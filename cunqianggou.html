@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<style type="text/css">
+/*.mui-content{background:#11c250;}*/
+/*body {
+	background: url(images/huiyuanka.png);background-size: 100%;}*/
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav.red{background-color: #18B831;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;box-shadow: none;}
+	.mui-bar-tab .mui-tab-item.mui-active{color:#50B24B;}
+	.mui-icon{color: red;}	
+	#select{
+		margin-top: 2px;
+		width: 100%;
+		height: 25px;
+		line-height: 25px;
+		text-align: center;
+	}
+	#select a{
+		display: block;
+		float: left;
+		background: #666666;
+		color: #fff;
+		font-weight:bold;
+		width:30%;
+		margin-left: 50px;
+		border-radius: 5px;
+		font-size: 12px;
+	}
+	#select a.mui-active{
+		color: #18B831;
+	}
+	
+	.qianggou{
+		background: #fff;
+		overflow: hidden;
+		height: 155px;
+		margin-top: 1%;	
+		margin-bottom: 1%;
+		border: solid 2px #18B831;
+	}
+	.qianggou .order{
+		width: 98%;
+		height: 20px;
+		margin: 3px;
+		border: solid 1px #18B831;
+		background: #fff;
+	}
+	.qianggou.ms{
+		width: 98%;
+	}
+	.qianggou .ms .product{	
+		margin-left: 1%;
+		width: 39%;
+		background: #FFFFFF;
+		float: left;
+		text-align: center;
+	}
+	.qianggou .ms .product img{		
+		width:82%;
+	}
+	.qianggou .grade{
+		font-size: 14px;
+		margin-right: 1%;
+		width: 56%;
+		height: 40px;
+		background: #fff;
+		float: right;
+	}
+	/*.grade p{
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+	}*/
+	
+	.qianggou .timer{
+		margin-right: 1%;
+		width: 56%;
+		height: 30px;
+		background: #FFFFFF;
+		float: right;		
+		text-align: center;
+	}
+	.qianggou .time{
+		color: #18B831;
+		font-size: 14px;
+		font-weight: bold;	
+	}
+	.qianggou .time span {		
+		display: inline-block;
+		color:#fff;
+		width: 25px;
+		height: 25px;
+		line-height: 25px;
+		margin:2px;
+		font-size: 14px;
+		background: #18B831;
+		border-radius: 3px;
+	}
+	.qianggou .price{
+		width: 25%;
+		height: 25px;
+		color: #18B831;
+		font-size: 14px;
+		font-weight: bold;
+		background: #fff;
+		margin-top: 3px;
+		margin-left: 3%;
+		float: left;
+	}
+	.qianggou .price s{
+		font-size: 11px;
+		color: #666;
+	}
+	
+	.qianggou .kucun{
+		margin-top: 3px;
+		margin-right: 1%;
+		width: 25%;
+		height: 25px;
+		font-size: 14px;
+		color: #18B831;
+		background: #FFFFFF;
+		float: right;
+	}
+	.qianggou .mashangqiang{
+		margin-right: 1%;
+		width: 25%;
+		height: 20px;
+		float: right;
+	}
+	.qianggou .mashangqiang a{
+		color: #FFFFFF;
+		background: #18B831;
+		font-size: 14px;
+		padding: 3%;
+		border-radius: 3px;
+	}
+	.qianggou .chengnuo{
+		width: 25%;
+		height: 20px;
+		line-height: 20px;
+		margin-left: 3%;
+		float: left;
+		background-color: #fff;
+	}
+	.qianggou .chengnuo img{
+ 		width:100%;	
+	}
+/*.mui-bar-tab .foot_tab{width: 20%;}*/
+	li{list-style: none;border: 1px solid floralwhite;}
+	li p{margin: 0xp;padding: 0xp;line-height: 20px;}
+	.list{height: 130px;width:100%;background: #fff;}
+	.img{width:130px;height: 100%;float: left;margin-right: 8px;}
+	.img img {width: 100%;height: 100%;padding: 3px;}
+	.title{width: auto;height: 60px;padding-top: 5px;line-height: 8px;}
+	.title p{color: #333;font-size: 14px;height: 21px;overflow: hidden;margin-bottom: 0px;}
+	.starttime{color: #333;line-height: 15px;font-size: 8px;}
+	.jiage{line-height: 18px;}
+	.yuan{font-size: 14px;color: #18B831;}
+	.xian{font-size: 12px;color: #999999;}
+	.stock{float: right;margin-right: 20px;font-size: 12px;color: #18B831;}
+	.qiang{float: right;width:60px;height:auto;background:#18B831;border-radius:3px;margin-right:20px;font-size:14px;color:white;text-align: center;}
+</style>
+<script type="text/javascript">
+mui.init({
+	pullRefresh:{
+		container:"#pullRefresh",
+		up: {
+//			auto:true,
+			contentrefresh: '正在加载...',
+			contentnomore: '没有更多数据了',
+			callback: upfn
+		}
+	}
+});
+
+	var page = 2;
+	function upfn(){
+		var ur;
+		if($('#select a:first').hasClass("mui-active")){
+			ur = "http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/next_miao"
+		}else{
+			ur = "http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/miaoed"
+		}
+//			alert(ur)
+		setTimeout(function() {
+			
+			jQuery.ajax({
+		      	url:ur,
+		      	data:{
+		      		page:page
+		      	},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					page++;
+					var goodslist = document.getElementById("goodsList");
+					var strs='';
+					for(var i=0;i<data.length;i++){
+						var li = document.createElement('li')
+						li.setAttribute('data-id',''+data[i].id+'');
+						if($('#select a:first').hasClass("mui-active")){	
+							li.innerHTML='<div class="list" ><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" /></div><div class="title"><p>'+data[i].shopname+'</p><p>'+data[i].grade+'</p></div><div class="starttime">开始时间：<span>'+data[i].str_time+'</span><br/>结束时间：<span>'+data[i].end_time+'</span></div><div class="jiage"><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="stock">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">准备抢</bottom></div></div>';							
+						}else{
+							li.setAttribute('class','jian');
+							li.innerHTML='<div class="list" ><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" /></div><div class="title"><p>'+data[i].shopname+'</p><p>'+data[i].grade+'</p></div><div class="starttime">开始时间：<span>'+data[i].str_time+'</span><br/>结束时间：<span>'+data[i].end_time+'</span></div><div class="jiage"><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="stock">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">马上抢</bottom></div></div>';
+						}
+						goodslist.appendChild(li);
+					}
+				if(data != ''){
+					mui('#pullRefresh').pullRefresh().endPullupToRefresh(false);
+				}else{
+					mui('#pullRefresh').pullRefresh().endPullupToRefresh(true);
+				}
+				}
+			})
+			
+		},1000);
+		
+	}
+//mui.plusReady(function(){
+    //商品列表
+
+       
+    
+//})
+</script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">村抢购</h1>
+</header>
+<div class="mui-content">
+	
+	<input type="hidden" id="url" value="http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/next_miao"/>
+	<div class="qianggou">
+		<div class="order" id="miao1"><ul id="orderlist"></ul></div>
+		<div id="msing" class="ms jian">
+			<div class="product" id="miao2"><img src="images/ceshi.jpg" /></div>
+			<div class="timer" id="miao3"><span class="time" id="time"><span class="hour">00</span>:<span class="minute">00</span>:<span class="miao">00</span>:<span class="haomiao">00</span></span></div>
+			<div class="grade" id="miao4"><p>美年达美年达美年达美年达美年达美年达美年达美年达美年达</p></div>
+			<div class="price" id="miao5">￥<span id="nowprice">120</span>&nbsp;&nbsp;<s>￥<span id="proprice">200</span></s></div>
+			<div class="kucun" id="miao6">库存666件</div>
+			<div class="mashangqiang"><a id="miao8">马上抢>></a></div>
+			<div class="chengnuo"><img src="images/chengnuo.png" /></div>
+		</div>
+	</div>
+	<div id="select">
+		<a data-id="0" class="mui-active" onclick="qiang()">开抢区</a>
+		<a data-id="1" onclick="jian()">捡漏区</a>
+	</div>
+	<div id="pullRefresh">
+	<ul id="goodsList">	
+		<!--<li data-id="'+data[i].id+'" class="li">
+			<div class="list">
+				<div class="img">
+					<img src="images/chongzhi.png" style="width:100%"/>
+				</div>
+				<div class="title">
+					<p><font color="#000"><font size=3>电子秤</p>
+					<p><font color="#fff0000"><font size=2.5>80kg</p>						
+				</div>
+				<div class="starttime">开始时间：<span></span><br/>结束时间：<span></span></div>
+				<div>
+					<span class="yuan">抢购价:￥55</span>
+					<span class="stock">库存663件</span><br/>
+					<span class="xian"><s>市场价:￥999</s></span>
+					<bottom class="qiang">马上抢</bottom>
+				</div>
+			</div>
+		</li>-->
+	</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	mui(document).on('tap','.jian',function(){
+		//mui.toast(this.getAttribute('data-id'));
+		mui.openWindow({
+			url:'miao.html',
+			id:'miao.html',
+			extras:{
+				good_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+	
+		//滚动显示
+
+	jQuery(function() {
+
+//		setInterval(function() {
+//			var wrapT = $(".cd_tiao").find("ul");
+//			var imgH = wrapT.find("li").height();
+//			wrapT.animate({
+//				"margin-top": "-30px"
+//			}, function() {
+//
+//				wrapT.find("li").eq(0).appendTo(wrapT);
+//				wrapT.css("margin-top", "0px");
+//
+//			})
+//
+//		}, 3000);
+		
+		
+		var ting;
+		function miaosha(){
+			jQuery.ajax({
+		      	url:"http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/miaoing",
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					time_distance = data.end_time - data.now_time
+					time_distance = time_distance*1000
+//					console.log(time_distance)
+	//				document.getElementById("time_distance").value = time_distance;
+					var ms = document.getElementById("msing");
+					ms.setAttribute('data-id',''+data.id+'');
+					var proprice = document.getElementById("proprice");
+					var nowprice = document.getElementById("nowprice");
+					var picture = document.getElementById('miao2');
+					var kucun = document.getElementById('miao6');
+					var name = document.getElementById('miao4');
+		  			var str = '';
+		  			var str1 = '';
+		  			var pictures = '';
+		  			var inventory = '';
+		  			var shopname = '';
+
+					pictures ='<img src="http://www.cundianle.cn'+data.picture+'">';
+					str = data.proprice;
+					str1 = data.nowprice;
+					shopname = data.shopname+data.grade;
+					inventory = '库存'+data.inventory+'件';
+		  			proprice.innerHTML = str;
+		  			nowprice.innerHTML= str1
+		  			picture.innerHTML = pictures;
+		  			kucun.innerHTML = inventory;
+		  			name.innerHTML = shopname;
+	
+					function daojishi(){
+						if(time_distance > 0){
+			//				console.log(time_distance)			
+			            	time_distance = time_distance -10;
+//			            	console.log(time_distance)
+							int_hour = Math.floor(time_distance/3600000)
+			                int_minute=Math.floor(time_distance/60000)%60
+			                int_second=Math.floor(time_distance/1000)%60
+			                haomiao=Math.floor(time_distance/10)%100
+			                $("#time").find(".hour").text(int_hour < 10 ? "0" + int_hour : int_hour);
+							$("#time").find(".minute").text(int_minute < 10 ? "0" + int_minute : int_minute);
+							$("#time").find(".miao").text(int_second < 10 ? "0" + int_second : int_second);
+							$("#time").find(".haomiao").text(haomiao < 10 ? "0" + haomiao : haomiao);
+							clearTimeout(ting)
+			             	setTimeout(daojishi,10)
+						}else if(time_distance <= 0){
+							if($('#select a:first').hasClass("mui-active")){
+								qiang()
+							}else{
+								jian()
+							}
+							miaosha()							
+						}	
+					}	  			
+					daojishi()
+				}							
+			})
+			ting = setTimeout(miaosha,60000)
+		}
+		miaosha()
+
+	})
+</script>
+
+<script type="text/javascript">	
+
+//	$('#select').on('click','a',function(){
+//		
+//		$(this).addClass("mui-active").siblings("a").removeClass("mui-active");		
+//		var goodsList = document.getElementById("goodsList");
+//		var id = $(this).attr("data-id");
+//		if (id==0){
+//			var ur = "http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/next_miao";
+//			document.getElementById("url").value=ur;
+//		}else{
+//			var ur = "http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/miaoed";
+//			document.getElementById("url").value=ur;
+//		}		
+////		setTimeout(function() {
+//			jQuery.ajax({
+//		      	url:ur,
+//				type:"get",
+//				dataType:"jsonp",
+//				jsonp:"jsoncallback",
+//
+//				success:function(data){
+//						var str='';
+//						for(var i=0;i<data.length;i++){
+//						str=str+'<li data-id="'+data[i].id+'" class="li"><div class="list"><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" style="width:100%"/></div><div class="title"><p>'+data[i].shopname+'</p><p>'+data[i].grade+'</p></div><div class="starttime">开始时间：<span>'+data[i].str_time+'</span><br/>结束时间：<span>'+data[i].end_time+'</span></div><div class="jiage"><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="stock">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">马上抢</bottom></div></div></li>';
+//						}
+//					
+//						goodsList.innerHTML = str;															
+//				}
+//			})
+////		}, 10);
+//	});
+
+function qiang(){	
+	$('#select a:last').removeClass("mui-active")
+	$('#select a:first').addClass("mui-active")
+	jQuery.ajax({
+      	url:"http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/next_miao",
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+
+		success:function(data){
+				var str='';
+				for(var i=0;i<data.length;i++){
+				str=str+'<li data-id="'+data[i].id+'" class="li"><div class="list"><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" style="width:100%"/></div><div class="title"><p>'+data[i].shopname+'</p><p>'+data[i].grade+'</p></div><div class="starttime">开始时间：<span>'+data[i].str_time+'</span><br/>结束时间：<span>'+data[i].end_time+'</span></div><div class="jiage"><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="stock">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">准备抢</bottom></div></div></li>';
+				}			
+				goodsList.innerHTML = str;															
+		}
+	})	
+}
+
+
+function jian(){
+	$('#select a:first').removeClass("mui-active")
+	$('#select a:last').addClass("mui-active")
+
+	jQuery.ajax({
+      	url:"http://60.205.152.9/ceshi_cundianle/cdl.php/Home/Miao/miaoed",
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+
+		success:function(data){
+				var str='';
+				for(var i=0;i<data.length;i++){
+				str=str+'<li data-id="'+data[i].id+'" class="li jian"><div class="list"><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" style="width:100%"/></div><div class="title"><p>'+data[i].shopname+'</p><p>'+data[i].grade+'</p></div><div class="starttime">开始时间：<span>'+data[i].str_time+'</span><br/>结束时间：<span>'+data[i].end_time+'</span></div><div class="jiage"><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="stock">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">马上抢</bottom></div></div></li>';
+				}			
+				goodsList.innerHTML = str;															
+		}
+	})	
+}
+qiang()
+</script>
+</body>
+</html>

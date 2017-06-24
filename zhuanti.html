@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<style type="text/css">
+
+/*.mui-content{background:#11c250;}*/
+/*body {
+	background: url(images/huiyuanka.png);background-size: 100%;}*/
+.mui-bar-nav{box-shadow: none;}
+.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}
+.mui-bar-tab .mui-tab-item.mui-active{color:#50B24B;}
+.mui-icon{color: red;}
+.guanggao {
+		width: 100%;
+		height: 300px;
+		/*border-bottom: 5px solid #FFCCFF;*/
+		text-align: center;
+	}
+.guanggao img{
+		width: 100%;
+		height: 100%;
+	}
+/*.mui-bar-tab .foot_tab{width: 20%;}*/
+
+
+  
+	li{list-style: none;margin-top: 2px;}
+	li p{margin: 0xp;padding: 0xp;line-height: 20px;}
+	.qianggou{height: 130px;width:100%;background: #fff;}
+	.img{width:130px;height: 100%;float: left;margin-right: 3px;}
+	.img img {width: 100%;height: 100%;}
+	.title{width: auto;height: 80px;padding-top: 15px;line-height: 10px;}
+	.title p{color: #000000;font-size: 16px;height: 21px;overflow: hidden;}
+	.yuan{font-size: 16px;color: #18B831;}
+	.xian{font-size: 12px;color: #999999;}
+	.kucun{float: right;margin-right: 20px;font-size: 12px;color: #18B831;}
+	.qiang{float: right;width:65px;height:auto;background:#18B831;border-radius:5px;margin-right:20px;font-size:15px;color:white;text-align: center;}
+</style>
+<script type="text/javascript">
+mui.init({
+	pullRefresh:{
+		container:"#pullRefresh",
+		up: {
+//			auto:true,
+			contentrefresh: '正在加载...',
+			contentnomore: '没有更多数据了',
+			callback: upfn
+		}
+	}
+});
+
+	var page = 2;
+	function upfn(){
+		
+		setTimeout(function() {
+			var topic_id = document.getElementById("topic").value;
+			jQuery.ajax({
+		      	url:"http://www.cundianle.cn/cdl.php/home/Miao/getGoodsList",
+		      	data:{
+		      		topic_id:topic_id,
+		      		page:page
+		      	},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					page++;
+					var goodslist = document.getElementById("goodsList");
+					var strs='';
+					for(var i=0;i<data.length;i++){
+						var li = document.createElement('li');
+						li.setAttribute('data-id',''+data[i].id+'');
+						li.innerHTML='<div class="qianggou" ><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" /></div><div class="title"><p><font color="#000">'+data[i].shopname+'</p><p><font color="#fff0000">'+data[i].grade+'</p></div><div><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="kucun">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">马上抢</bottom></div></div>';
+						goodslist.appendChild(li);
+					}
+				if(data != ''){
+					mui('#pullRefresh').pullRefresh().endPullupToRefresh(false);
+				}else{
+					mui('#pullRefresh').pullRefresh().endPullupToRefresh(true);
+				}
+				}
+			})
+			
+		},1000);
+		
+	}
+
+mui.plusReady(function(){
+    //商品列表
+    var self = plus.webview.currentWebview();
+    var topic_id = self.topic_id;
+    document.getElementById("topic").value=topic_id;
+    jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Miao/getGoodsList",
+	      	data:{
+	      		topic_id:topic_id 
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var goodslist = document.getElementById("goodsList");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					str=str+'<li data-id="'+data[i].id+'" class="li"><div class="qianggou" ><div class="img"><img src="http://www.cundianle.cn'+data[i].picture+'" style="width:90%"/></div><div class="title"><p><font color="#000">'+data[i].shopname+'</p><p><font color="#fff0000">'+data[i].grade+'</p></div><div><span class="yuan">抢购价:￥'+data[i].nowprice+'</span><span class="kucun">库存'+data[i].inventory+'件</span><br/><span class="xian"><s>市场价:￥'+data[i].proprice+'</s></span><bottom class="qiang">马上抢</bottom></div></div></li>';
+				}
+				goodslist.innerHTML = str;
+				
+			}
+		})
+    
+//获取广告位图片
+	
+	  	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Miao/guang_picture",
+	      	data:{
+	      		topic_id:topic_id
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+						document.getElementById("tong1").src="http://www.cundianle.cn/"+data.guang_picture;
+					}						
+		})
+    
+})
+</script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title"></h1>
+</header>
+<div id=pullRefresh class="mui-content">
+	<input type="hidden" id="topic"  />
+<div class="guanggao"><img id="tong1"src=""  /></div>
+<ul id="goodsList" >	
+		<!--<li data-id="'+data[i].id+'" class="li">
+			<div class="qianggou" >
+				<div class="img"><img src="images/chongzhi.png" style="width:100%"/></div>
+				<div class="title"><p>'+data[i]</p ><p>'+data</p ></div>
+				<div><span class="yuan">￥188</span><span class="xian"><s>￥'+data</s></span>
+					<span class="kucun">库存件</span>
+				</div><bottom class="qiang">马上抢</bottom>
+			</div>
+		</li>-->
+</ul>
+</div>
+<script type="text/javascript">
+	mui("#goodsList").on('tap','li',function(){
+		//mui.toast(this.getAttribute('data-id'));
+		mui.openWindow({
+			url:'miao.html',
+			id:'miao.html',
+			extras:{
+				good_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+</script>
+</body>
+</html>

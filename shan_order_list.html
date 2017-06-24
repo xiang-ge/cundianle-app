@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var userid =  plus.storage.getItem("userid");
+	var phone =  plus.storage.getItem("phone");
+	document.getElementById("phone").value = phone;
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Shan/orderListAll",
+      	data:{
+      		user_id:userid,
+      		good_type:2
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+		
+			if(data != ""){  
+				if(data == -1){
+					plus.ui.toast("获取订单列表失败");					
+				}else{
+					var orderlist = document.getElementById("orderlist");
+	  				var order = '';
+					for(i=data.length-1;i>=0;i--){
+						if(data[i].is_pay == 2){							
+							order=order+'<li><div class="cd_list">';
+					    	if(data[i].order_status == -2){
+								order=order+'<p class="cd_tit">已下单,待发货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 2){
+								order=order+'<p class="cd_tit">已发货,待收货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 3){
+								order=order+'<p class="cd_tit">已完成,待评价<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 4){
+								order=order+'<p class="cd_tit">已评价<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 0){
+								order=order+'<p class="cd_tit">已取消<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == -1){
+								order=order+'<p class="cd_tit">已退款<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}
+					    	
+					        order=order+'<div class="pic" data-id="'+data[i].order_id+'"><img src="'+data[i].goods_img+'"><div class="tit">'+data[i].goods_name+'</div><div class="right"><p class="price">￥'+data[i].shop_price+'</p><p class="prices"></p><p class="num">x'+data[i].goods_count+'</p></div></div><div class="detail"><span>共<b>'+data[i].goods_count+'</b>件商品</span><span>实收：<b>￥'+data[i].total+'</b></span></div>';
+					 
+					        if(data[i].order_status == -2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;color:#000">等待商家发货</a></div>';
+							}else if(data[i].order_status == 2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;">配送中</a></div>';
+							}else if(data[i].order_status == 3){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="evaluateOrder('+data[i].order_id+')">评价</a><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 4){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 0){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == -1){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}
+				        
+				        	order=order+'</div></li>';
+						}else{
+							order=order+'<li data-id="'+data[i].order_id+'"><div class="cd_list">';
+					    	if(data[i].order_status == -2){
+								order=order+'<p class="cd_tit">等待付款 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 1){
+								order=order+'<p class="cd_tit">已付款,待发货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 2){
+								order=order+'<p class="cd_tit">已发货,待收货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 3){
+								order=order+'<p class="cd_tit">已完成,待评价 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 4){
+								order=order+'<p class="cd_tit">已评价 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 0){
+								order=order+'<p class="cd_tit">已取消<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}
+					    	
+					        order=order+'<div class="pic" data-id="'+data[i].order_id+'"><img src="'+data[i].goods_img+'"><div class="tit">'+data[i].goods_name+'</div><div class="right"><p class="price">￥'+data[i].shop_price+'</p><p class="prices"></p><p class="num">x'+data[i].goods_count+'</p></div></div><div class="detail"><span>共<b>'+data[i].goods_count+'</b>件商品</span><span>实收：<b>￥'+data[i].total+'</b></span></div>';
+					 
+					        if(data[i].order_status == -2){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="cancelOrder('+data[i].order_id+')">取消订单</a><a href="javascript:;" onclick="payOrder('+data[i].order_id+')">货到付款</a></div>';
+							}else if(data[i].order_status == 1){
+								order=order+'';
+							}else if(data[i].order_status == 2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;>配送中</a></div>';
+							}else if(data[i].order_status == 3){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="evaluateOrder('+data[i].order_id+')">评价</a><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 4){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 0){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}
+				        
+				        	order=order+'</div></li>';
+			        	}
+					}
+					orderlist.innerHTML = order;
+					}
+  				
+				
+			}else{
+				document.getElementById("unorder").innerHTML='<img class="no_order" src="images/no_order.png">';
+			}
+		}
+	})
+	
+})
+
+window.addEventListener('refresh',function(){
+	var userid =  plus.storage.getItem("userid");
+	var phone =  plus.storage.getItem("phone");
+	document.getElementById("phone").value = phone;
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Shan/orderListAll",
+      	data:{
+      		user_id:userid,
+      		good_type:2
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+		
+			if(data != ""){  
+				if(data == -1){
+					plus.ui.toast("获取订单列表失败");					
+				}else{
+					var orderlist = document.getElementById("orderlist");
+	  				var order = '';
+					for(i=data.length-1;i>=0;i--){
+						if(data[i].is_pay == 2){							
+							order=order+'<li><div class="cd_list">';
+					    	if(data[i].order_status == -2){
+								order=order+'<p class="cd_tit">已下单,待发货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 2){
+								order=order+'<p class="cd_tit">已发货,待收货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 3){
+								order=order+'<p class="cd_tit">已完成,待评价<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 4){
+								order=order+'<p class="cd_tit">已评价<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 0){
+								order=order+'<p class="cd_tit">已取消<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == -1){
+								order=order+'<p class="cd_tit">已退款<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}
+					    	
+					        order=order+'<div class="pic" data-id="'+data[i].order_id+'"><img src="'+data[i].goods_img+'"><div class="tit">'+data[i].goods_name+'</div><div class="right"><p class="price">￥'+data[i].shop_price+'</p><p class="prices"></p><p class="num">x'+data[i].goods_count+'</p></div></div><div class="detail"><span>共<b>'+data[i].goods_count+'</b>件商品</span><span>实收：<b>￥'+data[i].total+'</b></span></div>';
+					 
+					        if(data[i].order_status == -2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;color:#000">等待商家发货</a></div>';
+							}else if(data[i].order_status == 2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;">配送中</a></div>';
+							}else if(data[i].order_status == 3){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="evaluateOrder('+data[i].order_id+')">评价</a><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 4){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 0){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == -1){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}
+				        
+				        	order=order+'</div></li>';
+						}else{
+							order=order+'<li data-id="'+data[i].order_id+'"><div class="cd_list">';
+					    	if(data[i].order_status == -2){
+								order=order+'<p class="cd_tit">等待付款 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 1){
+								order=order+'<p class="cd_tit">已付款,待发货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 2){
+								order=order+'<p class="cd_tit">已发货,待收货 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 3){
+								order=order+'<p class="cd_tit">已完成,待评价 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 4){
+								order=order+'<p class="cd_tit">已评价 <span class="mui-icon mui-icon-arrowright"></span></p>';
+							}else if(data[i].order_status == 0){
+								order=order+'<p class="cd_tit">已取消<span class="mui-icon mui-icon-arrowright"></span></p>';
+							}
+					    	
+					        order=order+'<div class="pic" data-id="'+data[i].order_id+'"><img src="'+data[i].goods_img+'"><div class="tit">'+data[i].goods_name+'</div><div class="right"><p class="price">￥'+data[i].shop_price+'</p><p class="prices"></p><p class="num">x'+data[i].goods_count+'</p></div></div><div class="detail"><span>共<b>'+data[i].goods_count+'</b>件商品</span><span>实收：<b>￥'+data[i].total+'</b></span></div>';
+					 
+					        if(data[i].order_status == -2){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="cancelOrder('+data[i].order_id+')">取消订单</a><a href="javascript:;" onclick="payOrder('+data[i].order_id+')">货到付款</a></div>';
+							}else if(data[i].order_status == 1){
+								order=order+'';
+							}else if(data[i].order_status == 2){
+								order=order+'<div class="pri"><a href="javascript:;" style="border:none!important;>配送中</a></div>';
+							}else if(data[i].order_status == 3){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="evaluateOrder('+data[i].order_id+')">评价</a><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 4){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}else if(data[i].order_status == 0){
+								order=order+'<div class="pri"><a href="javascript:;" onclick="removeOrder('+data[i].order_id+')">删除订单</a></div>';
+							}
+				        
+				        	order=order+'</div></li>';
+			        	}
+					}
+					orderlist.innerHTML = order;
+					}
+				
+				
+			}else{
+				document.getElementById("unorder").innerHTML='<img class="no_order" src="images/no_order.png">';
+			}
+		}
+	})
+	
+})
+</script>
+<style>
+	.cdhead{background:#50B24B;}
+	.cdhead h1{color: #fff;}
+	#list{background-color: #fff;position: fixed;width: 100%;text-align: center;}
+	#list a{font-size: 1em;color:#333;line-height: 40px;margin: 0px 15px;}
+	#list a.mui-active{color: #50B24B;padding-bottom:8px;border-bottom: 2px solid #50B24B;}
+	.order_bg{background: #fff;}
+	.order_bg ul{padding:0px;}
+	.order_bg ul li{list-style: none;background: #FFFFFE;}
+	.cd_tit{height:40px;line-height: 40px;padding-left:10px;font-size:16px;color:#000;border-bottom:1px solid #F2F2F2;border-top:8px solid #F2F2F2;}
+	.cd_tit .mui-icon{float:right;padding-top:8px;color:#aaa;}
+	.order_bg ul li .pic{padding:5px 20px 5px 10px;height:110px;}
+	.order_bg ul li .pic img{float: left;width:90px;height:90px;padding:10px;border:1px solid #f2f2f2;border-radius: 2px;;}
+	.order_bg ul li .pri{border-top:1px solid #f2f2f2;height:40px;line-height: 40px;padding-left:20px;}
+	.order_bg ul li .pri a{font-size:15px;display: inline-block;padding:0px 12px;border-radius: 5px;border:1px solid #50b24b;height:30px;line-height: 30px;float:right;margin-top:4px;color:#50b24b;margin-right:3%;}
+	.order_bg ul li .pic .tit{font-size:15px;float: left;width: 40%;height: 50%;color: #444;overflow: hidden;line-height: 25px;margin-top: 5px; margin-left: 10px;}
+	.order_bg ul li .pic .right{padding: 10px 0% 0 0;}
+	.order_bg ul li .pic .right p{height: 20px;}
+	.order_bg ul li .pic .right .price{text-align: right;font-size: 16px;color: #444;font-weight: bold;}
+	.order_bg ul li .pic .right .prices{text-decoration:line-through;text-align: right;font-size: 16px;color: #444;}
+	.order_bg ul li .pic .right .num{font-size: 16px;text-align: right;}
+	.order_bg ul li  .detail{background-color: #fff;height: 40px;border-top: 1px solid #ddd;border-bottom: 1px solid #eee;line-height: 40px;padding-right: 4%;}
+	.order_bg ul li  .detail b{font-weight: normal;}
+	.order_bg ul li  .detail span{margin-left: 10px;color: #333;}
+	.order_img{width:70%;margin:auto;display: block;margin-top:30%;}
+	.order_p{text-align: center;}
+	.no_order{width:50%;display: block;margin:40% auto;}
+	.mui-bar-tab .foot_tab{width: 20%;}
+</style>
+</head>
+<body>
+<!--<header class="mui-bar mui-bar-nav cdhead">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left mygren" id="personal" style="color: #fff;"></a>
+    <h1 class="mui-title">我的订单</h1>
+</header>-->
+<div class="mui-content order_bg" style="background: none;">
+	<!--<div id="list">
+		<a href="order_list.html">
+			村抢购订单
+		</a>
+		<a class="mui-active">
+			闪超订单
+		</a>
+		<a href="jifen_order_list.html">
+			积分商城订单
+		</a>
+	</div>-->
+	
+	<div id="unorder"></div>
+	<ul id="orderlist">
+    	
+    </ul>
+</div>
+<input type="hidden" id="phone" />
+<!--底部-->
+<!--<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab jump" href="index.html">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab jump" href="shansong.html">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+		<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+	<a class="foot_tab active">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>-->
+</body>
+<script type="text/javascript">
+mui.init();
+//document.getElementById('personal').addEventListener('tap', function() {
+//	mui.openWindow({
+//		url:'personal.html',
+//		id:'personal',
+//		createNew: true,
+//		show:{
+//			aniShow:"pop-in",
+//			duration: '200'
+//		},
+//      waiting:{
+//      	autoShow:false,
+//      	options:{
+//		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+//		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+//		    }
+//      },
+//      styles: {
+//			zindex: 1
+//		}
+//	})
+//})
+mui("#orderlist").on('tap','.pic',function(){
+	//alert(this.getAttribute('data-id'))
+	mui.openWindow({
+		url:'order_detail_shan.html',
+		id:'order_detail_shan',
+		extras:{
+			order_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+</script>
+<script>
+/**
+ * 取消订单信息
+ * ***/
+function cancelOrder(id){	
+	if(window.confirm('确定取消改订单信息？')){
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Shan/cancelOrder",
+	      	data:{
+				order_id:id
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//alert(data)
+				if(data == 1){
+					plus.ui.toast("取消成功");
+					window.location.href=window.location.href;
+				}else{
+					plus.ui.toast("取消失败，请稍后再试");
+					window.location.href=window.location.href;
+				}
+	
+			}
+		})
+	}
+}
+/**
+ * 删除订单信息
+ * ***/
+function removeOrder(id){
+	if(window.confirm('确定删除该订单信息？')){
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Shan/removeOrder",
+	      	data:{
+				order_id:id
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				if(data == 1){
+					plus.ui.toast("删除成功");
+					window.location.href=window.location.href;
+				}else{
+					plus.ui.toast("删除失败，请稍后再试");
+					window.location.href=window.location.href;
+				}
+	
+			}
+		})
+	}
+}
+/**
+ * 收货订单操作
+ * ***/
+function confirmOrder(id,price){
+	//alert(id)
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Shan/confirmOrder",
+      	data:{
+			order_id:id
+		},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			if(data == 1){
+				//加积分
+				var phone = document.getElementById("phone").value;
+				jQuery.ajax({
+			      	url:"http://www.cundianle.cn/cdl.php/home/Vip/integral",
+			      	data:{
+						phone:phone,
+						integral:price
+					},
+					type:"get",
+					dataType:"jsonp",
+					jsonp:"jsoncallback",
+					success:function(e){
+						window.location.href=window.location.href;
+					}
+				})
+				
+			}else{
+				window.location.href=window.location.href;
+			}
+
+		}
+	})
+}
+/**
+ * 评价
+ * ***/
+function evaluateOrder(id){
+	mui.openWindow({
+		url:'order_evaluate.html',
+		id:'order_evaluate',
+		extras:{
+			order_id:id
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+}
+/**
+ * 继续支付
+ * ***/
+function payOrder(id){
+	mui.openWindow({
+		url:'shan_order_go_pay.html',
+		id:'shan_order_go_pay',
+		extras:{
+			order_id:id
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+}
+</script>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/public.css"/>
+		<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+		<script src="js/mui.min.js"></script>
+		<style>
+			.mymoney{}
+			.mymoney .active{height:70px;line-height:70px;padding:0px 15px;margin-bottom:15px;}
+			.mymoney li{position:relative;height:45px;line-height:45px;padding:3px 15px;background: #fff;border-bottom:1px solid #F3F3F3;}
+			.mymoney li a{display: block;width:94%;height:100%;color:#333;float: left;}
+			.mymoney li a span{color:#50B24B;font-size:23px;margin-right:10px;}
+			.mymoney li .mui-icon-arrowright{color:#999;position: absolute;right:14px;top:25%;}
+			.mymoney li .xj{color:#FF0000;font-size:20px;margin-left:5px;}
+		    .mymoney .active .mui-icon-arrowright{color:#999;position: absolute;right:14px;top:35%;}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav cdhead">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mygren"></a>
+		    <h1 class="mui-title">我的钱包</h1>
+		</header>
+		<div class="mui-content">
+		    <ul class="mymoney">
+		    	<li class="active">
+		    		<a href="#">  账户余额:<b class="xj">123</b></a><span class="mui-icon mui-icon-arrowright"></span>
+		    	</li>
+		    	<li><a href="#"><span class="mui-icon iconfont icon-chongzhi"></span>充值</a><span class="mui-icon mui-icon-arrowright"></span></li>
+		    	<li><a href="#"><span class="mui-icon mui-icon-locked"></span>支付密码</a><span class="mui-icon mui-icon-arrowright"></span></li>
+		    	
+		    </ul>
+		</div>
+		
+	</body>
+    <script type="text/javascript">
+			mui.init()
+	</script>
+</html>

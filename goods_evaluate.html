@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		var self = plus.webview.currentWebview();
+	  	var goods_id = self.goods_id;
+	  	/*
+		 *商品评价
+		 ****/
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/getGoodEvaluate",
+	      	data:{
+	  			id:goods_id
+	  		},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				if(data == null){
+					document.getElementById("evaluatelist").innerHTML = "暂无";
+				}else{
+					//用户评价
+					var evaluatelist = document.getElementById("evaluatelist");
+					var evaluate = "";
+					for(i=data.length-1;i>=0;i--){
+						
+						evaluate=evaluate+'<li><div class="user"><img src="'+data[i].user_img+'" /><span>'+data[i].user_name+'</span></div><p class="text">'+data[i].evaluate_content+'</p><div class="images">';
+				
+						var img = data[i].evaluate_img;
+						for(j=img.length-1;j>=0;j--){
+							evaluate=evaluate+'<img src="'+img[j]+'" />';
+						}
+						evaluate=evaluate+'</div><p class="date">'+data[i].add_time+'</p>	</li>';
+					}
+					evaluatelist.innerHTML = evaluate;
+					mui('.images').on('click','img',function(){
+						var src = this.src;
+						$('.mask').show();
+						$('.mask img').attr('src',src);
+					})
+				}
+				
+			}
+		});
+	    
+	})
+</script>
+<style type="text/css">
+	body{background-color: #fff;}
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;background-color: #fff;}
+	.mui-title{text-align: left;}
+	.item{display: block;height: 50px;background-color: #fff;padding: 0 3%;line-height: 50px;color: #333;border-radius: 5px;margin-top: 15px;}
+	.item .mui-icon{float: right;line-height: 50px;color: #ccc;}
+	
+	.evaluate{padding: 10px 0;}
+	.evaluate ul li{border-bottom: 1px solid #ddd;padding: 10px 5%;}
+	.evaluate ul li .user{margin-bottom: 5px;}
+	.evaluate ul li .user img{float: left;width: 50px;height: 50px;border-radius: 25px;margin-right: 3%;}
+	.evaluate ul li .user span{float: left;margin-top: 5px;}
+	.evaluate ul li .text{clear: both;color: #333;font-size: 16px;line-height: 25px;}
+	.evaluate ul li .images{height: 100px;margin-top: 5px;}
+	.evaluate ul li .images img{display: block;float: left;width: 80px;height: 80px;margin-right: 5px;}			
+	
+	.evaluate ul li .date{margin-top: 10px;}
+	.evaluate .butt_white{width: 35%;height: 40px;line-height: 40px;margin: 10px auto 0;}
+
+	.mask{display: none;width: 100%;height: 100%;position: fixed;bottom: 0;left: 0;background:rgba(0,0,0,0.4);padding: 0 5%;}
+	.mask span{height:100%;display: inline-block;vertical-align: middle;}
+	.mask img{vertical-align: middle;max-width: 100%;margin-top: 60px;max-height: 90%;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">评价</h1>
+    <!--<a class="city mui-pull-right" href="choose_1.html">换车</a>-->
+</header>
+	
+<div class="mui-content">
+	<div class="evaluate">
+		<ul id="evaluatelist"></ul>
+		<div class="mask">
+			<span></span><img />
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+//图片放大
+
+$('.mask').click(function(){
+	$('.mask').hide();
+})
+</script>
+</html>

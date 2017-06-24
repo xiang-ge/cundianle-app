@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		var userid = plus.storage.getItem("userid");
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/getUserAccountList",
+	      	data:{
+	      		userid:userid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var bill = document.getElementById("list");
+				var nogood = document.getElementById("nogood");
+				if(data == ""){
+	  				nogood.style.display = "block";
+					
+				}else{
+					nogood.style.display = "none"
+					var str = "";
+					for(i=data.length-1;i>=0;i--){					
+						str=str+'<li class="item"><p>';
+						if(data[i].type == 1){
+							str=str+'<span class="tit">消费</span>';
+						}else{
+							str=str+'<span class="tit">充值</span>';
+						}
+						str=str+'<span class="date">'+data[i].add_time+'</span></p><p class="money"><span class="balance">余额：'+data[i].balance+'</span><b>'+data[i].money_change+'</b></p></li>'
+					}
+					bill.innerHTML = str;
+				}
+			}
+		})
+  		
+  	})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}
+	.mui-title{text-align: left;}
+	ul{padding: 10px 3% 0;}
+	.item{background-color: #fff;padding: 10px 3%;border-radius: 5px;margin-top: 10px;}
+	.item p .tit{font-size: 18px;color: #333;}
+	.item p .date{float: right;}
+	.item .money{margin-top: 5px;}
+	.item p .balance{color: #333;}
+	.item p b{float: right;color: #333;font-size: 18px;}
+	.nogood{text-align: center;margin-top: 25%;display:none}
+	.nogood .icon-p-shop{font-size: 100px;margin-top: 30px;}
+	.nogood .text{font-size: 20px;margin-top: 20px;}
+	.no_record{width:50%;display: block;margin:40% auto;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left jump" href="personal.html"></a>
+    <h1 class="mui-title" style="text-align: center;">账户余额</h1>
+</header>
+
+<div class="mui-content">
+	<div class="nogood" id="nogood">
+		<!--<p class="mui-icon iconfont icon-p-shop"></p><p class="text">您还没有消费哦~</p>-->
+		<img class="no_record" src="images/no_record.png">
+	</div>
+	<ul id="list"></ul>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+mui('body').on('tap', '.jump', function(e) {
+	var id = this.getAttribute("href");
+	var href = this.href;
+	mui.openWindow({
+		url: href, 
+		id:id,
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	});
+});
+</script>

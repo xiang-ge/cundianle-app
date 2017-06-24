@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		var self = plus.webview.currentWebview();  		
+  		var total = parseFloat(self.shop_price*self.goods_count);
+  		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/delivery",
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+//				if(total < data.delivery){
+//					total+=parseFloat(data.price);
+//					document.getElementById("distribution").innerHTML = "配送费:￥"+data.price;
+//					document.getElementById("total").innerHTML = "￥"+total.toFixed(2);
+//					document.getElementById("tot").value = total.toFixed(2);
+//				}else{
+					document.getElementById("total").innerHTML = "￥"+total.toFixed(2);
+					document.getElementById("tot").value = total.toFixed(2);
+//				}
+			}
+		})
+		document.getElementById("title").innerHTML = self.goods_name;//商品名称
+		document.getElementById("img").src = self.goods_img;//商品图片
+		document.getElementById("currentprice").innerHTML = "￥"+self.shop_price;//现售价
+		document.getElementById("originalprice").innerHTML = "￥"+self.market_price;//市场价
+		document.getElementById('type').value = self.type;   //秒杀商品标识
+		document.getElementById('order_number').value = self.order_number; //订单编号
+		
+		//document.getElementById("total").innerHTML = "￥"+total.toFixed(2);//总价
+		document.getElementById("count").innerHTML = self.goods_count;//商品数量		 		
+	  	document.getElementById("goods_id").value = self.goods_id;//商品id
+	  	document.getElementById("shop_id").value = plus.storage.getItem("shopid");//超市id
+		document.getElementById("goods_name").value = self.goods_name;//商品名称
+		document.getElementById("goods_img").value = self.goods_img;//商品图片
+		document.getElementById("shop_price").value = self.shop_price;//现售价
+		document.getElementById("market_price").value = self.market_price;//市场价
+		document.getElementById("goods_free").value = self.goods_free;//运费
+		document.getElementById("goods_count").value = self.goods_count;//商品数量
+		document.getElementById("goods_one").value = self.goods_one;//规格1
+		document.getElementById("goods_two").value = self.goods_two;//规格2
+		document.getElementById("attr_id").value = self.attr_id;//规格id
+		document.getElementById("type").value = self.type;//区分秒杀和闪超
+		
+		document.getElementById("user_id").value = plus.storage.getItem("userid");
+		var userid = plus.storage.getItem("userid");
+		var shopid = plus.storage.getItem("shopid");
+		//alert(userid)
+		/*
+		* 获取收货地址的默认地址
+		***/
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/personal",
+	      	data:{
+	      		userid:userid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+//				if(data.detailed == ""){
+//					document.getElementById("address").innerHTML = "收货地址："+data.provincename+data.cityname+data.townname+data.user_list_village;
+////					document.getElementById("add").innerHTML = '<input type="text" id="detailed" placeholder="请输入详细地址" style="width:70%;margin-right: 5px;"><input type="button" value="确认" onclick="sure()"style="height:40px;color:#fff;background: #16a937;">'
+//				}else{
+					document.getElementById("detaileds").value = data.detailed;
+					document.getElementById("address").innerHTML = "收货地址："+data.provincename+data.cityname+data.townname+data.user_list_village+data.detailed;
+//				}
+				document.getElementById("consignees").innerHTML = "收货人："+data.user_list_nickname;
+				document.getElementById("cellphone").innerHTML = data.user_list_phone;
+				
+				
+			}
+		})
+		
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/getArriveTime",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var time = parseInt(data.arrive_time);
+				var oDate = new Date(); //实例一个时间对象
+				if(time >= 60){				
+					var hours = oDate.getHours()+Math.floor(time/60); //获取系统时，
+					var min = oDate.getMinutes()+(time%60); //获取系统分  加上20分钟
+					if(min >= 60){
+						hours=hours+Math.floor(min/60);
+						min = (min%60);					
+					}
+				}else{
+					var hours = oDate.getHours(); //获取系统时，
+					var min = oDate.getMinutes()+time; //获取系统分  加上20分钟
+					
+					
+					if(min >= 60){
+						hours=hours+Math.floor(min/60);
+						min = (min%60);
+						
+					}
+				}
+				if(min<10){
+					min='0'+min;
+				}
+				//alert(min)
+				if(self.type==1){
+					document.getElementById("times").innerHTML ="预计明日10:00到达超市";//预计达到时间
+				}else{
+					document.getElementById("times").innerHTML ="尽快送达|预计"+hours+":"+min;//预计达到时间
+				}
+
+//				document.getElementById("number").innerHTML ="您前面还有"+data.count+"人等待";//预计达到时间
+				document.getElementById("arrive_time").value = hours+":"+min;
+
+			}
+		})
+		
+		
+	})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}
+	.mui-title{text-align: left;}
+	
+	.address{background-color: #fff;padding: 10px 3%;}
+	.address .iconfont{display: block;width: 10%;height: 100%;float: left;color: #b3b3b3;line-height: 40px;font-size: 30px;}
+	.address .right{width: 100%;float: left;}
+	.address .right .name{color: #3e4245;font-size: 17px;line-height: 40px;}
+	.address .right .name .tele{float: right;}
+	.address .right .add{font-size: 15px;color: #555;}
+	.address .mui-icon-arrowright{float: right;color: #999;}
+	
+	.order{background-color: #fff;width: 100%;margin-top: 15px;padding: 0 3%;}
+	
+	.order .goodImg{float: left;display: block;width: 35%;margin: 10px 3% 15px 0;}
+	.order .right{padding: 15px 0 15px;}
+	.order .right .tit{font-size: 15px;color: #333;line-height: 22px;height: 40px;overflow: hidden;}
+	.order .right .size{line-height: 30px;}
+	.order .right .price{}
+	.order .right .price b{color: #5EB530;font-size: 18px;}
+	.order .right .price s{font-size: 12px;}
+	.order .right .price span{float: right;}
+	
+	/*.number .tit{line-height: 30px;}
+	.mui-numbox{float: right;width: 120px;height: 30px;}*/
+	
+	.fanli{height: 20px;margin-top: 15px;}
+	.fanli span{color: #5EB530;}
+	.mui-switch-mini{float: right;}
+	.mui-switch{height: 20px;}
+	.mui-switch.mui-active{background-color: #E83E41;border-color: #E83E41;}
+	.mui-switch .mui-switch-handle{height: 18px;}
+	
+	.send{margin-top: 20px;height: 40px;width:28%;margin-left: 70%;}
+	.send span{float: right;}
+	.send span i{color: #999;}
+	
+	.foot{position: fixed;bottom: 0;width:100%;height: 50px;background-color: #fff;}
+	.foot span{float: right;line-height: 50px;margin-right: 5%;}
+	.foot span b{color: #34B242;font-size: 20px;}
+	.foot a{display: block;float:right;width: 30%;height: 50px;line-height: 50px;text-align: center;color: #fff;background: #34B242;;font-size: 18px;}
+	
+	label{font-family: "微软雅黑" !important;}
+	.mui-content > .mui-card:first-child{margin-top: 0;}
+	.mui-card{margin: 0;border-radius: 0;margin-top: 15px;}
+	.mui-input-group .mui-input-row{height: auto;}
+	.mui-radio input[type="radio"]{top: 40%;right: 10px;}
+	.mui-radio input[type="radio"]:checked::before, .mui-checkbox input[type="checkbox"]:checked::before{color: #E83E41;}
+	.mui-radio input[type="radio"]:checked::before{content: "\e62c";font-family: "iconfont";}
+	.mui-radio input[type="radio"]::before{content: none;}
+	
+	ul li{padding: 10px 0;}
+	.name{color: #3e4245;font-size: 18px;}
+	.name .tele{float: right;}
+	
+	.add{float: left;font-size: 15px;color: #555;margin-top: 15px;line-height: 22px;}
+	.add span{color: #E83E41;}
+	.sd{background: #fff;padding:6px 0px;margin:15px 0px;border-left:3px solid #2AC845;overflow: hidden;}
+	.sd p{float:left;line-height: 30px;margin-bottom: 0px;;}
+	.sd .sd_l{font-size:1rem;margin-left:5px;margin-right:5px;color:#000;padding-top:5%;}
+	.sd .sd_l span{margin-right:5px;}
+	.sd .sd_rr{float:right;width:60%;}
+	.sd .no_t{border-bottom:1px solid #fff;;}
+	.sd .sd_r{color:#2AC845;margin-right:10px;border-bottom:1px solid #dfdfdf;width:100%;text-align: center;}
+	.butt_red{width: 100%;height: 50px;line-height: 50px;border-radius: 0;font-size: 18px;position: fixed;bottom: 0;background: #5EB530;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title" style="text-align: center;">确认订单</h1>
+	<!--<a class="city mui-pull-right" href="choose_1.html">换车</a>-->
+</header>
+<div class="mui-content">
+	<div class="address">
+		<span class="mui-icon iconfont icon-dingwei"></span>
+		<a id="orderaddress">
+			<div class="right">
+				<p class="name">
+					<span id="consignees"></span>
+					<span class="tele" id="cellphone"></span>
+				</p>
+				<p class="add" id="address"></p>
+				<div id="add"></div>
+			</div>
+		</a>
+		<div style="clear: both;"></div>
+	</div>
+	<div class="sd">
+		<p class="sd_l"><span class="iconfont icon-miaosha"></span>送达时间</p><div class="sd_rr"><p class="sd_r"  id="times"></p><p class="sd_r "  style="border-bottom:1px solid #fff;;" id="number"></p></div>
+	</div>
+	<div class="order">
+		<img class="goodImg" src="images/car.png" id="img"/>
+		<div class="right">
+			<p class="tit" id="title"></p>
+			<p class="size" id="guige"></p>
+			<div class="price">
+				<b class="unitprice" id="currentprice"></b>
+				<s id="originalprice">￥</s>
+				<span class="num">x<span id="count"></span></span>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>	
+	<div class="foot">
+		<a id="pay">提交订单</a>
+		<span>合计:<b id="total"></b></span>
+		<span id="distribution" style="margin-right:3%;font-size: 14px;color:#FF0000;"></span>
+		<input type="hidden" id="goods_id"/>
+		<input type="hidden" id="shop_id"/>
+		<input type="hidden" id="goods_name"/>
+		<input type="hidden" id="goods_img"/>
+		<input type="hidden" id="shop_price"/>
+		<input type="hidden" id="market_price"/>
+		<input type="hidden" id="goods_free"/>
+		<input type="hidden" id="goods_count"/>
+		<input type="hidden" id="goods_one"/>
+		<input type="hidden" id="goods_two"/>
+		<input type="hidden" id="attr_id"/>
+		<input type="hidden" id="user_id"/>
+		<input type="hidden" id="arrive_time"/>
+		<input type="hidden" id="detaileds" value="0"/>
+		<input type="hidden" id="tot"/>
+		<input type="hidden" id="order_number" />
+		<input type="hidden" id="type" />
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+(function($){ 
+	//设置宽高
+	var width = $('.order .goodImg').width();
+	$('.order .goodImg').height(width*10/12);
+	//价格
+	
+	var price = price = Number($('.unitprice').text().substring(1))*Number($('.price .num').text().substring(1))
+	var priceF = price-Number($('.fanli span').text());
+	$('#total').html('￥'+priceF.toFixed(2));
+	$('.mui-switch-mini').click(function(){
+		if($(".mui-switch-mini").hasClass('mui-active')){
+			$('#total').html('￥'+priceF.toFixed(2));
+		}else{
+			$('#total').html('￥'+price.toFixed(2));
+		}
+	})
+})(jQuery);
+</script>
+<script type="text/javascript">
+mui('body').on('tap', '.jump', function(e) {
+	var id = this.getAttribute("href");
+	var href = this.href;
+	mui.openWindow({
+		url: href, 
+		id: id,
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+});
+var goods_id = document.getElementById("goods_id");//商品id
+var shop_id = document.getElementById("shop_id");//超市id
+var goods_name = document.getElementById("goods_name");//商品名称
+var goods_img = document.getElementById("goods_img");//商品图片
+var shop_price = document.getElementById("shop_price");//现售价
+var market_price = document.getElementById("market_price");//市场价
+var goods_free = document.getElementById("goods_free");//运费
+var goods_count = document.getElementById("goods_count");//商品数量
+var goods_one = document.getElementById("goods_one");//规格1
+var goods_two = document.getElementById("goods_two");//规格2
+var attr_id = document.getElementById("attr_id");//规格id
+var arrive_time = document.getElementById("arrive_time");//规格id
+var userid = document.getElementById("user_id");
+//var detaileds = document.getElementById("detaileds");
+var tot = document.getElementById("tot");
+var type = document.getElementById('type');
+var order_number = document.getElementById("order_number");
+document.getElementById('pay').addEventListener('tap', function() {
+	//alert(arrive_time.value)
+//	if(detaileds.value.length == 0){
+//		plus.ui.toast("详细地址不能为空");
+//		return;
+//	}else{
+		jQuery.ajax({
+			url:"http://www.cundianle.cn/cdl.php/home/User/addOrder",
+			data:{
+				userid:userid.value,
+				goods_id:goods_id.value,
+				shop_id:shop_id.value,
+				goods_name:goods_name.value,
+				goods_img:goods_img.value,
+				shop_price:shop_price.value,
+				market_price:market_price.value,
+				goods_free:goods_free.value,
+				goods_count:goods_count.value,
+				goods_one:goods_one.value,
+				goods_two:goods_two.value,
+				attr_id:attr_id.value,
+				type:type.value,
+				order_number:order_number.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//服务器返回响应，根据响应结果，分析是否发送成功；
+				//返回格式JSON：{'result':0}
+				if(data != 0){
+					if(data == -1){
+						mui.toast('超出限购上限');
+					}else if(data == -2){
+						mui.toast('库存不足');
+					}else{
+					mui.openWindow({
+			         	url: 'order_pay.html', 
+			         	id:'order_pay',
+			         	extras:{
+			         		order_id:data,
+			         		arrive_time:arrive_time.value,
+			         		tot:tot.value
+			         	},
+						createNew: true,
+						show:{
+							aniShow:"pop-in",
+							duration: '200'
+						},
+				        waiting:{
+				        	autoShow:false,
+				        	options:{
+						        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+						        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+						    }
+				        },
+				        styles: {
+							zindex: 1
+						}
+			     	});
+	     		}
+			}
+						
+			}
+		})
+//	}
+});
+function sure(){
+	var detailed = document.getElementById("detailed");
+	var userid = document.getElementById("user_id");
+	
+	jQuery.ajax({
+		url:"http://www.cundianle.cn/cdl.php/home/User/saveDetailed",
+		data:{
+			userid:userid.value,
+			detailed:detailed.value
+		},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			if(data != 0){
+				document.getElementById("add").style.display="none";
+//				document.getElementById("detaileds").value = data.detailed;
+				document.getElementById("address").innerHTML = "收货地址："+data.provincename+data.cityname+data.townname+data.user_list_village+data.detailed;
+				
+			}
+		}
+	})
+	//alert(userid)
+}
+</script>
+</html>

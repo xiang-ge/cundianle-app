@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<!--<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>-->
+<link href="css/mui.min.css" rel="stylesheet"/>
+
+<style>
+	.mui-bar-nav{background:#50B24B;}
+	.mui-bar-nav h1{color: #fff;}
+	#list{background-color: #fff;position: fixed;width: 100%;text-align: center;}
+	#list a{font-size: 1em;color:#333;line-height: 40px;margin: 0px 15px;}
+	#list a.mui-active{color: #50B24B;padding-bottom:8px;border-bottom: 2px solid #50B24B;}
+	.mui-bar-tab {
+		margin-top: 44px;
+		bottom: auto;
+	}	
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left mygren" id="personal" style="color: #fff;"></a>
+    <h1 class="mui-title">我的订单</h1>
+</header>
+	
+<div class="mui-bar mui-bar-tab">
+	<a id="defaultTab" class="mui-tab-item mui-active" href="miao_order_list.html">		
+		<span class="mui-tab-label">村抢购订单</span>
+	</a>
+	<a class="mui-tab-item" href="shan_order_list.html">
+		<span class="mui-tab-label">闪超订单</span>
+	</a>
+	<a class="mui-tab-item" href="jifen_order_list.html">
+		<span class="mui-tab-label">积分订单</span>
+	</a>
+</div>
+	
+
+<input type="hidden" id="phone" />
+<input type="hidden" id="Numberzx" />
+
+
+<script type="text/javascript" charset="utf-8">
+ //mui初始化
+	mui.init();
+	var subpages = ['miao_order_list.html', 'shan_order_list.html', 'jifen_order_list.html'];
+	var subpage_style = {
+		top: '94px',
+		bottom: '5px'
+	};
+	
+	var aniShow = {};
+	
+	 //创建子页面，首个选项卡页面显示，其它均隐藏；
+	mui.plusReady(function() {		
+		var self = plus.webview.currentWebview();
+		for (var i = 0; i < 3; i++) {
+			var temp = {};
+			var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
+			if (i > 0) {
+				sub.hide();
+			}else{
+				temp[subpages[i]] = "true";
+				mui.extend(aniShow,temp);
+			}
+			self.append(sub);
+		}
+	});
+	 //当前激活选项	
+	 	var activeTab = subpages[0];
+	
+//	var title = document.getElementById("title");
+	 //选项卡点击事件
+	mui('.mui-bar-tab').on('tap', 'a', function(e) {
+		
+		var targetTab = this.getAttribute('href');
+		if (targetTab == activeTab) {
+			return;
+		}
+		//显示目标选项卡;
+		plus.webview.show(targetTab);		
+		
+		var refreshlist = plus.webview.getWebviewById(targetTab);
+		//显示目标选项卡;
+		mui.fire(refreshlist,'refresh',{});		
+		//隐藏当前;
+		plus.webview.hide(activeTab);
+		//更改当前活跃的选项卡
+		activeTab = targetTab;
+	});
+	 //自定义事件，模拟点击“首页选项卡”
+	document.addEventListener('gohome', function() {
+		
+		var defaultTab = document.getElementById("defaultTab");
+		//模拟首页点击
+		mui.trigger(defaultTab, 'tap');
+		//切换选项卡高亮
+		var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+		if (defaultTab !== current) {
+		
+			current.classList.remove('mui-active');
+			defaultTab.classList.add('mui-active');
+		}
+	});
+	
+	
+	document.getElementById('personal').addEventListener('tap', function() {
+	mui.openWindow({
+		url:'personal.html',
+		id:'personal',
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+		
+</script>
+
+</body>
+
+</html>

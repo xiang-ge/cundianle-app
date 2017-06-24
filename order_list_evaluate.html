@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var userid =  plus.storage.getItem("userid");
+	//document.getElementById("userid").value = userid;
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/getEvalOrderList",
+      	data:{
+      		user_id:userid
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			//alert(data)
+			if(data != ""){  					
+  				var orderlist = document.getElementById("orderlist");
+  				var order = '';
+				for(i=data.length-1;i>=0;i--){
+					
+						order=order+'<li data-id="'+data[i].order_id+'"><div class="cd_list">';
+						order=order+'<p class="cd_tit">已完成,待评价 <span class="mui-icon mui-icon-arrowright"></span></p>';						
+				        order=order+'<div class="pic" data-id="'+data[i].order_id+'"><img src="'+data[i].goods_img+'"><div class="tit">'+data[i].goods_name+'</div><div class="right"><p class="price">￥'+data[i].shop_price+'</p><p class="prices">￥'+data[i].market_price+'</p><p class="num">x'+data[i].goods_count+'</p></div></div><div class="detail"><span>共<b>'+data[i].goods_count+'</b>件商品</span><span>实收：<b>￥'+data[i].total+'</b></span></div>';
+			        	order=order+'<div class="pri"><a href="javascript:;" onclick="evaluateOrder('+data[i].order_id+')">评价</a></div></div></li>';
+		        	
+				}
+				orderlist.innerHTML = order;
+			}else{
+				document.getElementById("unorder").innerHTML = '<img class="no_order" src="images/no_order.png">';
+			}
+		}
+	})		
+	
+})
+</script>
+<style>
+	.mui-bar-nav{background:#50B24B;}
+	.mui-bar-nav h1{color: #fff;}
+	#personal{color: #fff;}
+	.order_bg{}
+	.order_bg ul{padding:0px;margin:0px;}
+	.order_bg ul li{margin-bottom:10px;list-style: none;background: #FFFFFE;}
+	.cd_tit{height:40px;line-height: 40px;padding-left:20px;font-size:16px;color:#000;border-bottom:1px solid #F2F2F2;}
+	.cd_tit .mui-icon{float:right;padding-top:8px;color:#aaa;}
+	.order_bg ul li .pic{padding:5px 20px;height:110px;}
+	.order_bg ul li .pic img{float: left;width:90px;height:90px;padding:10px;border:1px solid #f2f2f2;border-radius: 2px;;}
+	.order_bg ul li .pri{border-top:1px solid #f2f2f2;height:40px;line-height: 40px;padding-left:20px;;}
+	.order_bg ul li .pri a{display: inline-block;padding:0px 20px;border-radius: 5px;border:1px solid #50b24b;height:30px;line-height: 30px;float:right;margin-top:4px;color:#50b24b;}
+	.order_bg ul li .pic .tit{float: left;width: 40%;height: 50%;font-size: 16px;color: #444;overflow: hidden;line-height: 25px;margin-top: 5px; margin-left: 10px;}
+	.order_bg ul li .pic .right{padding: 10px 5% 0 0;}
+	.order_bg ul li .pic .right p{height: 20px;}
+	.order_bg ul li .pic .right .price{text-align: right;font-size: 16px;color: #444;font-weight: bold;}
+	.order_bg ul li .pic .right .prices{text-decoration:line-through;text-align: right;font-size: 16px;color: #444;}
+	.order_bg ul li .pic .right .num{font-size: 16px;text-align: right;}
+	.order_bg ul li  .detail{background-color: #fff;text-align: right;height: 40px;border-top: 1px solid #ddd;border-bottom: 1px solid #eee;line-height: 40px;padding-right: 3%;}
+	.order_bg ul li  .detail span{margin-left: 10px;color: #333;}
+	.no_order{width:50%;display: block;margin:40% auto;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left" id="personal"></a>
+    <h1 class="mui-title">待评价订单</h1>
+</header>
+<div class="mui-content order_bg">
+	<div id="unorder"></div>
+	<ul id="orderlist">
+		<!--<li>
+		    <div class="cd_list">
+		    	<p class="cd_tit">等待付款 <span class="mui-icon mui-icon-arrowright"></span></p>
+		        <div class="pic">
+		        	<img src="images/product_img.png">
+		        	<div class="tit">大哥大股东</div>
+		        	<div class="right">
+		        	<p class="price">￥10.00</p>		        	
+		        	<p class="prices">￥10.00</p>
+		        	<p class="num">x5</p>
+		        	</div>
+		        </div>
+		        <div class="detail"><span>共<b>2</b>件商品</span><span>实收：<b>￥140.00</b>(邮费：<b>￥0.00</b>)</span></div>
+		        <div class="pri"><a href="order_detail.html">去支付</a></div>
+		    </div>
+    	</li>
+    	<li>
+		    <div class="cd_list">
+		    	<p class="cd_tit">等待付款 <span class="mui-icon mui-icon-arrowright"></span></p>
+		        <div class="pic"><img src="images/product_img.png"></div>
+		        <div class="pri">实付款：<span>￥91.00</span><a href="order_detail.html">去支付</a></div>
+		    </div>
+    	</li>-->
+    </ul>
+</div>
+</body>
+<script type="text/javascript">
+mui.init();
+document.getElementById('personal').addEventListener('tap', function() {
+	mui.openWindow({
+		url:'personal.html',
+		id:'personal',
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+mui("#orderlist").on('tap','.pic',function(){
+	mui.openWindow({
+		url:'order_detail.html',
+		id:'order_detail',
+		extras:{
+			order_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+</script>
+<script>
+/**
+ * 评价
+ * ***/
+function evaluateOrder(id){
+	mui.openWindow({
+		url:'order_evaluate.html',
+		id:'order_evaluate',
+		extras:{
+			order_id:id
+		},
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+	    },
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+}
+</script>
+</html>

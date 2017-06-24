@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/public.css" />
+<link rel="stylesheet" href="css/iconfont.css" />
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	plus.runtime.getProperty(plus.runtime.appid,function(inf){
+		document.getElementById("wgtVer").value = inf.version;
+        var checkUrl="http://www.cundianle.cn/appgys/userupgrade.php";
+	    var xhr=new XMLHttpRequest();
+	    xhr.onreadystatechange=function(){
+	        switch(xhr.readyState){
+	            case 4:
+	            if(xhr.status==200){
+	                var newVer=xhr.responseText;
+	                if(newVer != 1){
+	                   document.getElementById("my").style.color="red";
+	                   document.getElementById("gengxin").style.display="block";
+	                }
+	            }
+	            break;
+	            default:
+	            break;
+	        }
+	    }
+	    xhr.open('GET',checkUrl+"?ver="+inf.version);
+	    xhr.send();
+    });
+	//把用户名和密码在本地存储中获取到
+  	var userid = plus.storage.getItem("userid");
+	var shopid = plus.storage.getItem("shopid");
+	var storeNo = plus.storage.getItem("storeNo");
+//	alert(shopid);
+//	alert(storeNo);
+	if(userid == null || shopid == null){
+		mui.openWindow({
+		    url:'login.html', 
+		    id:'login',
+		    createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		});
+	
+	}else{
+		var shopid = plus.storage.getItem("shopid");
+		/*
+		 * 轮播图
+		 * **/
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/imgs",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var imglist = document.getElementById("imglist");
+				var str='';
+				var last='';
+				var first='';
+				for(var i=0;i<data.length;i++){
+					//最后一张图片
+					//alert(i)
+					//alert(data.length)
+					if(i == (data.length-1)){
+						//alert(i)
+						last=last+'<div class="mui-slider-item mui-slider-item-duplicate img" data-id="'+data[i].id+'"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'"></a></div>';
+					}
+					str=str+'<div class="mui-slider-item img" data-id="'+data[i].id+'"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'"></a></div>';
+					//获取第一张图片
+					if(i == 0){
+						first=first+'<div class="mui-slider-item mui-slider-item-duplicate img" data-id="'+data[i].id+'"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'"></a></div>';
+					}
+					
+				}
+				//alert(last+str+first)
+				imglist.innerHTML = last+str+first;
+				mui("#imglist").on('tap','.img',function(){
+					//alert(this.getAttribute('data-id'))
+					mui.openWindow({
+						url:'miao.html',
+						id:'miao.html',
+						extras:{
+							good_id:this.getAttribute('data-id')
+						},
+						createNew: true,
+						show:{
+							aniShow:"pop-in",
+							duration: '200'
+						},
+				        waiting:{
+				        	autoShow:false,
+				        	options:{
+						        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+						        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+						    }
+				        },
+				        styles: {
+							zindex: 1
+						}
+					})
+				})
+			}
+		})
+	  	/**
+	  	 * 点点点
+	  	 * **/
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/imgs",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var imgnum = document.getElementById("imgnum");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					if(i == 0){
+						str=str+'<div class="mui-indicator mui-active"></div>';
+					}else{
+						str=str+'<div class="mui-indicator"></div>';
+					}
+				}
+				imgnum.innerHTML = str;
+			}
+		})
+		/*
+		 * 村村头条
+		 * **/
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/news",
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var newslist = document.getElementById("newslist");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					if(data[i].is_recommend == 1){
+						str=str+'<li data-id="'+data[i].n_id+'"><a href="javascript:;">'+data[i].news_title+'</a></li>';
+						
+					}else{
+						str=str+'<li data-id="'+data[i].n_id+'"><a href="javascript:;">'+data[i].news_title+'</a></li>';
+					}
+					
+				}
+				newslist.innerHTML = str;				
+			}
+		})
+		/*
+		 *乡亲都在买
+		 * **/
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Miao/recommend",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var goodslist = document.getElementById("goodslist");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					if(i%2 == 1){
+						str=str+'<li data-id="'+data[i].id+'" class="nobg"><img src="http://www.cundianle.cn'+data[i].picture+'"><div class="cd_pt"><p>'+data[i].shopname+'</p><p class="cd_pb"><span>￥<b>'+data[i].nowprice+'</b></span><a href="javascript:;" class="buy" '+data[i].id+'>立即抢购</a></p></div></li>';
+				
+					}else{
+						str=str+'<li data-id="'+data[i].id+'"><img src="http://www.cundianle.cn'+data[i].picture+'"><div class="cd_pt"><p>'+data[i].shopname+'</p><p class="cd_pb"><span>￥<b>'+data[i].nowprice+'</b></span><a href="javascript:;" class="buy" '+data[i].id+'>立即抢购</a></p></div></li>';
+				
+					}
+				}
+				goodslist.innerHTML = str;
+				mui('#goodslist img').each(function(){
+					var width = this.offsetWidth;
+					
+					//this.style.height = width+10+'px';
+					this.style.height=width+'px';
+					//alert(this.style.height)
+					//this.style.height = width+'px';
+				})
+				
+			}
+		})
+	  	
+	  	
+	  	/*
+	  	 *
+	  	 * 获取抢购列表图片
+	  	 * ***/	  
+	  	jQuery.ajax({
+        	url:"http://www.cundianle.cn/cdl.php/home/Miao/adList",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var qianggoulist = document.getElementById("qianggouList");
+				var img_qg0='';
+				var img_qg1='';
+				var img_qg2='';
+				var img_qg3='';
+				for(var i=0;i<data.length;i++){
+					//最后一张图片
+					//alert(i)
+					//alert(data.length)
+					if(i == 3){
+						//alert(i)
+						img_qg3=img_qg3+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'" /></a></li>';
+					}
+					if(i == 2){
+						//alert(i)
+						img_qg2=img_qg2+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'" /></a></li>';
+					}
+					if(i == 1){
+						//alert(i)
+						img_qg1=img_qg1+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'" /></a></li>';
+					}
+					if(i == 0){
+						img_qg0=img_qg0+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].ad_picture+'" /></a></li>';
+					}
+					
+				}
+			
+				qianggoulist.innerHTML = img_qg3+img_qg2+img_qg1+img_qg0;
+	
+			}		
+		})
+	  	
+	  	
+	  	//获取广告位图片
+	  	
+	  	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/plugAd/indexAds",
+      	
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				for(var i=0;i<data.length;i++){
+					if(i == 0){	
+						document.getElementById("tong1").src="http://www.cundianle.cn/"+data[i].plug_ad_pic;	
+					}else{
+						document.getElementById("tong2").src="http://www.cundianle.cn/"+data[i].plug_ad_pic;
+					}					
+					
+				}
+	
+			}		
+		})	  	
+	  	
+	  	/*
+	  	 *
+	  	 * 获取专题列表图片
+	  	 * ***/	  
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Miao/six",
+	      	data:{
+	      		shopid:shopid
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var zhuantilist = document.getElementById("zhuantiList");
+				var img_zt0='';
+				var img_zt1='';
+				var img_zt2='';
+				var img_zt3='';
+				var img_zt4='';
+				var img_zt5='';
+				for(var i=0;i<data.length;i++){
+					//最后一张图片
+					//alert(i)
+					//alert(data.length)
+					if(i == 0){
+						//alert(i)
+						img_zt5=img_zt5+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}					
+					if(i == 1){
+						//alert(i)
+						img_zt4=img_zt4+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}
+					if(i == 2){
+						//alert(i)
+						img_zt3=img_zt3+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}
+					if(i == 3){
+						//alert(i)
+						img_zt2=img_zt2+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}
+					if(i == 4){
+						//alert(i)
+						img_zt1=img_zt1+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}
+					if(i == 5){
+						img_zt0=img_zt0+'<li data-id="'+data[i].id+'" class="li"><a href="javascript:;"><img src="http://www.cundianle.cn'+data[i].topic_picture+'" /></a></li>';
+					}
+					
+				}
+			
+				zhuantilist.innerHTML = img_zt5+img_zt4+img_zt3+img_zt2+img_zt1+img_zt0;
+	
+			}		
+		})
+	}
+})
+</script>
+<style>
+	#slider {
+		height: 200px;
+	}
+	
+	
+	
+	#slider .mui-slider-item {
+		height: 200px;
+		margin-bottom: 0px;
+	}
+	
+	#slider .mui-slider-item img {
+		height: 200px;
+	}
+	
+	.cd_menu {
+		padding-top: 15px;
+		padding-bottom: 10px;
+		overflow: hidden;
+		margin: 0px;
+		background: #fff;
+	}
+	
+	.cd_menu li {
+		float: left;
+		width: 20%;
+		list-style: none;
+		text-align: center;
+		margin: 0px;
+		padding: 0px;
+		line-height: 36px;
+	
+	}
+	.cd_menu li a{display: block;width:100%;height:100%;position:relative;}
+	.cd_menu li a>span{display: block;position:relative;}
+	.cd_menu li a img {
+		width:36px;
+		margin:0 auto;
+		display: block;
+	}
+	.cd_menu li a p {
+		font-size: 0.8rem;
+		margin-bottom: 0px;
+		margin-top: 5px;
+		text-align: center;
+		height:30px;
+		line-height:15px;
+	}
+	
+	.cd_tiao {
+		padding: 1.6% 1% 1% 4.5%;
+		margin-top: 1px;
+		margin-bottom: 1px;
+		background: #fff;
+		overflow: hidden;
+		height: 45px;
+	}
+	
+	.cd_tiao img {
+		float: left;
+		margin-right: 10px;
+		margin-top: 2.1%;
+		margin-left: 5px;
+		width:21%;
+	}
+	
+	.cd_tiao ul {
+		float: left;
+		height: 30px;
+		overflow: hidden;
+		width:70%;
+		margin-left:2%;
+	}
+	
+	.cd_tiao ul li {
+		line-height: 30px;
+		height: 30px;
+
+	}
+	
+	.cd_tiao ul li a {
+		font-size: 14px;
+		color: #333;
+	}
+	
+	.cd_img img{
+		width: 100%;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		background: #fff;
+		overflow: hidden;
+		}
+	.qianggou
+	{
+		overflow: hidden;
+		width: 100%;
+		height: 240px;	
+
+	}
+	.qianggou ul{
+		height: 240px;
+		background: #fff;
+
+	}
+	.qianggou ul li{
+		width: 50%;
+		height: 50%;
+		float: left;
+		border: 1px solid #efeff4;	
+		text-align: center;
+	}
+	.qianggou ul li img{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;	
+	}
+	.guanggao {
+		width: 100%;
+		height: 90px;
+		margin-top: 1px;
+		margin-bottom: 1px;
+		text-align: center;
+	}
+	.guanggao img{
+		width: 100%;
+		height: 100%;
+	}
+	
+	.zhuanti
+	{
+		overflow: hidden;
+		width: 100%;
+		height: 360px;	
+		margin-bottom: 1px;
+
+	}
+	.zhuanti ul{
+		width: 100%;
+		height: 360px;
+		background: #fff;
+	
+	}
+	.zhuanti ul li{
+		width: 49%;
+		height: 120px;
+		margin: 0 auto;
+		float: left;
+		border: 1px solid #efeff4;	
+		text-align: center;
+	}
+	.zhuanti ul li img{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;	
+	}
+	
+	.cd_ms {
+		height:260px;
+		overflow: hidden;
+		margin-top: 1px;
+		margin-bottom:1px;
+		
+	}
+	.cd_ms .cd_ms_t {
+		background: #fff;
+		float:left;
+		width:39.5%;
+		position: relative;
+		height:196px;
+	}
+	
+	.cd_ms .cd_ms_t .sj img {
+		vertical-align: middle;
+		margin-right: 5px;
+		width:70%;
+	}
+	
+	.cd_ms .cd_ms_t .time {
+    font-size: 0.82rem;
+    color: #979797;
+    font-weight: bold;
+    display: inline-block;
+    margin-left:2%;
+    width: 100%;
+	}
+	.cd_ms_t h2{font-size: 1.4rem;color:#666;}
+	.cd_ms .cd_ms_t .time span {
+		display: inline-block;
+		color:#fff;
+		height: 24px;
+		line-height: 24px;
+		margin:5px;
+		font-size: 14px;
+		background: #494848;
+		margin-top: 5px;;
+		padding:0px 4%;
+		border-radius: 10px;
+		
+	}
+	.qa{display: block;position: absolute;top:0px;left:0px;width:100%;height:100%;background: rgba(0,0,0,0.6);color:#fff;text-align: center;border-radius: 50%;z-index:777;font-size:0.6rem !important;}
+	.cd_ms .cd_ms_t .cd_more {
+		float: right;
+		font-size: 14px;
+	}
+	
+	.cd_ms .cd_ms_t .sj_n{
+		margin-top:5%;
+		width:100%;
+		margin-bottom:0px;
+		position: relative;
+	}
+	.cd_ms  .s_m{font-size:1.2rem;margin-top:1%;color:#0e0e0e;margin-left:2%;}
+	.cd_ms .cd_ms_t .sj_n .hot{position: absolute;top:-5%;right:40%;width:20%;}
+
+	
+	
+	.cd_buy {
+		background: #fff;
+		margin-bottom: 45px;
+	}
+	
+	.cd_buy h2 {
+		font-size: 18px;
+		font-weight: bold;
+		color: #50B24B;
+		height: 33px;
+		line-height: 30px;
+		text-align: center;
+		margin: 0px;
+		border-bottom: 2px solid #dfdfdf;
+	}
+	.xq_w{width:100%;height:60px;background: #fff;margin-bottom:1px;padding:3.5% 0px;}
+	.xq_w .xq{width:40%;margin:0 auto;display: block;}
+	
+	.cd_buy ul {
+		overflow: hidden;
+		background: #efeff4;
+	}
+	
+	.cd_buy ul li {
+		float: left;
+		width: 49.5%;
+		margin-right: 1px;
+		margin-bottom: 1px;
+		background: #fff;
+	}
+	.cd_buy ul li img{width: 100%;height:120px;}
+	
+	.cd_buy ul li.nobg {
+		margin-right: 0;
+	}
+	
+	.cd_buy ul li .cd_pt {
+		margin-top: 5px;
+	}
+	
+	.cd_buy ul li .cd_pt p {
+		font-size: 14px;
+		color: #333;
+		padding: 0px 3px;
+		margin-bottom:5px;
+		padding-left: 5px;
+		height: 21px;
+		overflow: hidden;
+	}
+	
+	.cd_buy ul li .cd_pt .cd_pb {
+		display: block;
+		margin-top: 2px;
+		width: 100%;
+	}
+	
+	.cd_buy ul li .cd_pt .cd_pb span {
+		color: #e21d36;
+	}
+	
+	.cd_buy ul li .cd_pt .cd_pb span b {
+		color: #e21d36;
+		font-size: 1rem;
+		margin-left:-2px;
+		font-weight: normal;
+	}
+	
+	.cd_buy ul li .cd_pt .cd_pb a {
+		margin-right: 5px;
+		padding: 0px 6px;	
+		background: #50B24B;
+		color: #fff;
+		float: right;
+		font-size: 14px;
+		border-radius: 3px;
+		height:20px;
+		line-height: 20px;
+		padding-top:1px;
+	}
+	
+	
+	
+	
+	.mui-bar-tab .mui-tab-item.active{color:#50B24B;}
+	
+	/*.mui-bar-tab a{color:#18B831;}*/
+	.mui-bar-tab a{color:#929292;}
+	.qd{position: absolute;top:50%;left:50px;height:20px;line-height:20px;background: rgba(0,0,0,0.6);border-radius: 5px;;color:#999;z-index:3;margin-top:20px;margin-left:-5px;}
+	.sg{width:80%;display: block;}
+	.li_w{width:100%;height:100%;display: block;}
+	.sw{width:100%;display: block;height: 196px;}
+	#slider .adress_t{text-align: center;border-radius: 33px;width:30%;height:36px;line-height: 36px;background: rgba(0,0,0,0.4);position: absolute;z-index: 999;top:5%;left:40%;}
+	#slider .adress_t span{font-size:0.8rem;color: #fff;display: block;}
+	#slider .adress_t span::after{content:'';display:inline-block;width:0px;height:0px;border-top:5px solid #fff;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px;}
+	.mui-bar-tab .foot_tab{width: 20%;}
+	#slider{position: relative;}
+	.slide_top{position: fixed;left:0%;height:44px;width:100%;z-index:10001;overflow: hidden;padding-top: 1%;}
+	.slide_top .sao {margin-left:5%;width:9%;margin-top:1%;}
+	.slide_top .sao img{width:80%;}
+	#slider .serch {
+		width:60%;
+		background: rgba(255,255,255,0.3);
+		display: inline-block;
+		position: relative;
+		height:26px;
+		border-radius: 5px;;
+		line-height: 26px;
+		margin-top: 5px;
+		margin-left:8%;
+	
+		
+	}
+	
+	#slider .serch input {
+		background: none;
+		font-size: 16px;
+		height: 21px;
+	}
+	#slider .serch .icon-sousuo-sousuo{position: absolute;top:15%;right:5%;color:#fff;line-height: 21px;}
+	.cart {margin-left:7%;width:9%;margin-top:1%;}
+	.cart img{width:80%;}
+	/*.cart{margin-left:2%;}
+	.cart img{font-size:32px;color:#fff;display: inline-block;}*/
+	.slide_top a{display:block;float:left;height:40px;}
+	*::-webkit-input-placeholder { color: #fff;text-align: left; } 
+	/*mask*/
+	.mask1{display:none;width:100%;height:100%;position: fixed;top:0px;left: 0px;z-index:999;background:rgba(0,0,0,0.4);}
+	.mask1 .m_wrap{position: absolute;width:90%;left:5%;top:50%;height:182px;margin-top:-91px;z-index:5;background: #fff;border-radius: 5px;;}
+	.mask1 .m_wrap h2{font-size: 16px;color:#34b242;text-align: center;border-bottom:1px solid #34b242;height:35px;line-height: 30px;padding:0px 5%;;}
+	.mask1 .m_wrap p{font-size:14px;color:#333;line-height: 20px;;}
+	.mask1 .m_wrap .m_btn{position: absolute;bottom:0;margin-top:10px;width:100%;overflow: hidden;background: #f5f5f5;;}
+	.mask1 .m_wrap .m_btn a.no{border-right:none;}
+	.mask1 .m_wrap .m_btn a{display: block;float: left;width:50%;border-right:1px solid #dfdfdf;padding:12px 0px;text-align: center;color:#333;}
+	
+.mui-slider-indicator .mui-indicator{background: #ffffff;-webkit-box-shadow: none;box-shadow:none;}
+
+.mui-slider-indicator .mui-indicator.mui-active{background: #18b831;}
+
+</style>
+</head>
+
+<body>
+<div id="slider" class="mui-slider">
+	<div class="slide_top" id="searchtop">
+	<a href="javascript:;" class="sao"><img src="images/saoyisao.png"></a>
+	<a class="serch" href="search_list.html"><input type="search" disabled="disabled" placeholder="输入商品名称查找"><span class="iconfont icon-sousuo-sousuo"></span></a>
+	<a class="cart" href="cart.html"><img src="images/gouwu.png"></a>
+	</div>
+	<div class="mui-slider-group mui-slider-loop" id="imglist">
+		<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#">
+				<img src="">
+			</a>
+		</div>
+		<!-- 第一张 -->
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="">
+			</a>
+		</div>
+		<!-- 第一张 -->
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="">
+			</a>
+		</div>
+		<!-- 第一张 -->
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="">
+			</a>
+		</div>
+
+		<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#">
+				<img src="">
+			</a>
+		</div>
+	</div>
+
+	<div class="mui-slider-indicator" id="imgnum"></div>
+</div>
+<div class="mui-content" style="padding-bottom: 6px;;">
+	<ul class="cd_menu">
+		<li>
+			<a href="shansong.html">
+				<img id="shan" src="images/shanchao1.png">
+				<p>闪超</p>
+			</a>			
+		</li>
+		<li>
+			<a href="cunqianggou.html">
+				<img id="cun" src="images/cun.png">
+				<p>村抢购</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="he" src="images/hezuoshe.png">
+				<p>合作社</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="nong" src="images/nongzi.png">
+				<p>农资</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="bian" src="images/bianmin.png">
+				<p>便民</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="chong" src="images/chongzhi.png">
+				<p>充值</p>
+			</a>			
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="yu" src="images/yuding.png">
+				<p>预定</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="gong" src="images/gongzuo.png">
+				<p>工作</p>
+			</a>
+		</li>
+		<li>
+			<a href="jifenindex.html">
+				<img id="ji" src="images/jifen.png">
+				<p>积分</p>
+			</a>
+		</li>
+		<li>
+			<a href="jingqingqidai.html">
+				<img id="fen" src="images/fenlei.png">
+				<p>分类</p>
+			</a>
+		</li>
+	</ul>
+	
+	<div class="cd_tiao">
+		<a href="news.html"><img src="images/kuaibao.png"></a>
+		<ul id="newslist"></ul>
+	</div>
+	<div class="xq_w"><img class="xq" src="images/shoumanwu.png"></div>
+	
+	
+	<div class="qianggou">
+		<ul id="qianggouList">
+
+		</ul>
+	</div>
+	<div class="guanggao"><a href="cunqianggou.html"><img id="tong1"src=""  /></div>
+	<div class="xq_w"><img class="xq" src="images/haopinzhi.png"></div>
+
+
+		<div class="zhuanti">
+		<ul id="zhuantiList">
+			<!--<li class="li1">
+				<a href="zhuanti1.html">
+				<img class="jumps img01" id="guang01" src="images/zhuanti1.png" >
+				</a>
+			</li>
+			<li class="li2">
+				<img class="jumps img02" id="guang02" src="images/zhuanti2.png" >
+			</li class="li3">
+			<li>
+				<img class="jumps img03" id="guang03" src="images/zhuanti3.png">
+			</li>
+			<li class="li4">
+				<img class="jumps img04" id="guang04" src="images/zhuanti4.png" >
+			</li>
+			<li class="li5">
+				<img class="jumps img05" id="guang05" src="images/zhuanti5.png" >
+			</li class="li6">
+			<li>
+				<img class="jumps img06" id="guang06" src="images/zhuanti6.png">
+			</li>-->
+		</ul>
+	</div>
+	
+	<div class="xq_w"><img class="xq" src="images/cirida.png"></div>
+	<div class="guanggao"><a href="javascript:;"><img id="tong2"src=""  /></div>
+
+	<div class="cd_buy">
+	
+	<input type="hidden" id="goods_id" />
+
+
+
+	
+	
+	<!--秒杀end-->
+
+		
+		<!--<h2>乡亲们都在买</h2>-->
+		<ul id="goodslist"></ul>
+	</div>
+</div>
+<!--底部-->
+<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab active">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab jump" href="shansong.html">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+	<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+		<a class="foot_tab jump" href="personal.html">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+
+<!--遮罩层-->
+
+<div class="mask1" id="gengxin">
+	<div class="m_wrap">
+	<div class="de" style="padding:0px 5%;">
+		  <h2 id="my">温馨提示</h2>
+		  <p>修复若干bug，请升级到最新版本</p>
+	     </div>
+	      <div class="m_btn">
+	      	<input type="hidden" id="wgtVer" />
+	      	<a href="javascript:;" id="close">下次再说</a><a onclick="checkUpdate()" class="no">升级新版</a>
+	      </div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+(function($, doc) {
+	$.oldBack = mui.back;
+	var backButtonPress = 0;
+	$.back = function(event) {
+		backButtonPress++;
+		if (backButtonPress > 1) {
+			plus.runtime.quit();
+		} else {
+			plus.nativeUI.toast('再按一次退出应用');
+		}
+		setTimeout(function() {
+			backButtonPress = 0;
+		}, 1000);
+		return false;
+	};
+}(mui, document));
+</script>
+
+<!--<script type="text/javascript">
+	$(document).on('tap','#jifen',function(){
+		window.location.href = "jifenindex.html";
+	})
+	
+	$(document).on('tap','#shansong',function(){
+		window.location.href = "shansong.html";
+	})
+</script>-->
+
+
+<script type="text/javascript" charset="utf-8">
+	mui.init({
+		swipeBack: true, //启用右滑关闭功能
+
+	});
+    
+    
+
+/*处理a标签，将所有的点击a标签后，隐藏底部导航*/
+	mui('.mui-bar-tab').on('tap', '.jump', function(e) {
+		var id = this.getAttribute("href");
+		var href = this.href;
+		mui.openWindow({
+			url: href, 
+			id: id,
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		});
+		
+	});
+	
+		//首页 分类导航
+//	mui(".cd_menu").on("tap", "a", function() {
+//        var id = this.getAttribute("href");
+//	      var href = this.href;
+//	      mui.openWindow({
+//	      	url:href,
+//	      	id:id,
+//	      	show:{
+//			aniShow:"pop-in",
+//			duration: '200'
+//		    },
+//	        waiting:{
+//	        	autoShow:false,
+//	        	options:{
+//			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+//			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+//			    }
+//	        },
+//	        styles: {
+//				zindex: 1
+//			}
+//	      		      		      		      	
+//	      })
+//	      	      
+//	});
+
+
+//首页产品列表
+   mui("#newslist").on('tap','li',function(){
+		//alert(this.getAttribute('data-id'))
+		mui.openWindow({
+			url:'news.html',
+			id:'news',
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+   
+   //抢购产品列表
+      mui("#qianggouList").on('tap','li',function(){
+		//alert(this.getAttribute('data-id'))
+		mui.openWindow({
+			url:'miao.html',
+			id:'miao.html',
+			extras:{
+			good_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+   
+   //专题产品列表
+         mui("#zhuantiList").on('tap','li',function(){
+		//alert(this.getAttribute('data-id'))
+		mui.openWindow({
+			url:'zhuanti.html',
+			id:'zhuanti.html',
+			extras:{
+			topic_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+         
+   
+   mui("#goodslist").on('tap','li',function(){
+		//alert(this.getAttribute('data-id'))
+		mui.openWindow({
+			url:'miao.html',
+			id:'miao.html',
+			extras:{
+				good_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		})
+	})
+
+	//轮播图
+	var slider = mui("#slider");
+	slider.slider({
+		interval: 5000
+	});
+
+
+	//滚动显示
+
+	jQuery(function() {
+
+		setInterval(function() {
+			var wrapT = $(".cd_tiao").find("ul");
+			var imgH = wrapT.find("li").height();
+			wrapT.animate({
+				"margin-top": "-30px"
+			}, function() {
+
+				wrapT.find("li").eq(0).appendTo(wrapT);
+				wrapT.css("margin-top", "0px");
+
+			})
+
+		}, 3000);
+
+		//图片宽高比，乡亲买啥
+		//var picW1 = $(".cd_buy").find("li").find("img").width();
+		//alert(picW1)
+		//$(".cd_buy").find("li").find("img").height(picW1);
+		
+
+	})
+		document.getElementById('close').addEventListener('tap', function() {
+		document.getElementById("gengxin").style.display="none";
+	})
+	
+//获取首张图
+	
+	
+</script>
+<script type="text/javascript">
+
+// 检测更新
+var checkUrl="http://www.cundianle.cn/appgys/userupgrade.php";
+function checkUpdate(){
+    plus.nativeUI.showWaiting("检测更新...");
+    var wgtVer = document.getElementById('wgtVer').value;
+    var xhr=new XMLHttpRequest();
+    xhr.onreadystatechange=function(){
+        switch(xhr.readyState){
+            case 4:
+            plus.nativeUI.closeWaiting();
+            if(xhr.status==200){
+                var newVer=xhr.responseText;
+                
+                if(newVer != 1){
+                   var wgtUrl = "http://www.cundianle.cn"+newVer;
+                   downWgt(wgtUrl);  // 下载升级包
+                }else{
+                    plus.ui.toast("无新版本可更新！");
+                }
+            }else{
+                plus.ui.toast("检测更新失败！");
+            }
+            break;
+            default:
+            break;
+        }
+    }
+    xhr.open('GET',checkUrl+"?ver="+wgtVer);
+    xhr.send();
+}
+// 下载wgt文件
+//var wgtUrl="http://demo.dcloud.net.cn/test/update/H5EF3C469.wgt";
+function downWgt(wgtUrl){
+    plus.nativeUI.showWaiting("正在更新...");
+    plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){
+        if ( status == 200 ) {
+        	//alert("下载wgt成功："+d.filename);
+            installWgt(d.filename); // 安装wgt包
+        } else {
+            plus.ui.toast("更新失败！");
+        }
+        plus.nativeUI.closeWaiting();
+    }).start();
+}
+// 更新应用资源
+function installWgt(path){
+    plus.nativeUI.showWaiting("安装wgt文件...");
+    plus.runtime.install(path,{},function(){
+        plus.nativeUI.closeWaiting();
+        //console.log("安装wgt文件成功！");
+        plus.nativeUI.alert("应用资源更新完成！",function(){
+//          plus.runtime.restart();
+			plus.storage.removeItem("userid");
+			plus.storage.removeItem("shopid");
+			plus.storage.removeItem("phone");
+			plus.storage.removeItem("storeNo");
+            window.location.href="login.html";
+        });
+        
+    },function(e){
+        plus.nativeUI.closeWaiting();
+//      console.log("安装wgt文件失败["+e.code+"]："+e.message);
+       plus.ui.toast("安装失败");
+       //plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);
+    });
+}
+
+//滚动条事件
+window.onscroll = function(){
+ var t = document.documentElement.scrollTop || document.body.scrollTop; 
+ var top_div = document.getElementById( "searchtop" ); 
+ if( t >= 44 ){
+  top_div.style.backgroundColor="#18B831"
+ }
+ if( t < 44 ){
+  top_div.style.backgroundColor="rgba(250,250,252,0)"
+ }
+}
+
+</script>
+</html>

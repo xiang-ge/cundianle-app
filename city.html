@@ -1,0 +1,366 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var self = plus.webview.currentWebview();
+	document.getElementById("user_list_id").value = plus.storage.getItem("userid");
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/province",
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			var province = document.getElementById("provincess");
+			str="";
+			str=str+'<option value="0">省份</option>';
+			for(i=data.length-1;i>=0;i--){
+				str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+			}
+			//alert(str)
+			province.innerHTML = str;
+		}
+	})
+  	
+})
+</script>
+<style>
+
+.mygren{background:url(images/mai.png);color:#fff;}
+.m_t{font-size:1rem;overflow: hidden;}
+.m_t p{color: #818080; margin-top: 5%;margin-left: 2.5%;font-size: 1.1rem;}
+.m_t ul{overflow: hidden;}
+.m_t ul li{width:20%;color:#1a1b1b;float:left;border: 1px solid #dfdfdf;background: #fff;border-radius: 5px;height:40px;line-height: 40px;margin:2.5% 2.5%;text-align: center;}
+.m_b p{color: #818080; margin-top: 5%;margin-left: 2.5%;font-size: 1.1rem;}
+.m_b ul{overflow: hidden;}
+.m_b ul li{width:30%;color:#1a1b1b;float:left;border: 1px solid #dfdfdf;background: #fff;border-radius: 5px;padding:5px 0;height:50px;margin:2.5% 1.5%;text-align: center;}
+.mui-input-row label~input, .mui-input-row select, .mui-input-row label~textarea{width:100%;padding-left:4px;}
+.sel{border:1px solid #dfdfdf;border-radius: 5px;;}
+.mui-select:before{right:6px;}
+.mui-input-row{float:left !important;clear: none;}
+.mui-select{width:23%;margin:1%;font-size:0.85rem;}
+.foot{width: 100%;height: 50px;position: fixed;bottom: 0;}
+.foot .register{width: 100%;height: 50px;line-height: 50px;text-align: center;padding:0px;font-size: 1.1rem;color:#fff;background: url(images/mai.png);}
+select{padding-left:10% !important;}
+</style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav mygren">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mygren"></a>
+<h1 class="mui-title" style="color:#fff;">选择超市</h1>
+</header>
+<div class="mui-content">
+<div class="m_t">
+	<p>当前定位城市</p>
+	<!--<ul><li>河北省</li><li>廊坊市</li><li>霸州市</li><li>王庄子乡</li></ul>-->
+	<div class="mui-input-row mui-select" style="float: left;">        
+        <select class="sel" id="provincess"  onChange="provinces();"></select>
+    </div>
+    <div class="mui-input-row mui-select">        
+        <select class="sel" id="cityss" onchange="citys();"><option value="0">市/县</option></select>
+    </div>
+    <div class="mui-input-row mui-select">        
+        <select class="sel" id="townss" onchange="towns();"><option value="0">镇/区</option></select>
+    </div>
+    <div class="mui-input-row mui-select">        
+        <select class="sel" id="village" onchange="villages();"><option value="0">乡/村</option></select>
+    </div>
+</div>
+<div class="m_b">
+	<p>点击选择超市</p>
+<ul class="m_list" id="supermarket"><li style="line-height:40px;">超市</li></ul>
+</div>
+</div>
+<div class="foot">
+	<ul class="register" id="register"><li style="line-height:50px;">点击注册完成</li></ul>
+</div>
+<input type="hidden" id="user_list_province" value="0" />
+<input type="hidden" id="user_list_city" value="0" />
+<input type="hidden" id="user_list_town" value="0" />
+<input type="hidden" id="provincename"/>
+<input type="hidden" id="cityname" />
+<input type="hidden" id="townname" />
+<input type="hidden" id="user_list_id" />
+</body>
+<script type="text/javascript">
+	function provinces(){		
+		var provinceid = document.getElementById("provincess");
+		//alert(provinceid.value)
+		document.getElementById("user_list_province").value = provinceid.value;
+		document.getElementById("provincename").value = provinceid.options[provinceid.options.selectedIndex].text;
+		//alert();
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/city",
+	      	data:{
+				id:provinceid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var city = document.getElementById("cityss");
+				str="";
+				str=str+'<option value="0">市/县</option>';
+				for(i=data.length-1;i>=0;i--){
+				
+					str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+				}
+				city.innerHTML = str;
+				document.getElementById("townss").innerHTML = '<option value="0">镇/区</option>';
+				document.getElementById("village").innerHTML = '<option value="0">乡/村</option>';
+				document.getElementById("supermarket").innerHTML = '<li style="line-height:40px;">超市</li>';
+			}
+		})
+	}
+
+	function citys(){
+		var cityid = document.getElementById("cityss");
+		//alert(cxid.value)
+		document.getElementById("user_list_city").value = cityid.value;
+		document.getElementById("cityname").value = cityid.options[cityid.options.selectedIndex].text;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/town",
+	      	data:{
+				id:cityid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var town = document.getElementById("townss");
+				str="";
+				str=str+'<option value="0">镇/区</option>';
+				for(i=data.length-1;i>=0;i--){
+				
+					str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+				}
+				town.innerHTML = str;
+				document.getElementById("village").innerHTML = '<option value="0">乡/村</option>';
+				document.getElementById("supermarket").innerHTML = '<li style="line-height:40px;">超市</li>';
+			}
+		})
+	}
+	function towns(){
+		var townid = document.getElementById("townss");
+		//alert(townid.value)
+		document.getElementById("user_list_town").value = townid.value;
+		document.getElementById("townname").value = townid.options[townid.options.selectedIndex].text;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/village",
+	      	data:{
+				id:townid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var village = document.getElementById("village");
+				str="";
+				str=str+'<option value="0">乡/村</option>';
+				for(i=data.length-1;i>=0;i--){
+					
+						str=str+'<option value="'+data[i].member_list_detailed+'">'+data[i].member_list_detailed+'</option>';
+					}
+
+				village.innerHTML = str;
+				document.getElementById("supermarket").innerHTML = '<li style="line-height:40px;">超市</li>';
+			}
+		})	
+	}
+	function villages(){
+		var village = document.getElementById("village");
+		var register = document.getElementById("register");
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/supermarket",
+	      	data:{
+				name:village.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var supermarket = document.getElementById("supermarket");
+				var str="";
+				var zhuce="";
+				for(i=data.length-1;i>=0;i--){
+					if(data[i].member_list_detailed.length > 5){
+						str=str+'<li onclick="supermarkets(this,'+data[i].member_list_id+')" data-address="'+data[i].member_list_detailed+'">'+data[i].shop_name+'</li>';
+						zhuce=zhuce+'<li onclick="supermarkets(this,'+data[i].member_list_id+')" data-address="'+data[i].member_list_detailed+'">点击注册完成</li>';
+					}else{
+						str=str+'<li onclick="supermarkets(this,'+data[i].member_list_id+')" data-address="'+data[i].member_list_detailed+'" style="line-height:40px;">'+data[i].shop_name+'</li>';
+						zhuce=zhuce+'<li onclick="supermarkets(this,'+data[i].member_list_id+')" data-address="'+data[i].member_list_detailed+'">点击注册完成</li>';
+					}
+					
+				}
+				supermarket.innerHTML = str;
+				register.innerHTML = zhuce;
+				
+			} 
+		})	
+	}
+	function supermarkets(obj,id){
+		var shop_id = id;//超市id
+		var user_list_village = $(obj).attr("data-address");//超市地址
+		
+		var province = document.getElementById('user_list_province');//省
+		var city = document.getElementById('user_list_city');//市
+		var town = document.getElementById('user_list_town');//区
+		var provincename = document.getElementById('provincename');//省
+		var cityname = document.getElementById('cityname');//市
+		var townname = document.getElementById('townname');//区
+		var user_list_id = document.getElementById('user_list_id');//用户id
+		jQuery.ajax({
+			url:"http://www.cundianle.cn/cdl.php/home/User/saveRegister",
+	      	data:{
+				"user_list_id":user_list_id.value,
+				"shop_id":shop_id,
+				"user_list_province":province.value,
+				"user_list_city":city.value,
+				"user_list_town":town.value,
+				"user_list_village":user_list_village,
+				"provincename":provincename.value,
+				"cityname":cityname.value,
+				"townname":townname.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				if(data == 1){
+					plus.ui.toast("注册失败,请稍后重新注册");
+					window.location.href=window.location.href;
+				}else{
+					plus.storage.setItem("userid",data['userid']);
+					plus.storage.setItem("shopid",data['shopid']);
+					mui.openWindow({
+					    url:'index.html', 
+					    id:'index',
+						createNew: true,
+						show:{
+							aniShow:"pop-in",
+							duration: '200'
+						},
+						waiting:{
+							autoShow:false,
+							options:{
+								width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+								height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+							}
+						},
+						styles: {
+							zindex: 1
+						}
+					});
+				}
+			}
+		})
+		
+	}
+	
+</script>
+<!--	/*function towns(){
+		var townid = document.getElementById("townss");
+		//alert(townid.value)
+		document.getElementById("user_list_town").value = townid.value;
+		document.getElementById("townname").value = townid.options[townid.options.selectedIndex].text;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/village",
+	      	data:{
+				id:townid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var village = document.getElementById("village");
+				var str="";
+				for(i=data.length-1;i>=0;i--){
+					if(data[i].member_list_detailed.length > 5){
+						str=str+'<li onclick="villages('+data[i].member_list_id+',"'+data[i].member_list_detailed+'")">'+data[i].member_list_detailed+'</li>';
+					}else{
+						str=str+'<li onclick="villages('+data[i].member_list_id+',"'+data[i].member_list_detailed+'")" style="line-height:40px;">'+data[i].member_list_detailed+'</li>';
+					}
+					
+				}
+				village.innerHTML = str;
+			} 
+		})	
+	}
+	
+	*/
+	/*function villages(id,address){
+		alert(id)
+		var province = document.getElementById('user_list_province');//省
+		var city = document.getElementById('user_list_city');//市
+		var town = document.getElementById('user_list_town');//去
+		var provincename = document.getElementById('provincename');//省
+		var cityname = document.getElementById('cityname');//市
+		var townname = document.getElementById('townname');//去
+		var user_list_id = document.getElementById('user_list_id');//去
+		//省市区
+		if(province.value == 0 || city.value == 0 || town.value == 0 || village.value == 0){
+			plus.ui.toast("请选择您所在的省市区");
+			//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请选择您所在的省市区";
+			return;
+		}else{
+			jQuery.ajax({
+				url:"http://www.cundianle.cn/cdl.php/home/User/saveRegister",
+		      	data:{
+					"user_list_id":user_list_id.value,
+					"shop_id":id,
+					"user_list_province":province.value,
+					"user_list_city":city.value,
+					"user_list_town":town.value,
+					"user_list_village":address,
+					"provincename":provincename.value,
+					"cityname":cityname.value,
+					"townname":townname.value
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					if(data == 1){
+						plus.ui.toast("注册失败,请稍后重新注册");
+						window.location.href=window.location.href;
+					}else{
+						plus.storage.setItem("userid",data['userid']);
+						plus.storage.setItem("shopid",data['shopid']);
+						mui.openWindow({
+						    url:'index.html', 
+						    id:'index',
+							createNew: true,
+							show:{
+								aniShow:"pop-in",
+								duration: '200'
+							},
+							waiting:{
+								autoShow:false,
+								options:{
+									width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+									height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+								}
+							},
+							styles: {
+								zindex: 1
+							}
+						});
+					}
+				}
+			})
+		}
+		
+		
+		
+	}*/-->
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>我的账户</title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="css/public.css" />
+<link rel="stylesheet" href="css/iconfont.css" />
+<link rel="stylesheet" href="css/icons-extra.css" />
+
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	plus.runtime.getProperty(plus.runtime.appid,function(inf){
+        document.getElementById("wgtVer").value = inf.version;;
+        document.getElementById("version").innerHTML = inf.version;
+        var checkUrl="http://www.cundianle.cn/appgys/userupgrade.php";
+	    var xhr=new XMLHttpRequest();
+	    xhr.onreadystatechange=function(){
+	        switch(xhr.readyState){
+	            case 4:
+	            if(xhr.status==200){
+	                var newVer=xhr.responseText;
+	                if(newVer != 1){
+	                	
+	                   document.getElementById("gx").style.background="red";
+	                   //document.getElementById("my").style.background="red";
+	                }
+	            }
+	            break;
+	            default:
+	            break;
+	        }
+	    }
+	    xhr.open('GET',checkUrl+"?ver="+inf.version);
+	    xhr.send();
+    });
+  		//把用户名和密码在本地存储中获取到
+  	var userid = plus.storage.getItem("userid");
+  	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/personal",
+      	data:{
+      		userid:userid
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			
+			//余额
+			//document.getElementById("money").innerHTML = data.user_list_money;
+			//alert(data.user_list_phone)
+			//手机号
+			//积分
+//			document.getElementById("jifen").innerHTML = data.user_list_jifen;
+			document.getElementById("phone").innerHTML = data.user_list_phone;					
+			//头像
+			document.getElementById("img").src = "http://www.cundianle.cn/"+data.user_list_headpic;
+			
+		}
+	})
+})
+</script>
+<style>
+	ul{padding:0px;margin:0px;}
+	ul li{list-style:none;}
+	.cd_top{background: #50B24B;padding:15px 20px;position: relative;height:20%;}
+	.cd_top{padding-top:10px;background: url(images/huiyuan.png) no-repeat left top; background-size:100% 100%;margin-top:-5px;padding-bottom:22px;}
+	.cd_top .photo{width:50%;margin:0 auto;text-align: center;padding-top:10%;}
+	.cd_top .photo .tx{border-radius:50%;width:100px;height:100px;}
+	.cd_top .photo .line{color:#fff;margin-top:10px;height:20px;line-height:20px;}
+	.cd_top ul{overflow:hidden;text-align: center;}
+	.cd_top ul li{color: #fff;}
+	.cd_top ul li a{color:#fff;}
+	.cd_top ul li a p{color:#fff;margin-bottom:0px;}
+	.cd_top ul li span{color: #fff;}
+	.cd_top .icon-tubiao{position: absolute;right:7%;top:10%;color:#fff;font-size:26px;}
+	.cd_mid{margin-top:15px;background: #fff;padding:0px 0px 5px 15px;;}
+	.cd_mid .cd_mt{line-height:40px;height:40px;border-bottom:1px solid #dfdfdf;overflow: hidden;;}
+	.cd_mid .cd_mt h2{font-size:16px;float:left;line-height:30px;font-weight: normal;}
+	.cd_mid .cd_mt a{float:right;color:#aaa;font-size:15px;margin-right:4%;}
+	.cd_mid ul{overflow: hidden;}
+	.cd_mid ul li{float:left;width:32%;text-align: center;padding-top:16px;}
+	.cd_mid ul li a{display: block;width: 100%;height:100%;}
+	.cd_mid ul li a span{font-size:25px;color:#666;}
+	.cd_mid ul li a p{margin-top:3px;}
+	.cd_cell{margin-top:15px;border:none;margin-bottom:50px;}
+	.cd_cell .mui-table-view-cell a{color:#444;font-size:16px;}
+	.cd_cell .mui-table-view-cell a span{font-size:18px;color:#666;margin-right:10px;}
+	.cd_cell .mui-table-view-cell .cd_r{float:right;margin-top:0px;}
+	.mui-bar-tab .mui-tab-item.mui-active{
+		
+		color:#50B24B;
+	}
+	.mui-bar-tab .foot_tab{width: 20%;}
+	#gx{
+	border-radius: 5px;
+	display: inline-block;
+    line-height: 1.4;
+    position: absolute;
+    top: 25%;
+    right: 0;
+    color: #fff;    
+    width: 10px;
+    height: 10px;}
+	
+</style>
+</head>
+<body>
+<div class="mui-content order_bg">
+	<div class="cd_top">
+		<div class="photo">
+			<img class="tx" src="images/head.png" id="img">
+				
+				
+				
+			<p class="line" id="phone"></p>
+		</div>
+		<a href="user_set.html"><span class="icon  iconfont icon-tubiao"><span class="mui-icon mui-icon-gear-filled" ></span></span></a>
+		<ul>
+			<!--<li><span></span><span id="jifen">0.00</span>积分</li>-->
+			<!--<li><a href="user_topup.html"><span id="money">0.00</span><p>余额</p></a></li>-->
+		</ul>
+	</div>
+	<div class="cd_mid">
+		<div class="cd_mt">
+		<h2>我的订单 </h2>
+		 <a href="order_list.html">查看全部订单<span class="mui-icon mui-icon-arrowright"></span></a>
+		</div>
+		<ul>
+			<li><a href="order_list_pay.html"><span class="iconfont icon-daizhifu"></span><p>待支付</p></a></li>
+			<li><a href="order_list_receipt.html"><span class="iconfont icon-daishouhuo"></span><p>待收货</p></a></li>
+			<li><a href="order_list_evaluate.html"><span class="iconfont icon-clipboard-check"></span><p>待评价</p></a></li>
+			<!--<li><a href="#"><span class="iconfont icon-tuihuan"></span><p>退换</p></a></li>-->
+		</ul>
+	</div>
+	<ul class="mui-table-view cd_cell">
+   	        <li class="mui-table-view-cell" onclick="check();">
+	            <a class="mui-navigate-right">
+	            	<span class="iconfont icon-cz"></span>绑定会员卡
+	            </a>
+	        </li>
+   	        <li class="mui-table-view-cell">
+	            <a class="mui-navigate-right" href="member_jifen.html">
+	            	<span class="mui-icon-extra mui-icon-extra-gold"></span>查询积分
+	            </a>
+	        </li>
+	        <!--<li class="mui-table-view-cell">
+	            <a class="mui-navigate-right" href="user_account.html">
+	            	<span class="iconfont icon-xiaofeijilu"></span>消费记录
+	            </a>
+	        </li>-->
+
+	        <!--<li class="mui-table-view-cell">
+	            <a class="mui-navigate-right">
+	            	<span class="iconfont icon-yijianfankui"></span>意见反馈
+	            </a>
+	        </li>-->
+	         <!--<li class="mui-table-view-cell mui-collapse-content">
+	            <a style="float:left;">
+	            	<span class="iconfont icon-kefu"></span>客服电话
+	            </a>
+	            <span class="cd_r" style="color:#2AC845;">400-885-6900</span>
+	        </li>-->
+	        <li class="mui-table-view-cell mui-collapse-content" onclick="checkUpdate()">
+	            <a style="float:left;">
+	            	<input type="hidden" id="wgtVer" />
+	            	<span class="iconfont icon-kefu"></span><span id="gx">&nbsp;</span><span style="font-size:16px;">版本检测</span>
+	            </a>
+	            <span class="cd_r" style="color:#2AC845;" id="version"></span>
+	        </li>
+	  </ul>	    
+</div>
+<!--底部-->
+<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab jump" href="index.html">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab jump" href="shansong.html">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+		<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+	<a class="foot_tab active">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+
+</body>
+<script>
+mui.init();	
+/*处理a标签，将所有的点击a标签后，隐藏底部导航*/
+mui('.mui-bar-tab').on('tap', '.jump', function(e) {
+	var id = this.getAttribute("href");
+	var href = this.href;
+	mui.openWindow({
+		url: href, 
+		id: id,
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,//自动显示等待框，默认为true
+            //title:'正在加载...',//等待对话框上显示的提示内容               
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	});
+	
+});
+			//首页 分类导航
+mui(".cd_mt").on("tap", "a", function() {
+      var id = this.getAttribute("href");
+      var href = this.href;
+      
+      mui.openWindow({
+      	url:href,
+      	id:id,
+      	createNew: true,
+      	show:{
+		aniShow:"pop-in",
+		duration: '200'
+	    },
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+      	
+      	
+      	
+      	
+      })
+      
+      
+})
+</script>
+<script type="text/javascript">
+(function($, doc) {
+	$.oldBack = mui.back;
+	var backButtonPress = 0;
+	$.back = function(event) {
+		backButtonPress++;
+		if (backButtonPress > 1) {
+			plus.runtime.quit();
+		} else {
+			plus.nativeUI.toast('再按一次退出应用');
+		}
+		setTimeout(function() {
+			backButtonPress = 0;
+		}, 1000);
+		return false;
+	};
+}(mui, document));
+</script>
+<script type="text/javascript">
+
+// 检测更新
+var checkUrl="http://www.cundianle.cn/appgys/userupgrade.php";
+function checkUpdate(){
+    plus.nativeUI.showWaiting("检测更新...");
+    var wgtVer = document.getElementById('wgtVer').value;
+    var xhr=new XMLHttpRequest();
+    xhr.onreadystatechange=function(){
+        switch(xhr.readyState){
+            case 4:
+            plus.nativeUI.closeWaiting();
+            if(xhr.status==200){
+                var newVer=xhr.responseText;
+                
+                if(newVer != 1){
+                   var wgtUrl = "http://www.cundianle.cn"+newVer;
+                   downWgt(wgtUrl);  // 下载升级包
+                }else{
+                    plus.ui.toast("无新版本可更新！");
+                }
+            }else{
+                plus.ui.toast("检测更新失败！");
+            }
+            break;
+            default:
+            break;
+        }
+    }
+    xhr.open('GET',checkUrl+"?ver="+wgtVer);
+    xhr.send();
+}
+// 下载wgt文件
+//var wgtUrl="http://demo.dcloud.net.cn/test/update/H5EF3C469.wgt";
+function downWgt(wgtUrl){
+    plus.nativeUI.showWaiting("正在更新...");
+    plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){
+        if ( status == 200 ) {
+        	//alert("下载wgt成功："+d.filename);
+            installWgt(d.filename); // 安装wgt包
+        } else {
+            plus.ui.toast("更新失败！");
+        }
+        plus.nativeUI.closeWaiting();
+    }).start();
+}
+// 更新应用资源
+function installWgt(path){
+    plus.nativeUI.showWaiting("安装wgt文件...");
+    plus.runtime.install(path,{},function(){
+        plus.nativeUI.closeWaiting();
+        //console.log("安装wgt文件成功！");
+        plus.nativeUI.alert("应用资源更新完成！",function(){
+   //       plus.runtime.restart();
+			plus.storage.removeItem("userid");
+			plus.storage.removeItem("shopid");
+			plus.storage.removeItem("phone");
+			plus.storage.removeItem("storeNo");
+            window.location.href="login.html";        
+        });
+    },function(e){
+        plus.nativeUI.closeWaiting();
+       // console.log("安装wgt文件失败["+e.code+"]："+e.message);
+       plus.ui.toast("安装失败");
+      // plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);
+    });
+}
+
+//验证是否绑定会员
+function check(){
+		//查询该账号是否已经绑定会员
+		var phone = document.getElementById('phone').innerHTML;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Vip/confirmVip",
+	      	data:{
+	      		phone:phone
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//表示手机号已注册
+				if(data ==1){
+					window.location.href="member_bangding.html";
+				}else{
+					mui.toast("您已绑定会员，请放心使用");
+				}
+			}
+		})
+}
+</script>
+
+</html>

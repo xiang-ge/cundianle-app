@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/province",
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var province = document.getElementById("provincess");
+				str="";
+				str=str+'<option value="0">省份</option>';
+				for(i=data.length-1;i>=0;i--){
+					str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+				}
+				//alert(str)
+				province.innerHTML = str;
+			}
+		})
+	  	
+  	})
+</script>
+<style>
+     .mui-bar-nav~.mui-content{padding-top:60px;}
+	 .mui-input-group .new_dh{height:60px;line-height: 60px;font-size:16px;}
+	 .mui-input-group .new_dh label{width:28%;padding:24px 15px;font-family: "微软雅黑";}
+	 .mui-input-group .new_dh input{height:60px;font-family: "微软雅黑";}
+	 .mui-input-group .mui-input-row:after {left:0px;}
+	 .new_address{height:60px;line-height: 60px;overflow: hidden;position: relative;}
+	 .new_address label{padding:0px 15px;font-family: "微软雅黑";float:left;width:28%;}
+	 .new_address p{float:left;width:60%;font-size:16px;position:relative;color:#333;}
+	 .new_address p .mui-icon-arrowright{position: absolute;top:30%;right:5%;color:#8f8f94;}
+	 .new_address:after{position: absolute;left:0px;right:0px;bottom:0px;content: '';height:1px;background:#c8c7cc;transform: scaleY(.5);-webkit-transform: scaleY(.5);}
+	 .new_adr{height:40px;line-height:40px;margin-top:30px;background: #50B24B;color:#fff;width:60%;margin:30px auto;padding:0px;border:none;}
+	 #notice{height: 20px;margin-top: 5px;color: #e83e41;font-size: 16px;}
+</style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mygren"></a>
+	<h1 class="mui-title">用户注册</h1>
+</header>
+	
+<div class="mui-content">
+	<form class="mui-input-group">
+    <div class="mui-input-row new_dh">
+		<label>用户名:</label>
+		<input type="text" id="user_list_nickname" placeholder="请输入用户名">
+	</div>
+	<div class="mui-input-row new_dh">
+		<label>手机号:</label>
+		<input type="text" id="user_list_phone" placeholder="请输入手机号" maxlength="11">
+	</div>
+	<div class="mui-input-row new_dh">
+		<label>登录密码:</label>
+		<input type="password" id="user_list_pwd" placeholder="请输入密码">
+	</div>
+	<div class="new_address">
+		<label>城市:</label>
+		<p style="width:18%;float:left;"><select id="provincess" onChange="provinces();"><option value="0">市/县</option></select></p>
+		<p style="width:26%;float:left;"><select id="cityss" onchange="citys();"><option value="0">市/县</option></select></p>
+		<p style="width:28%;float:left;"><select id="townss" onchange="towns();"><option value="0">镇/区</option></select></p>
+	</div>
+	<div style="clear: both;"></div>
+	<div class="new_address">
+		<label>超市</label><p><select id="village" onchange="villages();"><option value="0">超市</option></select></p>
+	</div>
+	
+	<div class="mui-input-row new_dh">
+		<label>详细地址:</label>
+		<input type="text" id="detailed" placeholder="请输入详细地址">
+	</div>
+	</form>
+	<p id="notice"></p>
+	<button type="button" id="sub" class="mui-btn mui-btn-block new_adr">注册</button>	
+	<input type="hidden" id="shop_id" value="0" />
+	<input type="hidden" id="user_list_province" value="0" />
+	<input type="hidden" id="user_list_city" value="0" />
+	<input type="hidden" id="user_list_town" value="0" />
+	<input type="hidden" id="user_list_village" value="0" />
+	<input type="hidden" id="provincename"/>
+	<input type="hidden" id="cityname" />
+	<input type="hidden" id="townname" />
+</div>
+</body>
+
+<script type="text/javascript">
+
+	var user_list_nickname = document.getElementById('user_list_nickname');//昵称
+	var user_list_phone = document.getElementById('user_list_phone');//手机号
+	var user_list_pwd = document.getElementById('user_list_pwd');//登陆密码
+	var shop_id = document.getElementById('shop_id');//详细地址
+	var province = document.getElementById('user_list_province');//省
+	var city = document.getElementById('user_list_city');//市
+	var town = document.getElementById('user_list_town');//去
+	var village = document.getElementById('user_list_village');//村
+	var provincename = document.getElementById('provincename');//省
+	var cityname = document.getElementById('cityname');//市
+	var townname = document.getElementById('townname');//去
+	var detailed = document.getElementById('detailed');//详细地址
+	var notice = document.getElementById('notice');
+	var phone_sign=/^1[3-8]\d{9}$/i;
+	//var pass_sign=/^\w+$/i;
+	var pass_sign=/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
+	var sub = document.getElementById("sub");
+	sub.addEventListener('tap',function(){
+		
+		//alert(village.value)
+		//超市名
+		if(user_list_nickname.value.length == 0){
+			notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 昵称不能为空";
+			return;
+		}		
+		//手机验证
+		if(user_list_phone.value.length == 0){
+			notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 手机号不能为空";
+			return;
+		}
+		if(!phone_sign.test(user_list_phone.value)){
+			notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请输入正确的手机号";
+			return;
+		}else{
+			jQuery.ajax({
+				url:"http://www.cundianle.cn/cdl.php/home/User/checkUserPhone",
+		      	data:{
+					"phone":user_list_phone.value
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					if(data == 0){
+						notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 该手机号已被使用,请更换手机号";
+						return;
+					}else{						
+						//省市区
+						if(province.value == 0 || city.value == 0 || town.value == 0 || village.value == 0){
+							notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请选择您所在的省市区";
+							return;
+						}
+						//密码验证
+						if(user_list_pwd.value.length == 0){
+							notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 登录密码不能为空";
+							return;
+						}
+						if(!pass_sign.test(user_list_pwd.value)){
+							notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 密码应为6到15位字母数字组合";
+							return;
+						}//详细地址
+						if(detailed.value == 0){
+							notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请输入详细地址";
+							return;
+						}
+						else{
+							notice.innerHTML="";
+							jQuery.ajax({
+								url:"http://www.cundianle.cn/cdl.php/home/User/register",
+						      	data:{
+									"user_list_phone":user_list_phone.value,
+									"shop_id":shop_id.value,
+									"user_list_pwd":user_list_pwd.value,
+									"user_list_nickname":user_list_nickname.value,
+									"user_list_province":province.value,
+									"user_list_city":city.value,
+									"user_list_town":town.value,
+									"user_list_village":village.value,
+									"provincename":provincename.value,
+									"cityname":cityname.value,
+									"townname":townname.value,
+									"detailed":detailed.value
+								},
+								type:"get",
+								dataType:"jsonp",
+								jsonp:"jsoncallback",
+								success:function(data){
+									if(data == 1){
+										plus.ui.toast("注册失败,请稍后重新注册");
+										window.location.href=window.location.href;
+									}else{
+										plus.ui.toast("注册成功,请登录");
+										mui.openWindow({
+										    url:'login.html', 
+										    id:'login',
+											createNew: true,
+											show:{
+												aniShow:"pop-in",
+												duration: '200'
+											},
+											waiting:{
+												autoShow:false,
+												options:{
+													width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+													height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+												}
+											},
+											styles: {
+												zindex: 1
+											}
+										});
+									}
+								}
+							})
+							
+						}
+					}
+				}
+			})
+		}
+	});
+	function provinces(){		
+		var provinceid = document.getElementById("provincess");
+		//alert(provinceid.value)
+		document.getElementById("user_list_province").value = provinceid.value;
+		document.getElementById("provincename").value = provinceid.options[provinceid.options.selectedIndex].text;
+		//alert();
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/city",
+	      	data:{
+				id:provinceid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var city = document.getElementById("cityss");
+				str="";
+				str=str+'<option value="0">市/县</option>';
+				for(i=data.length-1;i>=0;i--){
+				
+					str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+				}
+				city.innerHTML = str;
+				document.getElementById("townss").innerHTML = '<option value="0">镇/区</option>';
+				document.getElementById("village").innerHTML = '<option value="0">超市</option>';
+			}
+		})
+	}
+
+	function citys(){
+		var cityid = document.getElementById("cityss");
+		//alert(cxid.value)
+		document.getElementById("user_list_city").value = cityid.value;
+		document.getElementById("cityname").value = cityid.options[cityid.options.selectedIndex].text;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/town",
+	      	data:{
+				id:cityid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var town = document.getElementById("townss");
+				str="";
+				str=str+'<option value="0">镇/区</option>';
+				for(i=data.length-1;i>=0;i--){
+				
+					str=str+'<option value="'+data[i].id+'" >'+data[i].name+'</option>';
+				}
+				town.innerHTML = str;
+				document.getElementById("village").innerHTML = '<option value="0">超市</option>';
+			}
+		})
+	}
+	function towns(){
+		var townid = document.getElementById("townss");
+		//alert(townid.value)
+		document.getElementById("user_list_town").value = townid.value;
+		document.getElementById("townname").value = townid.options[townid.options.selectedIndex].text;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/village",
+	      	data:{
+				id:townid.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var village = document.getElementById("village");
+				str="";
+				str=str+'<option value="0">超市</option>';
+				for(i=data.length-1;i>=0;i--){
+					
+						str=str+'<option value="'+data[i].member_list_id+'" data-address="'+data[i].member_list_detailed+'">'+data[i].shop_name+'</option>';
+					}
+
+				village.innerHTML = str;
+			}
+		})	
+	}
+	function villages(){
+		var village = document.getElementById("village");
+		//alert(village.options[village.options.selectedIndex].getAttribute("data-address"))
+		document.getElementById("shop_id").value = village.value;
+		document.getElementById("user_list_village").value = village.options[village.options.selectedIndex].getAttribute("data-address");
+		
+		
+	}
+	
+	
+</script>
+</html>

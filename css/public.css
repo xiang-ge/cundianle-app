@@ -1,0 +1,35 @@
+/*头部*/
+*{margin:0px;padding:0px;}
+ul li{list-style: none;}
+body{font-family: "微软雅黑";color:#333;}
+.mygren{color:#50b24b;}
+.mytit{color:#333;}
+.cdhead{box-shadow:none;border-bottom:1px solid #bfc1c5;background: #fffffe;}
+.mui-bar-tab .active{color:#50B24B;}
+
+/*红色头部*/
+.mui-bar-nav.red{height: 60px;background-color: #50B24B;}
+.mui-bar-nav.red .mui-title{font-size: 22px;color: #fff;line-height: 60px;}
+.mui-bar-nav.red .mui-pull-left{color: #fff;line-height: 40px;}
+.mui-bar-nav.red .city{line-height: 60px;color: #fff;font-size: 18px;padding-right: 2%;}
+
+.mui-bar-tab a{color:#929292;}
+/*底部导航*/
+.foot_tab{display: block;float: left;width: 25%;text-align: center;color: #808080;}
+.foot_tab:active{color: #5EB530;}
+.foot_tab .mui-icon{font-size: 25px;padding: 8px 0 3px;display: block;}
+.foot_tab .mui-tab-label{font-size: 14px;margin-bottom: 2px;}
+
+.active{color: #5EB530;}
+.active p{color: #5EB530;}
+
+.badge{
+	border-radius: 5px;
+	display: inline-block;
+    line-height: 1.4;
+    position: absolute;
+    top: 25%;
+    left: 65%;
+    color: #fff;
+    width: 10px;
+    height: 10px;}

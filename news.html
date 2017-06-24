@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		/*
+		 * 村村头条
+		 * **/
+		jQuery.ajax({
+			url:"http://www.cundianle.cn/cdl.php/home/User/news",
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//alert(data)
+				if(data == null){
+  					document.getElementById("newslist").innerHTML = "暂无";
+  				}else{
+					var newslist = document.getElementById("newslist");
+					var news = "";
+					for(i=data.length-1;i>=0;i--){
+						news=news+'<li data-id="'+data[i].n_id+'"><div class="main"><p class="tit">'+data[i].news_title+'</p></div></li>';
+					}
+					newslist.innerHTML = news;
+				}
+			}
+		})
+  		
+  	})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}	
+	.date{padding: 15px 0;background-color: #fff;}
+	.date span{padding: 5px 3%;border-left: 4px solid #E83E41;color: #555;}
+	ul{}
+	ul li{background-color: #fff;padding: 10px 5% 0;margin-bottom: 10px;box-shadow: 2px 0 3px #ccc;}
+	ul li a img{display: block;width: 100%;border-radius: 10px;}
+	ul li a .tit{font-size: 18px;line-height: 40px;color: #555;}
+	ul li .foot{height: 40px;line-height: 40px;border-top: 1px solid #eee;padding-right: 5%;}
+	ul li .foot a{float: right;font-size: 16px;color: #888;}
+	ul li .foot a i{font-size: 20px;margin-right: 5px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">村村头条</h1>
+</header>
+<div class="mui-content">
+    <ul id="newslist"></ul>
+</div>
+</body>
+</html>
+<script type="text/javascript" charset="utf-8">
+mui("#newslist").on('tap','li',function(){
+	//alert(this.getAttribute('data-id'))
+	mui.openWindow({
+		url:'news_detail.html',
+		id:'news_detail',
+		extras:{
+			n_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+</script>

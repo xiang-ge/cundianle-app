@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.imageViewer.js"></script>
+<script src="js/arttmpl.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link href="css/mui.imageviewer.css" rel="stylesheet" />
+<script type="text/javascript" charset="utf-8">
+  	mui.init();  	
+  	mui.plusReady(function(){
+  		var self = plus.webview.currentWebview();
+	  	var order_id = self.order_id;
+	  	document.getElementById("userid").value = plus.storage.getItem("userid");
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/orderDetail",
+	      	data:{
+	      		order_id:order_id
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				document.getElementById("goods_id").value = data.goods_id;
+				document.getElementById("order_id").value = data.order_id;
+				document.getElementById("img").src = data.goods_img;
+			}
+		})
+  	})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 70px 3% 0;}
+	.mui-title{text-align: left;}
+	.main{background-color: #fff;border-radius: 5px;padding-bottom: 10px;}
+	.main .banner{width: 100%;height: 100px;border-bottom: 1px solid #ddd;padding: 10px 3%;}
+	.main .banner img{height: 80px;}
+	
+	.text{min-height: 130px;padding: 10px 3%;line-height: 25px;border: 0;}
+	
+	.foot{padding: 10px 3% 0;position: relative;}
+	.foot .images{float: left;width: 70%;overflow: hidden;}
+	.foot .images .images_box{float: left;}
+	.foot .images .images_box img{}
+	.foot .images .images_butt{float: left;display: block;width:30%;background: url(images/img_bg.png) no-repeat scroll top left;filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";background-size:100% 100%;}
+	.foot .butt_red{border-radius: 5px;border:1px solid #50b24b;text-align:center;margin-top:4px;color:#50b24b;width: 28%;float: right;height: 30px;line-height:30px;font-size: 14px;position: absolute;bottom: 0;right: 3%;}
+
+	#notice{color: #E83E41;margin-top: 10px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">发表评论</h1>
+</header>
+<div class="mui-content">
+	<div class="main">
+		<div class="banner"><img id="img"/></div>
+		<textarea class="text" id="maintext" placeholder="请写下对商品的感受吧，对他人帮助很大哦！"></textarea>
+		<div class="foot">
+			<div class="images">
+				<div class="images_box" id="text"></div>
+				<a class="images_butt"></a>
+			</div>
+			<a class="butt_red" id="send">发表</a>
+			<div style="clear: both;"></div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<p id="notice"></p>
+	<input type="hidden" id="goods_id"  />
+	<input type="hidden" id="order_id" />
+	<input type="hidden" id="userid" />
+</div>
+</body>
+<script type="text/javascript">
+(function($){
+	var width = $('.images .images_butt').width();
+	$('.images').height(width);
+	$('.images .images_butt').height(width);
+})(jQuery)
+</script>
+<script type="text/javascript">
+(function($, doc) {
+	var MIN_SOUND_TIME = 800;
+	$.init({
+		gestureConfig: {
+			tap: true, //默认为true
+			doubletap: true, //默认为false
+			longtap: true, //默认为false
+			swipe: true, //默认为true
+			drag: true, //默认为true
+			hold: true, //默认为false，不监听
+			release: true //默认为false，不监听
+		}
+	});
+	template.config('escape', false);
+	$.plusReady(function() {
+		plus.webview.currentWebview().setStyle({
+			softinputMode: "adjustResize"
+		});
+		var ui = {
+			butt: doc.querySelector('.foot .images .images_butt'),
+			//main: doc.querySelector('.text'),
+			//body: doc.querySelector('body'),
+			images: doc.querySelector('.foot .images .images_box')
+		};
+		ui.butt.addEventListener('tap', function(event) {
+			var btnArray = [{
+				title: "拍照"
+			}, {
+				title: "从相册选择"
+			}];
+			plus.nativeUI.actionSheet({
+				title: "选择照片",
+				cancel: "取消",
+				buttons: btnArray
+			}, function(e) {
+				var index = e.index;
+				switch (index) {
+					case 0:
+						break;
+					case 1:
+						var cmr = plus.camera.getCamera();
+						cmr.captureImage(function(path) {
+							var aaa= ui.butt.clientWidth;
+							var newNode = document.createElement("img");//创建一个P标签  
+					        newNode.src = "file://" + plus.io.convertLocalFileSystemURL(path); 
+							ui.images.appendChild(newNode);
+							//mui.scrollTo(99999999,10)
+							newNode.style.width=aaa+"px";
+					        newNode.style.height=aaa+"px";
+						}, function(err) {});
+						break;
+					case 2:
+						plus.gallery.pick(function(path) {
+							var aaa= ui.butt.clientWidth;
+							//alert(aaa)
+							var newNode = document.createElement("img");//创建一个P标签  
+					        newNode.src = path;  
+					        ui.images.appendChild(newNode);
+					        newNode.style.width=aaa+"px";
+					        newNode.style.height=aaa+"px";
+					        //mui.scrollTo(99999999,10)
+						}, function(err) {}, null);
+						break;
+				}
+			});
+		}, false);
+		//点击删除图片
+		var aa = document.getElementById("text");
+		mui(".images_box").on('tap','img', function(){
+			if(window.confirm('确定删除该图片？')){
+              	aa.removeChild(this);
+              }else{
+                 return;
+             }
+		})
+	});
+
+	//验证
+	var tit = document.getElementById('maintext');
+	var goods_id = document.getElementById('goods_id');
+	var userid = document.getElementById('userid');
+	var order_id = document.getElementById('order_id');
+	var notice = document.getElementById('notice');
+	var send = document.getElementById('send');
+	
+	send.addEventListener('tap',function(){
+		var imgs=new Array();
+		var imgarray=new Array();
+		var re = /<img([^>]+?)>/ig;
+	    var s = document.getElementById("text").innerHTML;
+	    var str=""
+	    var tempImg=""
+	    var res=/src\s*=\s*(["'])([^"']+)\1/i
+	    
+	    while((str = re.exec(s)) != null)
+	    {
+	    	//alert(str[1])
+	    	imgs.push(str[1]);
+	        tempImg=RegExp.$1;
+	        res.test(tempImg);
+	        //alert(((res.test(tempImg))?RegExp.$2:"")+"\r\n")
+	        var path = ((res.test(tempImg))?RegExp.$2:"")+"\r\n";	       
+	        var img = new Image();
+		        img.src = path;        // 传过来的图片路径在这里用。		        
+		        img.onload = function () {
+		        	
+		            var that = this;
+		            //生成比例 
+		            var w = that.width,
+		                h = that.height,
+		                scale = w / h; 
+		                w = 550 || w;              //480  你想压缩到多大，改这里
+		                h = w / scale;
+		
+		            //生成canvas
+		            var canvas = document.createElement('canvas');
+		
+		            var ctx = canvas.getContext('2d');
+		
+		            //$(canvas).attr({width : w, height : h});
+		            canvas.setAttribute("width",w);
+		            canvas.setAttribute("height",h);
+		
+		            ctx.drawImage(that, 0, 0, w, h);
+		
+		            var base64 = canvas.toDataURL('image/jpeg', 1 || 0.8 );   //1最清晰，越低越模糊。有一点不清楚这里明明设置的是jpeg。弹出 base64 开头的一段 data：image/png;却是png。哎开心就好，开心就好
+		           // alert(base64); 
+		            imgarray.push(base64);   // 把base64数据丢过去，上传要用。 
+		            //alert(imgs.length)
+		            //alert(imgarray.length)
+//		            if(imgs.length == imgarray.length){
+		            	//标题
+						if(tit.value.length == 0){
+							//alert(1)
+							notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请填写评论";
+							return;
+						}else{
+							notice.innerHTML="";
+							plus.nativeUI.showWaiting();
+							mui.ajax('http://www.cundianle.cn/cdl.php/home/User/evaluateOrder',{
+								data:{
+									title:tit.value,
+									userid:userid.value,
+									goods_id:goods_id.value,
+									order_id:order_id.value,
+									img:imgarray
+								},
+								dataType:'json',//服务器返回json格式数据
+								type:'post',//HTTP请求类型
+								timeout:10000,//超时时间设置为10秒；
+								success:function(data){
+									//服务器返回响应，根据响应结果，分析是否发送成功；
+									//返回格式JSON：{'result':0}
+									plus.nativeUI.closeWaiting();
+									
+							     	plus.ui.toast("评价成功");
+							     	mui.openWindow({
+								      	url:"order_list.html",
+								      	id:"order_list",
+								      	createNew: true,
+										show:{
+											aniShow:"pop-in",
+											duration: '200'
+										},
+								        waiting:{
+								        	autoShow:false,
+								        	options:{
+										        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+										        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+										    }
+								        },
+								        styles: {
+											zindex: 1
+										}
+								      })
+									
+									
+								},
+								error:function(xhr,type,errorThrown){
+									plus.nativeUI.closeWaiting();
+									plus.ui.toast("评价成功");
+							     	mui.openWindow({
+								      	url:"order_list.html",
+								      	id:"order_list",
+								      	createNew: true,
+										show:{
+											aniShow:"pop-in",
+											duration: '200'
+										},
+								        waiting:{
+								        	autoShow:false,
+								        	options:{
+										        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+										        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+										    }
+								        },
+								        styles: {
+											zindex: 1
+										}
+								      })
+					            }
+							})	
+						}
+//	    			}
+		           
+			    } 
+	        
+	        
+	    }
+	})
+}(mui, document)); 
+</script>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<style type="text/css">
+
+/*.mui-content{background:#11c250;}*/
+body {
+	background: url(images/huiyuanka.png);background-size: 100%;}
+
+.mui-bar-nav{background: #fff;box-shadow: none;}
+.mui-content{background: none;}
+.xuanze{margin-top:70%;}
+.xuanze input{width:60%;height:50px;background: #666666;opacity:0.8;color: #fff;font-weight: bold;display: block;margin: 0 auto;margin-bottom: 5%;font-size: 20px;border-radius: 6px;}
+.mui-bar-tab .mui-tab-item.mui-active{color:#50B24B;}
+.mui-bar-tab .foot_tab{width: 20%;}
+
+.cd_top .icon-tubiao{position: absolute;right:7%;top:10%;color:#fff;font-size:26px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">会员卡激活选项</h1>
+</header>
+<div class="mui-content">
+<div class="xuanze">
+
+	<input type="button" value="我已有超市会员卡" onclick="checkVip(1)"></input>
+	<input type="button"value="我没有超市会员卡" onclick="checkVip(2)"></input>
+	<input type="hidden" id="phone" />
+</div>
+</div>
+
+<!--底部-->
+<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab jump" href="index.html">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab jump" href="shansong.html">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+	<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+	<a class="foot_tab active" href="#">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+
+<script type="text/javascript">
+mui.init();	
+/*处理a标签，将所有的点击a标签后，隐藏底部导航*/
+	mui('.mui-bar-tab').on('tap', '.jump', function(e) {
+		var id = this.getAttribute("href");
+		var href = this.href;
+		mui.openWindow({
+			url: href, 
+			id: id,
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+		});
+		
+	});
+mui.plusReady(function(){
+	 var phones = plus.storage.getItem("phone");
+	document.getElementById('phone').value = phones;
+})
+function checkVip(a){
+	var phone = document.getElementById('phone').value;
+	//已有超市会员
+	if(a == 1){
+		//查询该账号是否已经绑定会员
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Vip/confirmVip",
+	      	data:{
+	      		phone:phone
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//表示手机号已注册
+				if(data ==1){
+					window.location.href="member_bangding.html";
+				}else{
+					mui.toast("您已绑定会员，请放心使用");
+				}
+			}
+		})
+	}
+	if(a == 2){
+		//验证该用户是否已注册会员
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Vip/checkphone",
+	      	data:{
+	      		vipphone:phone
+	      	},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//表示手机号已注册
+				if(data ==1){
+					window.location.href="member_login.html";
+				}else{
+					mui.toast("您已是超市会员，请到超市领取会员卡");
+				}
+			}
+		})
+	}
+}
+	
+</script>
+
+</body>

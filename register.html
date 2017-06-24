@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+    body{
+    	background: url(images/denglu.png);background-size: 100%;
+    }
+    .mui-content{margin-top:60%;background:none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 3% 10px;background-color: #11c250;}
+	.step{margin-top: 40px;}
+	.step .item{float: left;width: 25px;position: relative;}
+	.step .item p{width: 100px;position: absolute;top: -23px;left: -45px;text-align: center;font-size: 12px;}
+	.step .item .red{color: #e83e41;}
+	.step .item .text{width: 25px;height: 25px;border-radius: 13px;background-color: #cbc8c1;color: #fff;text-align: center;line-height: 25px;font-size: 12px;font-weight: bold;}
+	.step .item .active{background-color: #e83e41;}
+	.step .line{float: left;width: 30%;height: 3px;background-color: #cbc8c1;margin: 11px 0 0;}
+	.step .active{background-color: #e83e41;}
+	
+	.data{height: 50px;margin-top: 20px;padding-right: 3%;border:2px solid #5dd689;color:#fff;width:80%;margin:20px auto 0px;;}
+	.data span{display: block;float: left;width: 27%;text-align: right;line-height: 47px;color: #fff; font-size:1rem;}
+	.data input,.mui-btn-block{float: right;width: 70%;height: 47px;border-radius: 8px;border: none;background: none;}
+	.mui-btn-block{padding: 0 15px;line-height: 47px;text-align: left;}
+
+	.read{margin-top: 20px;text-align: center;color:#fff;}
+	.read span{color:#03f23d;}
+	.read1{text-align: right;color:#fff;width:80%;margin:20px auto 0px;}
+	.butt_red{text-align:center;width:80%;height:50px;margin:20px auto;display: block;padding:10px 0px;font-size:16px;color:#fff;background: #16a937;border:none;height:40px;}
+	.reg_logo{width:50%;display: block;margin:5% auto;}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff;
+    font-size:1rem;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;
+    font-size:1rem;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #fff;
+    font-size:1rem;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #fff;
+    font-size:1rem;
+}
+   .code1{width:51%;float:left;margin-left:auto;}
+   .code1 input{width:100%; font-size:1rem;}
+   .code2{color:#fff !important;width:47%;margin-left:2%;float:left;line-height: 47px;text-align: center; font-size:1rem;background: #16a937 !important;border:none !important;}
+   .code_w{margin-left:auto;margin-right:auto;overflow: hidden;width:80%;}
+</style>
+</head>
+
+<body>
+<div class="mui-content">
+	
+	<div class="data">
+		<span>用户名:</span>
+		<input type="text" id="user_list_nickname" placeholder="请输入用户名" />
+	</div>
+	<div class="data">
+		<span>手机号:</span>
+		<input type="number" id="user_list_phone" placeholder="请输入手机号"  maxlength="11" />
+	</div>
+	<div class="code_w">
+	<div class="data code1">
+		
+		<input type="text" id="code" placeholder="输入验证码" />
+	</div>
+	 <input type="button" class="data code2" id="codes" onclick="getTime(this)" value="发送验证码"/>
+	</div>
+	<div class="data">
+		<span>登录密码:</span>
+		<input type="password" id="user_list_pwd" placeholder="请输入登录密码" />
+	</div>
+	<a class="butt_red" id="sub">注册</a>
+	<p class="read">注册代表您同意<span>《村点乐用户协议》</span></p>
+	<p class="read1">如有账号,<a href="javascript:;" id="login_t">请直接登录</a></p>
+	<input type="hidden" id="setCode" value="000000">
+</div>
+</body>	
+<script type="text/javascript">
+    //登录跳页
+    document.getElementById('login_t').addEventListener('tap',function(){
+    	    mui.openWindow({
+    	    	url:'login.html',
+    	    	id:'login',
+    	    	createNew: true,
+				show:{
+					aniShow:"pop-in",
+					duration: '200'
+				},
+		        waiting:{
+		        	autoShow:false,
+		        	options:{
+				        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+				    }
+		        },
+		        styles: {
+					zindex: 1
+				}
+    	    })
+    	    
+    	
+    });
+</script>
+<script type="text/javascript">
+var setCode = document.getElementById("setCode");
+var phone = document.getElementById('user_list_phone');//手机号
+var codes = document.getElementById("codes");
+var codetxt=codes.innerText;
+var phone_sign=/^1[3-8]\d{9}$/i;
+var timer=null;
+var countdown = parseInt(59);
+function getTime(obj) {
+	//alert(phone.value)
+	//判断用户名是否为空
+	if(phone.value.length == 0){
+		plus.ui.toast("手机号不能为空");
+		return;
+	}else if(!phone_sign.test(phone.value)){
+		plus.ui.toast("请输入正确的手机号");
+		return;
+	}else{
+		//判断手机号是否存在
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/checkUserPhone",
+	      	data:{
+				phone:phone.value
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//服务器返回响应，根据响应结果，分析是否发送成功；
+				//返回格式JSON：{'result':0}
+				if(data == 0){
+					plus.ui.toast("该手机号已被使用,请更换手机号");
+					return;
+				}else{
+					//执行ajax
+					jQuery.ajax({
+				      	url:"http://www.cundianle.cn/cdl.php/home/Index/sendNote",
+				      	data:{
+							phone:phone.value
+						},
+						type:"get",
+						dataType:"jsonp",
+						jsonp:"jsoncallback",
+						success:function(data){
+							if(data.result == 1){
+								
+							 var 
+								minute=0,
+								second=0;//时间默认值	
+							 clearInterval(timer);
+							timer=setInterval(function(){
+								
+							if(countdown > 0){
+								second = Math.floor(countdown) - (minute * 60);
+							}
+							if (minute <= 9) minute = '0' + minute;
+							if (second <= 9) second = '0' + second;
+							
+							$("#codes").val(second+'秒后再次发送');
+							$("#codes").attr("disabled",true);
+							
+							
+							countdown--;
+							if(second<=01)
+							{
+								//alert(1)
+								clearInterval(timer);
+								$("#codes").attr("disabled",false);
+								setTimeout(function()
+								{
+									
+									$("#codes").val('发送验证码');
+									
+									countdown = parseInt(59);
+									
+								},1000)
+								
+							}
+							
+							}, 1000);
+
+								
+						}
+
+
+       				if(countdown==59){
+       					//alert(1)
+						  plus.ui.toast("验证码发送成功");
+			              obj.value="发送验证码";
+			              obj.setAttribute("disabled",false);
+                          //countdown =59; 
+                          setCode.value = data.code;
+							}else{
+								plus.ui.toast("验证码发送失败");
+							}
+						}
+					});
+				}							
+			}
+		});
+		
+	}
+}
+</script>
+<script type="text/javascript">
+
+	var user_list_nickname = document.getElementById('user_list_nickname');//昵称
+	var user_list_phone = document.getElementById('user_list_phone');//手机号
+	var user_list_pwd = document.getElementById('user_list_pwd');//登陆密码
+	var phone_sign=/^1[3-8]\d{9}$/i;
+	var pass_sign=/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
+	var sub = document.getElementById("sub");
+	sub.addEventListener('tap',function(){
+		
+		//alert(village.value)
+		//超市名
+		if(user_list_nickname.value.length == 0){
+			plus.ui.toast("用户名不能为空");
+			//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 昵称不能为空";
+			return;
+		}		
+		//手机验证
+		if(user_list_phone.value.length == 0){
+			plus.ui.toast("手机号不能为空");
+			//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 手机号不能为空";
+			return;
+		}
+		if(!phone_sign.test(user_list_phone.value)){
+			plus.ui.toast("请输入正确的手机号");
+			//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请输入正确的手机号";
+			return;
+		}else{
+			jQuery.ajax({
+				url:"http://www.cundianle.cn/cdl.php/home/User/checkUserPhone",
+		      	data:{
+					"phone":user_list_phone.value
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					if(data == 0){
+						plus.ui.toast("该手机号已被使用,请更换手机号");
+						return;
+					}else{
+						//密码验证
+						if(user_list_pwd.value.length == 0){
+							plus.ui.toast("登录密码不能为空");
+							//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 登录密码不能为空";
+							return;
+						}
+						if(!pass_sign.test(user_list_pwd.value)){
+							plus.ui.toast("密码应为6到15位字母数字组合");
+							//notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 密码应为6到15位字母数字组合";
+							return;
+						}
+						else{
+							jQuery.ajax({
+								url:"http://www.cundianle.cn/cdl.php/home/User/register",
+						      	data:{
+									"user_list_phone":user_list_phone.value,
+									"user_list_pwd":user_list_pwd.value,
+									"user_list_nickname":user_list_nickname.value
+								},
+								type:"get",
+								dataType:"jsonp",
+								jsonp:"jsoncallback",
+								success:function(data){
+									plus.storage.setItem("userid",data['userid']);
+									plus.storage.setItem("phone",data['phone']);
+									if(data == 1){
+										plus.ui.toast("注册失败,请稍后重新注册");
+										window.location.href=window.location.href;
+									}else{
+										mui.openWindow({
+										    url:'city.html', 
+										    id:'city',
+											createNew: true,
+											show:{
+												aniShow:"pop-in",
+												duration: '200'
+											},
+											waiting:{
+												autoShow:false,
+												options:{
+													width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+													height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+												}
+											},
+											styles: {
+												zindex: 1
+											}
+										});
+									}
+								}
+							})
+							
+						}
+					}
+				}
+			})
+		}
+	});
+	
+	
+</script>
+</html>

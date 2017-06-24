@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var userid = plus.storage.getItem("userid");
+	document.getElementById("userid").value = userid;
+  	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/personal",
+      	data:{
+      		userid:userid
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			
+			//昵称
+			document.getElementById("username").value = data.user_list_nickname;
+			
+			
+		}
+	})
+})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}
+	.mui-title{text-align: left;}
+	input[type="text"]{width: 100%;height: 50px;}
+	#notice{height: 20px;margin-top: 10px;color: #e83e41;}    		
+	.butt_red{display:block;color:#fff;text-align:center;width: 90%;height: 50px;line-height: 50px;margin: 10px auto 0;font-size: 20px;background:#5EB530;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left jump" href="user_set.html"></a>
+    <h1 class="mui-title">姓名</h1>
+</header>
+
+<div class="mui-content">
+	<form action="" method="post">
+		<input type="text" name="" id="username" value="" />
+	    <p id="notice"></p>
+	    <a class="butt_red" id="save">保存</a>
+	    <input type="hidden" id="userid" />
+	</form>
+</div>
+</body>
+<script type="text/javascript">
+/*mui('body').on('tap', '.jump', function(e) {
+	var id = this.getAttribute("href");
+	var href = this.href;
+	mui.openWindow({
+		url: href, 
+		id:id,
+		show:{
+			aniShow:"pop-in",
+			duration: '250'
+		},
+        waiting:{
+        	autoShow:true,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        }
+	});
+});*/
+</script>
+<script type="text/javascript">
+(function($) {
+	var username = document.getElementById('username');
+	var userid = document.getElementById("userid");
+	var notice = document.getElementById('notice');
+	var save = document.getElementById('save');
+	
+	save.addEventListener('tap',function(){
+		if(username.value.length == 0){
+			notice.innerHTML="<span class='mui-icon iconfont icon-cuowu2'></span> 请输入姓名";
+			return;
+		}
+		else{
+			notice.innerHTML="";
+			jQuery.ajax({
+		      	url:"http://www.cundianle.cn/cdl.php/home/User/saveUserName",
+				data:{
+					userid:userid.value,
+					username:username.value
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){
+					//服务器返回响应，根据响应结果，分析是否发送成功；
+					//返回格式JSON：{'result':0}
+					if(data == 1){
+						plus.ui.toast("修改成功！");
+						mui.openWindow({
+						    url:'user_set.html', 
+						    id:'user_set',
+					      	show:{
+							aniShow:"pop-in",
+							duration: '200'
+						    },
+					        waiting:{
+					        	autoShow:false,
+					        	options:{
+							        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+							        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+							    }
+					        },
+					        styles: {
+								zindex: 1
+							}
+					     })
+						
+					}else{
+						plus.ui.toast("修改失败！");
+				     	
+					}
+				}
+			})			
+			
+		}
+	})
+})(mui); 
+</script>
+</html>

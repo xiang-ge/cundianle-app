@@ -1,0 +1,1120 @@
+{
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/jquery-2.1.1.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"images/hezuoshe.png",
+			"images/wode.png",
+			"images/shan1.png",
+			"images/chongzhi.png",
+			"images/cunqianggou.png",
+			"images/gou.png",
+			"images/fenlei.png",
+			"images/xq.png",
+			"images/gongzuo.png",
+			"images/shanchao.png",
+			"images/nongzi.png",
+			"images/kuaibao.png",
+			"images/timg.jpg",
+			"images/sao.png",
+			"images/qianggou.png",
+			"images/bianmin.png",
+			"images/gouwuche.png",
+			"images/jifen.png",
+			"images/yuding.png",
+			"images/shouye.png",
+			"images/shouye1.png",
+			"images/cun.png",
+			"images/shanchao1.png",
+			"images/xiangqing.png",
+			"images/index_f.png",
+			"images/chengnuo.png",
+			"images/cd_procuct.png",
+			"images/shan.png",
+			"images/index_t.png",
+			"images/shoumanwu.jpg",
+			"images/home.png",
+			"images/saoyisao.png",
+			"images/gouwu.png",
+			"images/shoumanwu.png",
+			"fonts/iconfont.ttf",
+			"personal.html",
+			"news.html",
+			"shansong.html",
+			"images/zhuanti.jpg",
+			"images/guanggao.jpg",
+			"images/qg2.png",
+			"images/qg3.png",
+			"images/qg4.png",
+			"images/qg1.png",
+			"images/guanggao.png",
+			"images/zhuanti1.png",
+			"search_list.html",
+			"images/zhuanti6.png",
+			"images/zhuanti5.png",
+			"images/zhuanti2.png",
+			"images/zhuanti4.png",
+			"images/zhuanti3.png",
+			"images/haopinzhi.png",
+			"images/cirida.png",
+			"cunqianggou.html",
+			"zhuanti1.html",
+			"zhuanti2.html",
+			"zhuanti3.html",
+			"zhuanti4.html",
+			"login.html",
+			"jifenindex.html",
+			"jingqingqidai.html"
+		],
+		"refer": [
+			"login.html",
+			"goods_detail.html",
+			"shansong.html",
+			"cart.html",
+			"personal.html",
+			"miao.html",
+			"miao_list.html",
+			"news.html",
+			"cunqianggou.html",
+			"search_list.html",
+			"daojishi.html",
+			"zhuanti1.html",
+			"zhuanti2.html",
+			"zhuanti3.html",
+			"zhuanti4.html",
+			"zhuanti.html",
+			"jingqingqidai.html",
+			"jifenindex.html"
+		]
+	},
+	"goods_detail.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"cart.html",
+			"order_confirm.html",
+			"shan_order_confirm.html",
+			"goods_evaluate.html"
+		]
+	},
+	"shansong.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"images/wu.png",
+			"images/shanchao.png",
+			"images/wode.png",
+			"images/gouwuche.png",
+			"images/cunqianggou.png",
+			"images/shouye.png",
+			"fonts/iconfont.ttf",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/mui.pullToRefresh.js",
+			"js/mui.min.js",
+			"js/mui.pullToRefresh.material.js",
+			"index.html",
+			"cunqianggou.html",
+			"cart.html",
+			"search_list.html",
+			"personal.html",
+			"shan_search_list.html",
+			"order_list.html",
+			"jifenindex.html",
+			"css/app.css"
+		],
+		"refer": [
+			"index.html",
+			"personal.html",
+			"cart.html",
+			"order_confirm.html",
+			"goods_detail.html",
+			"miao_list.html",
+			"cunqianggou.html",
+			"search_list.html",
+			"shan_search_list.html",
+			"order_list.html",
+			"jifenindex.html",
+			"shansong2.html"
+		]
+	},
+	"personal.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"images/my_bg.png",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"images/head.png",
+			"order_list_pay.html",
+			"order_list_receipt.html",
+			"user_account.html",
+			"order_list_evaluate.html",
+			"images/wode.png",
+			"images/gouwuche.png",
+			"images/cunqianggou.png",
+			"images/shanchao.png",
+			"images/shouye.png",
+			"user_set.html",
+			"fonts/iconfont.ttf",
+			"member.html",
+			"images/huiyuan.png",
+			"member_bangding.html",
+			"member_jifen.html",
+			"fonts/mui-icons-extra.ttf",
+			"css/icons-extra.css"
+		],
+		"refer": [
+			"order_list_pay.html",
+			"order_list_receipt.html",
+			"user_account.html",
+			"order_list_evaluate.html",
+			"shansong.html",
+			"index.html",
+			"cart.html",
+			"user_set.html",
+			"member.html",
+			"order_list.html",
+			"miao_list.html",
+			"cunqianggou.html",
+			"daojishi.html",
+			"member_bangding.html",
+			"member_jifen.html",
+			"order_list_ceshi.html"
+		]
+	},
+	"order_list_pay.html": {
+		"resources": [
+			"js/jquery-1.10.2.min.js",
+			"images/no_order.png",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/iconfont.css",
+			"css/public.css",
+			"personal.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"personal.html",
+			"order_go_pay.html",
+			"order_detail.html",
+			"shan_order_go_pay.html",
+			"order_detail_shan.html",
+			"order_list_receipt.html"
+		]
+	},
+	"user_account.html": {
+		"resources": [
+			"personal.html",
+			"images/no_record.png",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js"
+		],
+		"refer": [
+			"personal.html"
+		]
+	},
+	"order_list_evaluate.html": {
+		"resources": [
+			"personal.html",
+			"images/no_order.png",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js"
+		],
+		"refer": [
+			"personal.html",
+			"order_evaluate.html"
+		]
+	},
+	"order_list_receipt.html": {
+		"resources": [
+			"personal.html",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"images/no_order.png",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"personal.html",
+			"order_detail.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"images/reg_logo.png",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/iconfont.css",
+			"css/public.css",
+			"images/denglu.png",
+			"register.html",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"personal.html",
+			"register.html",
+			"city.html"
+		]
+	},
+	"cart.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"images/no_cart.png",
+			"fonts/mui.ttf",
+			"images/shanchao.png",
+			"images/wode.png",
+			"images/gouwuche.png",
+			"images/cunqianggou.png",
+			"images/shouye.png",
+			"fonts/iconfont.ttf",
+			"shansong.html",
+			"order_cart_confirm.html",
+			"order_cart_pay.html"
+		],
+		"refer": [
+			"index.html",
+			"personal.html",
+			"shansong.html",
+			"cunqianggou.html",
+			"daojishi.html",
+			"order_cart_confirm.html",
+			"goods_detail.html",
+			"order_cart_pay.html"
+		]
+	},
+	"news.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"order_confirm.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"order_pay.html"
+		]
+	},
+	"user_set_name.html": {
+		"resources": [
+			"user_set.html"
+		],
+		"refer": [
+			"user_set.html"
+		]
+	},
+	"user_set.html": {
+		"resources": [
+			"js/mui.imageViewer.js",
+			"user_set_name.html",
+			"css/mui.imageviewer.css",
+			"user_set_password_log_1.html",
+			"js/arttmpl.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"personal.html"
+		],
+		"refer": [
+			"user_set_name.html",
+			"personal.html",
+			"user_set_password_log_1.html",
+			"login.html"
+		]
+	},
+	"user_set_password_log_1.html": {
+		"resources": [
+			"user_set.html"
+		],
+		"refer": [
+			"user_set.html"
+		]
+	},
+	"member.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"personal.html",
+			"images/shanchao.png",
+			"images/wode.png",
+			"images/gouwuche.png",
+			"fonts/mui.ttf",
+			"images/cunqianggou.png",
+			"images/shouye.png",
+			"images/huiyuanka.png",
+			"index.html",
+			"fonts/iconfont.ttf",
+			"member_login.html",
+			"member_bangding.html"
+		],
+		"refer": [
+			"personal.html",
+			"index.html",
+			"shansong.html",
+			"member_login.html",
+			"member_bangding.html",
+			"cart.html",
+			"cunqianggou.html"
+		]
+	},
+	"miao.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"images/mai.png"
+		],
+		"refer": [
+			"order_confirm.html",
+			"cart.html",
+			"goods_evaluate.html"
+		]
+	},
+	"order_pay.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"js/jquery-1.10.2.min.js",
+			"css/mui.css",
+			"js/immersed.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"order_list.html"
+		],
+		"refer": [
+			"order_list.html",
+			"order_list_receipt.html",
+			"order_list_pay.html"
+		]
+	},
+	"order_list.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"images/no_order.png",
+			"order_list_shan.html",
+			"cart.html",
+			"index.html",
+			"shansong.html",
+			"cunqianggou.html",
+			"shan_order_list.html",
+			"jifen_order_list.html",
+			"miao_order_list.html"
+		],
+		"refer": [
+			"order_detail.html",
+			"personal.html",
+			"order_go_pay.html",
+			"order_list_shan.html",
+			"cart.html",
+			"index.html",
+			"shansong.html",
+			"cunqianggou.html",
+			"shan_order_list.html",
+			"jifen_order_list.html",
+			"miao_order_list.html"
+		]
+	},
+	"order_detail.html": {
+		"resources": [
+			"js/mui.min.js",
+			"images/order_bg.png",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"order_evaluate.html",
+			"order_pay.html"
+		]
+	},
+	"order_go_pay.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"js/jquery-1.10.2.min.js",
+			"css/mui.css",
+			"js/immersed.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"order_list_pay.html",
+			"order_list.html",
+			"order_list_receipt.html"
+		]
+	},
+	"member_login.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"member.html",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"shansong.html",
+			"cunqianggou.html",
+			"personal.html",
+			"daojishi.html"
+		],
+		"refer": [
+			"member.html",
+			"shansong.html",
+			"cunqianggou.html",
+			"personal.html",
+			"daojishi.html"
+		]
+	},
+	"member_bangding.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"member.html",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"cunqianggou.html",
+			"index.html",
+			"personal.html",
+			"daojishi.html",
+			"images/huiyuanka.png"
+		],
+		"refer": [
+			"member.html",
+			"cunqianggou.html",
+			"index.html",
+			"personal.html",
+			"daojishi.html"
+		]
+	},
+	"miao_list.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"css/public.css",
+			"cart.html",
+			"personal.html"
+		],
+		"refer": [
+			"cart.html",
+			"personal.html"
+		]
+	},
+	"cunqianggou.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"member.html",
+			"member_bangding.html",
+			"images/chongzhi.png",
+			"images/guanggao.png",
+			"fonts/iconfont.ttf",
+			"index.html",
+			"shansong.html",
+			"order_list.html",
+			"member_jifen.html",
+			"jifenindex.html",
+			"images/chengnuo.png",
+			"images/ceshi.jpg",
+			"images/wu.png"
+		],
+		"refer": [
+			"goods_detail.html",
+			"miao.html",
+			"member.html",
+			"member_bangding.html",
+			"index.html",
+			"shansong.html",
+			"order_list.html",
+			"member_jifen.html",
+			"jifenindex.html"
+		]
+	},
+	"order_evaluate.html": {
+		"resources": [
+			"js/mui.imageViewer.js",
+			"css/mui.imageviewer.css",
+			"images/img_bg.png",
+			"js/arttmpl.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js"
+		],
+		"refer": [
+			"order_list.html"
+		]
+	},
+	"search_list.html": {
+		"resources": [
+			"index.html",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"images/wu.png",
+			"shansong.html"
+		],
+		"refer": [
+			"index.html",
+			"goods_detail.html",
+			"shansong.html"
+		]
+	},
+	"daojishi.html": {
+		"resources": [
+			"images/daojishi.png",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"member_bangding.html",
+			"member_login.html",
+			"member_jifen.html"
+		],
+		"refer": [
+			"member_bangding.html",
+			"member_login.html",
+			"member_jifen.html"
+		]
+	},
+	"zhuanti1.html": {
+		"resources": [
+			"index.html",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"images/guanggao.png",
+			"images/chongzhi.png",
+			"css/iconfont.css",
+			"css/public.css"
+		],
+		"refer": [
+			"index.html",
+			"miao.html"
+		]
+	},
+	"zhuanti2.html": {
+		"resources": [
+			"index.html",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"zhuanti3.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"index.html",
+			"images/guanggao.png",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"zhuanti4.html": {
+		"resources": [
+			"index.html",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"images/guanggao.png",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"zhuanti.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"images/guanggao.png",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"miao.html"
+		]
+	},
+	"member_jifen.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"personal.html",
+			"images/huiyuanka.png",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"daojishi.html",
+			"cunqianggou.html",
+			"index.html"
+		],
+		"refer": [
+			"personal.html",
+			"daojishi.html",
+			"cunqianggou.html",
+			"index.html"
+		]
+	},
+	"jingqingqidai.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"images/jingqingqidai.jpg",
+			"css/public.css",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"register.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"login.html",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"login.html",
+			"city.html"
+		]
+	},
+	"city.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"images/mai.png",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"shan_order_confirm.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"shan_order_pay.html"
+		]
+	},
+	"goods_evaluate.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js"
+		]
+	},
+	"shan_order_pay.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"css/mui.css",
+			"js/immersed.js",
+			"fonts/mui.ttf",
+			"order_list.html"
+		],
+		"refer": [
+			"order_list.html",
+			"shan_order_list.html",
+			"order_list_pay.html",
+			"order_list_receipt.html"
+		]
+	},
+	"order_cart_confirm.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"cart.html"
+		],
+		"refer": [
+			"order_cart_pay.html",
+			"cart.html"
+		]
+	},
+	"order_cart_pay.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"css/mui.css",
+			"js/immersed.js",
+			"fonts/mui.ttf",
+			"cart.html"
+		],
+		"refer": [
+			"order_list.html",
+			"shan_order_list.html",
+			"cart.html"
+		]
+	},
+	"jifenindex.html": {
+		"resources": [
+			"js/mui.pullToRefresh.js",
+			"index.html",
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"js/mui.pullToRefresh.material.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"personal.html",
+			"shansong.html",
+			"fonts/iconfont.ttf",
+			"jifengoumai.html",
+			"cunqianggou.html"
+		],
+		"refer": [
+			"index.html",
+			"jifenxiangqing.html",
+			"personal.html",
+			"shansong.html",
+			"jifengoumai.html",
+			"cunqianggou.html"
+		]
+	},
+	"shan_search_list.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"images/wu.png",
+			"shansong.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"shansong.html",
+			"goods_detail.html"
+		]
+	},
+	"order_list_shan.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"order_list.html",
+			"css/iconfont.css",
+			"css/public.css",
+			"order_list_jifen.html",
+			"shansong.html"
+		],
+		"refer": [
+			"personal.html",
+			"order_list.html",
+			"order_list_jifen.html",
+			"order_detail.html",
+			"shansong.html",
+			"order_go_pay.html"
+		]
+	},
+	"order_list_jifen.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"order_list_shan.html",
+			"css/iconfont.css",
+			"css/public.css"
+		],
+		"refer": [
+			"order_list_shan.html"
+		]
+	},
+	"shan_order_list.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"order_list.html",
+			"shansong.html",
+			"css/iconfont.css",
+			"css/public.css",
+			"order_list_jifen.html",
+			"fonts/iconfont.ttf",
+			"jifen_order_list.html",
+			"cart.html",
+			"fonts/mui.ttf",
+			"index.html",
+			"cunqianggou.html",
+			"images/no_order.png"
+		],
+		"refer": [
+			"order_list.html",
+			"shan_order_go_pay.html",
+			"shansong.html",
+			"order_detail.html",
+			"personal.html",
+			"order_list_jifen.html",
+			"jifen_order_list.html",
+			"cart.html",
+			"index.html",
+			"cunqianggou.html"
+		]
+	},
+	"shan_order_go_pay.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"js/jquery-1.10.2.min.js",
+			"css/mui.css",
+			"js/immersed.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/public.css"
+		],
+		"refer": [
+			"order_list.html",
+			"shan_order_list.html",
+			"order_list_pay.html"
+		]
+	},
+	"jifen_order_list.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"order_list.html",
+			"shan_order_list.html",
+			"index.html",
+			"shansong.html",
+			"fonts/iconfont.ttf",
+			"cunqianggou.html",
+			"fonts/mui.ttf",
+			"images/no_order.png"
+		],
+		"refer": [
+			"order_list.html",
+			"shan_order_list.html",
+			"index.html",
+			"shansong.html",
+			"personal.html",
+			"cunqianggou.html",
+			"order_detail_jifen.html"
+		]
+	},
+	"order_list_ceshi.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/jquery-1.10.2.min.js",
+			"shansong.html",
+			"js/mui.pullToRefresh.js",
+			"js/mui.pullToRefresh.material.js"
+		],
+		"refer": [
+			"personal.html",
+			"shansong.html"
+		]
+	},
+	"miao_order_list.html": {
+		"resources": [
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"js/mui.min.js",
+			"js/jquery-1.10.2.min.js",
+			"shan_order_list.html",
+			"jifen_order_list.html",
+			"cart.html",
+			"fonts/mui.ttf",
+			"fonts/iconfont.ttf",
+			"images/no_order.png"
+		],
+		"refer": [
+			"shan_order_list.html",
+			"jifen_order_list.html",
+			"cart.html",
+			"personal.html",
+			"order_detail.html",
+			"order_evaluate.html",
+			"order_go_pay.html"
+		]
+	},
+	"order_detail_jifen.html": {
+		"resources": [
+			"js/mui.min.js",
+			"images/order_bg.png",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js"
+		]
+	},
+	"jifenxiangqing.html": {
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/public.css",
+			"images/mai.png",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"jifengoumai.html"
+		]
+	},
+	"jifengoumai.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.10.2.min.js",
+			"fonts/iconfont.ttf",
+			"css/iconfont.css",
+			"css/public.css",
+			"jifenindex.html"
+		],
+		"refer": [
+			"jifenindex.html"
+		]
+	},
+	"shansong2.html": {
+		"refer": [
+			"index.html",
+			"goods_detail.html",
+			"shansong.html"
+		],
+		"resources": [
+			"js/jquery-2.1.1.min.js",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"css/public.css",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"images/wu.png"
+		]
+	}
+}

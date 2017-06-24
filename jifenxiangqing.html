@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		var self = plus.webview.currentWebview();
+	  	var good_id = self.good_id;
+	  	var userid = plus.storage.getItem("userid");
+	  	//alert(good_id)
+	  	jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Integral/goodInfo",
+//			url:"http://www.cundianle.cn/cdl.php/home/Miao/goodinfo",
+	      	data:{
+	  			good_id:good_id
+	  			
+	  		},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				
+				document.getElementById("img").src = "http://www.cundianle.cn"+data.picture;
+				document.getElementById("ids").innerHTML = good_id;
+				document.getElementById("title").innerHTML = data.name;
+				document.getElementById("integral").innerHTML = data.integral;
+				document.getElementById("integralone").value = data.integral;
+				document.getElementById("price").innerHTML = data.price;
+				document.getElementById("priceone").value = data.price;
+				document.getElementById("num").innerHTML = data.inventory;
+				document.getElementById("kucun").value = data.inventory;
+				document.getElementById("ids").value = good_id;
+				document.getElementById("shopid").value = data.shop_id;	
+				document.getElementById("describe").innerHTML = data.desc;//商品详细											
+			}
+		});
+		/*
+		 *商品评价
+		 ****/
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/User/getGoodEvaluate",
+	      	data:{
+	  			id:good_id
+	  		},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				if(data == ""){
+					document.getElementById("evaluate").style.display = "none";
+				}else{
+					//用户评价
+					var evaluatelist = document.getElementById("evaluatelist");
+					var evaluate = "";
+					for(i=data.length-1;i>=0;i--){
+						if(i == 0){
+							evaluate=evaluate+'<li><div class="user"><img src="'+data[i].user_img+'" /><span>'+data[i].user_name+'</span></div><p class="text">'+data[i].evaluate_content+'</p><p class="date">'+data[i].add_time+'</p>	</li>';
+						}
+					}
+					evaluatelist.innerHTML = evaluate;
+				}
+				
+			}
+		});
+		
+  	})
+</script>
+<style type="text/css">
+	.mui-bar-nav{padding-left: 5%;padding-right: 5%;padding-top: 10px;}
+	.mui-bar-nav .mui-title{font-size: 22px;color: #fff;line-height: 60px;}
+	.mui-bar-nav.mui-bar .mui-icon{padding: 0;width: 40px;height: 40px;color: #fff;text-align: center;line-height: 40px;border-radius: 20px;}
+	.mui-bar-nav .mui-action-back{font-size: 30px;}
+	.mui-bar-nav .icon-gouwuche1{font-size: 20px;}
+	.mui-bar-nav.green{padding-top:0px;}
+	.mui-bar-nav.green .mui-icon{color:#50B24B;}
+	.mui-bar-nav.tou{height: 60px;background-color: transparent;z-index: 99999;box-shadow: none;}
+	.mui-bar-nav.tou .mui-icon{background:rgba(0,0,0,0.6);}
+	
+	.mui-bar-nav.green{display: none;}
+	
+	/*.mui-slider .mui-slider-group .mui-slider-item img{height: 250px;}*/
+	.number{margin-left: 15px;font-size: 14px;color: #888888;}
+	.intro{background-color: #fff;padding: 20px 5% 5px;}
+	.intro .title{float: left;width: 83%;height: 40px;overflow: hidden;}
+	.intro .service{display: block;float: right;width: 15%;height: 30px;text-align: right;border-left: 1px solid #888;margin-top: 5px;}
+	.intro .service img{width: 40px;height: 40px;margin-top: -5px;}
+	.intro .price{color: #18B831;font-size: 20px;margin-top: 10px;}
+	.intro .price s{color: #555;font-size: 16px;}
+	.intro .you{display:inline-block;margin-top: 10px;margin-left: 20px;}
+	
+	.choosetyle{display: block;height: 40px;line-height: 40px;background-color: #fff;margin-top: 3px;padding: 0 5%;color: #555;}
+	.choosetyle i{float: right;line-height: 40px;}
+	
+	.mask{width: 100%;position: fixed;top: 0;background:rgba(0,0,0,0.4);display: none;z-index: 9999999;}
+	.mask .top{width: 100%;}
+	.size{width: 100%;background-color: #fff;position: absolute;bottom: 0;}
+	.size .mui-icon-close{position: absolute;top: 7px;right: 3%;color: #555;font-weight: bold;}
+	.size .img{float: left;width: 40%;padding: 5px;margin: -20px 0 0 2%;background-color: #fff;border-radius: 3px;}
+	.size .img img{width: 100%;}
+	.size .right{float: right;width: 57%;padding-right: 3%;}
+	.size .right .tit1{font-size:0.95rem;padding:7px 1% 0px 1%;color:#18B831;margin-bottom: 5px;;}
+	.size .right .price{font-size:1.1rem;;color: #18B831;padding: 0px 0;margin-bottom:5px;}
+	.size .right s{color: #999;display: block;}
+	.size .right .amount{margin-top: 5px;font-size: 16px;margin-left:5%;width:35%;display: inline-block;font-size: 0.8rem;float:left;;}
+	.size .right .cart_t{display: inline-block;width:50%;margin-left: 5%;height:20px;line-height: 20px;margin-top:2%;;}
+	.size .right .cart_t .conut{width:35%;height:20px;display: inline-block;padding:0px;border:none;text-align: center;}
+	.size .right .cart_t span{text-align:center;display: inline-block;width:20px;height:20px;border-radius: 50%;color:#04AA2C;border:1px solid #04AA2C;line-height: 20px;;}
+	
+	.size .note{margin-top: 5px;font-size: 16px;margin-left:5%;}
+	.size .size_tit{clear: both;color: #333;font-size: 18px;line-height: 5px;padding: 0 3%;}
+	.size ul{padding: 0 3%;width:100%;}
+	.size ul li{float: left;padding: 3px 5px;background-color: #eee;color: #333;margin: 0 10px 5px 0;border-radius: 5px;font-size: 14px;}
+	.size ul .active{background-color: #FF8800;color: #fff;}
+	.size .butt{clear: both;height: 50px;margin-top: 10px;}
+	.size .butt .butt_red{text-align:center;color:#fff;float: left;width: 100%;height: 50px;line-height: 50px;border-radius: 0;}
+	.size .butt .butt_y{background-color: #FF8800;}
+	.size .butt .buy{background: url(images/mai.png);}
+	.size .number{margin: 5px 5%;}
+
+
+	.evaluate{background-color: #fff;margin-top: 3px;padding: 3px 0;}
+	.evaluate .tit{font-size: 18px;padding: 0 5%;}
+	.evaluate ul li{border-bottom: 1px solid #ddd;padding: 3px 5%;}
+	.evaluate ul li .user{margin-bottom: 5px;}
+	.evaluate ul li .user img{float: left;width: 50px;height: 50px;border-radius: 25px;margin-right: 3%;}
+	.evaluate ul li .user span{float: left;margin-top: 5px;}
+	.evaluate ul li .text{clear: both;color: #333;font-size: 16px;line-height: 25px;}
+	.evaluate ul li .date{margin-top: 3px;}
+	.evaluate .butt_white{width: 35%;height: 30px;line-height: 30px;margin: 3px auto 0;display: block;color:#50B24B;}
+	
+	
+	.detail{background-color: #fff;margin-top: 3px;padding-bottom: 60px;}
+	.detail .tit{width: 25%;height: 50px;margin: 0 0 1px 5%;text-align: center;line-height: 50px;color: #18B831;font-size: 18px;border-bottom: 2px solid #18B831;}
+	.detail img{display: block;width: 100%;}
+	
+	.foot{width: 100%;height: 50px;position: fixed;bottom: 0;background-color: #fff;}
+	.foot .butt_red{float: right;width: 100%;height: 50px;line-height: 50px;border-radius: 0;text-align: center;color:#fff;}
+	.foot .butt_y{background-color: #FF8800;}
+	.foot .buy{background: url(images/mai.png);}
+	.foot .choose{background: url(images/mai.png);}
+	#guigetwolist ul{display: none;}
+	#describe{padding:2%;}	
+	#restrictions{width: 46%;float: right;margin-right: 4%;margin-top:4px;color: red;}
+</style>
+</head>
+<body>
+<div class="body">
+<header class="mui-bar mui-bar-nav tou">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <a class="mui-icon iconfont icon-gouwuchexuanzhong mui-pull-right" style="display: none;"></a>
+</header>
+<header class="mui-bar mui-bar-nav green">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <a class="mui-icon iconfont icon-gouwuchexuanzhong mui-pull-right"></a>
+</header>
+<!--轮播-->
+<div id="slider" class="mui-slider" >
+	<div class="mui-slider-group">
+		
+		<div class="mui-slider-item">
+			<a>
+				<img id="img">
+			</a>
+		</div>
+		
+	</div>
+</div><!--轮播 结束-->
+<div class="intro">
+	<div class="title" id="title"></div>
+	<div style="clear: both;"></div>
+	<div><s>原价:￥<span id="price"></span></s><span class="number">库存<span id="num"></span></span></div>
+	<div class="price">积分：<span id="integral"></span></div>
+	
+</div>
+
+
+<div class="evaluate" id="evaluate">
+	<p class="tit">商品评价</p>
+	<ul id="evaluatelist">
+	</ul>
+	<a class="butt_white" onclick="allComment()" id="allComment">查看全部评价</a>
+</div>
+<input type="hidden" id="ids" />
+<input type="hidden" id="vip_phone" />
+<input type="hidden" id="shopid" />
+<input type="hidden" id="priceone" />
+<input type="hidden" id="integralone"/>
+<input type="hidden" id="kucun"/>
+<input type="hidden" id="count" value="1"/>
+<div class="detail">
+	<div class="tit">商品详情</div>
+	<div id="describe"></div>
+</div>
+
+<div class="foot">
+	<a class="butt_red buy">立即兑换</a>
+</div>
+</div>
+</body>
+
+<script type="text/javascript">
+//立即支付
+mui('body').on('tap', '.buy', function(e) {
+	var phone  = plus.storage.getItem("phone");
+	var userid = plus.storage.getItem("userid");
+	var num    = 1;
+//	alert(phone)
+	if(userid != ""){
+		var goods_id = document.getElementById("ids"); //商品id
+		var goods_name = document.getElementById("title");//商品名称
+		var goods_img = document.getElementById("img");//商品图片
+		var count = document.getElementById("count"); //商品数量		
+		var price = document.getElementById("priceone");//现售价
+		var integral = document.getElementById("integralone");//市场价
+
+//		alert(shop_price.innerHTML);
+		jQuery.ajax({
+			url:"http://www.cundianle.cn/cdl.php/home/Integral/inventory",
+			data:{
+				phone:phone,
+				good_id:goods_id.value,             //
+				num:1
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				//服务器返回响应，根据响应结果，分析是否发送成功；
+				//返回格式JSON：{'result':0}
+			document.getElementById("vip_phone").value=data.vip_phone;
+//			var card=18888888888;
+//				alert(data.vip_phone);
+				if(data == 4){
+		        	mui.toast("您尚未登陆");
+		        	window.location.href='login.html'
+	       		}else if(data == 3){
+					mui.toast("未绑定会员卡");
+				}else if(data == 2){
+					mui.toast("库存不足，请等候下期商品");
+				}else{
+					mui.toast('请填写地址并提交订单');
+					//抢购成功，跳转确认订单页面
+					mui.openWindow({
+						url:'jifengoumai.html',
+						id:'jifengoumai',
+						extras:{
+							card : data.vip_phone,
+							userid:userid,
+							goods_id:goods_id.value,
+							goods_img:goods_img.src,
+							goods_name:goods_name.innerHTML,
+							order_number:data.order_number,
+							goods_price:price.value,
+							integral:integral.value,
+							goods_count:count.value
+						},
+						createNew: true,
+						show:{
+							aniShow:"pop-in",
+							duration: '200'
+						},
+				        waiting:{
+				        	autoShow:false,
+				        	options:{
+						        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+						        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+						    }
+				        },
+				        styles: {
+							zindex: 1
+						}
+				  })
+				}
+				
+			}
+		})
+	}else{
+		mui.toast('请先登录。');
+	}
+});
+
+var goods_id = document.getElementById("id");
+function allComment(){
+	//alert(shopid.value)
+	mui.openWindow({
+		url:'goods_evaluate.html',
+		id:'goods_evaluate',
+		extras:{
+			goods_id:goods_id.value
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+}
+</script>
+</html>
+

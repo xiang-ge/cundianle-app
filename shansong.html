@@ -1,0 +1,912 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="http://www.dcloud.io/hellomui/css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script src="http://www.dcloud.io/hellomui/js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+//mui.init();
+
+mui.init({
+	pullRefresh:{
+		container:"#pullRefresh",
+		up: {
+//			auto:true,
+			contentrefresh: '正在加载...',
+			contentnomore: '没有更多数据了',
+			callback: upfn
+		}
+	}
+		
+});
+
+	
+	function upfn(){		
+		var page = document.getElementById("page").value;														
+		var self = this;
+		var cat_id = document.getElementById("cat_id").value;
+		var storeNo = document.getElementById("storeNo").value;		
+		setTimeout(function() {
+//				alert(page)	
+//				alert(cat_id)
+			jQuery.ajax({
+		      	url:"http://www.cundianle.cn/cdl.php/home/Shan/cateGood",
+		      	data:{
+					cat_id:cat_id,
+					storeNo:storeNo,
+					p:page
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				success:function(data){	
+					if(data == -1){
+						min.toast('您尚未登录')
+						window.location.href='login.html'
+					}					
+//					console.log(data)
+//					console.log(page)
+					var right = document.getElementById("segmentedControlContents");
+					var oDate = new Date(); //实例一个时间对象
+					var hours = oDate.getHours(); //获取系统时，
+					var min = oDate.getMinutes(); //获取系统分  加上20分钟
+					if(hours<10){
+						hours='0'+hours;
+					}
+					if(min<10){
+						min='0'+min;
+					}
+					var start = document.getElementById("start");
+					var end = document.getElementById("end");
+					var str='';
+
+						for(var i=0;i<data.length;i++){
+							var li = document.createElement('li')
+//							li.setAttribute('data-id',''+data[i].id+'');
+							str='<img data-id="'+data[i].id+'" src="http://www.cundianle.cn'+data[i].goods_img+'"/><div class="sd_info"><p class="name" data-id="'+data[i].id+'">'+data[i].name+'</p><span class="jg" data-id="'+data[i].id+'">￥'+data[i].retailprice+'/'+data[i].unitname+'</span><span class="gg"></span>';											
+								//alert(start.value)
+								if(start.value > hours+":"+min || end.value < hours+":"+min){
+									str=str+'<span style="color:#ff0000;font-size:13px;">未营业</span>';
+									str=str+'</div></li>';
+								}else{
+									if(data[i].goodOnlineStock == 0){
+										str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">已售罄</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';	
+									}else if(data[i].goodOnlineStock == -2){
+										str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存不足</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+									}else{
+										str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存:'+data[i].goodOnlineStock+''+data[i].unitname+'</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+									}						
+								}	
+							li.innerHTML = str;	
+						
+							right.appendChild(li);
+						}
+						
+						if(data == 0){
+							page == page;
+							document.getElementById("page").value = page;
+							mui('#pullRefresh').pullRefresh().endPullupToRefresh(true);
+						}else if(data != ''){
+							page++;						
+							document.getElementById("page").value = page;
+							mui('#pullRefresh').pullRefresh().endPullupToRefresh(false);
+						}
+						
+						mui('#pullRefresh').pullRefresh().refresh(true);
+
+				}
+				
+			});	
+																
+		}, 500);
+	}
+	
+mui.plusReady(function(){
+//	plus.runtime.getProperty(plus.runtime.appid,function(inf){
+//      var checkUrl="http://www.cundianle.cn/appgys/userupgrade.php";
+//	    var xhr=new XMLHttpRequest();
+//	    xhr.onreadystatechange=function(){
+//	        switch(xhr.readyState){
+//	            case 4:
+//	            if(xhr.status==200){
+//	                var newVer=xhr.responseText;
+//	                if(newVer != 1){
+//	                   document.getElementById("my").style.background="red";
+//	                }
+//	            }
+//	            break;
+//	            default:
+//	            break;
+//	        }
+//	    }
+//	    xhr.open('GET',checkUrl+"?ver="+inf.version);
+//	    xhr.send();
+//  });
+	document.getElementById("shopid").value = plus.storage.getItem("shopid");
+	/*
+	 * 获取商品分类
+	 * **/
+	jQuery.ajax({
+		url:"http://www.cundianle.cn/cdl.php/home/Shan/goodTwoCateList",
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			var one = document.getElementById("one");	
+			var two = document.getElementById("fl_menu");
+			var str='';
+			var info='';
+			for(var i=0;i<data.length;i++){
+				//alert(data[i].cat_id)
+				if(i < 4){
+					if(i == 0){						
+						aa(data[i].cat_id)
+						str=str+'<a class="mui-active" data-id="'+data[i].cat_id+'" >'+data[i].cat_name+'</a>';
+					}else{
+						str=str+'<a data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';
+					}
+				}else{
+					info=info+'<li><a data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a></li>';
+				}
+			}			
+			one.innerHTML = str;		
+			two.innerHTML = info;	
+		}
+	})
+	
+	//营业时间
+	jQuery.ajax({
+		url:"http://www.cundianle.cn/cdl.php/home/Shan/business",
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			document.getElementById("start").value = data.start;	
+			document.getElementById("end").value = data.end;
+			
+		}
+	})
+  	
+  		
+})
+
+	
+
+
+function aa(id){			
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Shan/goodThreeCateList",
+      	data:{
+			cat_id:id
+		},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			var left = document.getElementById("segmentedControls");
+			var str='';
+			for(var i=0;i<data.length;i++){
+				if(i == 0){
+					bb(data[i].cat_id)
+					str=str+'<a class="mui-control-item mui-active" data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+				}else{
+					str=str+'<a class="mui-control-item"data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+				}
+			}
+			
+			left.innerHTML = str;	
+			
+		}
+	});
+		
+}
+function bb(id){
+	var storeNo = plus.storage.getItem("storeNo");
+	document.getElementById("cat_id").value=id;
+	document.getElementById("storeNo").value=storeNo;
+	var shopid = document.getElementById("shopid").value;
+	var right = document.getElementById("segmentedControlContents");
+		right.innerHTML='';
+	jQuery.ajax({
+  	 	url:"http://www.cundianle.cn/cdl.php/home/Shan/cateGood",
+      	data:{
+			cat_id:id,
+			storeNo:storeNo,
+		},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){			
+			var oDate = new Date(); //实例一个时间对象
+			var hours = oDate.getHours(); //获取系统时，
+			var min = oDate.getMinutes(); //获取系统分  加上20分钟
+			if(hours<10){
+				hours='0'+hours;
+			}
+			if(min<10){
+				min='0'+min;
+			}
+			var start = document.getElementById("start");
+			var end = document.getElementById("end");
+			//alert(end.value)
+			if(data == ""){
+				right.innerHTML='<img class="wu" src="images/wu.png"/>';
+			}else{
+				var str='';
+				for(var i=0;i<data.length;i++){					
+					str=str+'<li><img data-id="'+data[i].id+'" src="http://www.cundianle.cn'+data[i].goods_img+'"/><div class="sd_info"><p class="name" data-id="'+data[i].id+'">'+data[i].name+'</p><span class="jg" data-id="'+data[i].id+'">￥'+data[i].retailprice+'/'+data[i].unitname+'</span><span class="gg"></span>';
+					
+						//alert(start.value)
+						if(start.value > hours+":"+min || end.value < hours+":"+min){
+							str=str+'<span style="color:#ff0000;font-size:13px;">未营业</span>';
+							str=str+'</div></li>';
+						}else{
+							if(data[i].goodOnlineStock == 0){
+							str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">已售罄</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';	
+							}else if(data[i].goodOnlineStock == -2){
+								str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存不足</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+							}else{
+								str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存:'+data[i].goodOnlineStock+''+data[i].unitname+'</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+							}
+														
+						}											
+				}
+				
+				right.innerHTML = str;
+				
+			}
+			
+		}
+	})	
+}
+</script>
+<style type="text/css">
+.mui-content {
+	overflow: hidden;
+	background: #f7f7f7;
+	margin-bottom: 50px;
+}
+.mui-bar-nav {
+	background:#50B24B;
+}
+.mui-title {
+	color: #fff;
+}
+.sds .left {
+	float: left;
+	width: 30%;
+	height: 100%;
+}
+
+.mui-content .left a {
+	display: block;
+	text-align: center;
+	padding: 8px 0px;
+	background: #f7f7f7;
+	color: #333;
+	font-size: 15px;
+}
+
+#segmentedControls a.mui-active {
+	color: #50B24B;
+	background: #fff;
+	border-left: 2px solid #50B24B;
+}
+
+.mui-content .right {
+	float: left;
+	background: #fff;
+	width: 70%;
+}
+.mai{
+	color:#fff;
+	background-color:#50B24B;
+	font-size: 0.7em;
+	float: right;
+	border: 1px solid #50B24B;
+	border-radius: 6px;
+	padding: 1px 4px;
+	margin-right: 3px;
+}
+
+.sds ul li {
+	padding: 5px 5px;
+	width: 100%;
+	overflow: hidden;
+	border-bottom: 1px solid #DFDFDF;
+	position: relative;
+}
+
+.sds li img {
+	display: block;
+	float: left;
+	width: 67px;
+	height: 71px;
+}
+
+.sds .sd_info {
+	width: 65%;
+	float: left;
+	margin-left: 10px;
+}
+
+.sds .sd_info p {
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	width:100%;
+	font-size: 13px;
+	color: #333;
+	margin- bottom: 6%;
+}
+
+.sds .sd_info span {
+	display: block;
+}
+
+.sds .sd_info .gg {
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 3%;
+	;
+}
+
+.sds .sd_info .jg {
+	color: #FF0000;
+	font-weight: bold;
+}
+
+.sds ul li .mui-icon-plus {
+	position: absolute;
+	bottom: 7px;
+	right: 20px;
+	color: #50B24B;
+}
+
+.sds ul li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	font-family: "Microsoft YaHei", sans-serif;
+	color: #333;
+	background-color: #F1E9DC;
+}
+
+div.mui-content {
+	background-color: #F1E9DC;
+}
+
+p {
+	margin-bottom: 0px;
+}
+
+.mui-slider-indicator.mui-segmented-control {
+	padding: 5px 10px;
+	background: #FFF;
+}
+
+.mui-segmented-control.mui-scroll-wrapper {
+	height: 45px;
+}
+
+.mui-segmented-control.mui-scroll-wrapper .mui-control-item {}
+
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+	color: #50B24B;
+	;
+}
+
+.mui-segmented-control.mui-scroll-wrapper .mui-control-item.mui-active {}
+
+.mui-fullscreen .mui-segmented-control~.mui-slider-group {
+	top: 45px;
+}
+
+.mui-slider-group .mui-scroll-wrapper {
+	padding-top: 5px;
+}
+
+.mui-row.mui-fullscreen>[class*="mui-col-"] {
+	height: 100%;
+	background: #fff;
+}
+
+.mui-col-xs-3,
+.mui-control-content {
+	overflow-y: auto;
+	height: 100%;
+}
+
+.mui-segmented-control .mui-control-item {
+	line-height: 36px;
+	width: 100%;
+}
+
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+	background-color: #fff;
+}
+
+.mui-col-xs-3 {
+	float: left;
+}
+
+.mui-col-xs-9 {
+	float: right;
+}
+
+.mui-fullscreen {}
+
+.fl {
+	width: 100%;
+	background: #fff;
+	height: auto;
+	box-shadow: 2px 2px 2px #ddd;
+	z-index: 999;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.fl_t {
+	height: 40px;
+}
+
+ul,
+li {
+	padding: 0px;
+	margin: 0px;
+}
+
+li {
+	list-style: none;
+}
+
+.fl a {
+	height: 40px;
+	line-height: 40px;
+	color: #666;
+	font-size: 0.9rem;
+	width: 20%;
+	display: block;
+	float: left;
+	text-align: center;
+}
+
+.fl_menu {
+	background: #fff;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.fl_menu li {
+	float: left;
+	width: 20%;
+}
+
+.fl_menu li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.fl .mui-active {
+	color: #50B24B;
+}
+
+.wu {
+	width: 50%;
+	display: block;
+	margin: 30% auto;
+}
+
+.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item,
+.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active {
+	border-bottom: 1px solid #dfdfdf;
+}
+.mui-icon.mui-icon-search{
+	color: #fff;
+}
+.mui-bar-tab .foot_tab{width: 20%;}
+</style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+	<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #fff;"></a>-->
+     <h1 class="mui-title">闪送超市</h1>    
+   	<a class="mui-icon mui-icon-search mui-pull-right jump" href="shan_search_list.html"></a>
+ </header>
+ 
+<div class="mui-content mui-row mui-fullscreen">
+			<input type="hidden" id="shopid" />
+			<input type="hidden" id="start" value="00:00"/>
+			<input type="hidden" id="end" value="00:00"/>
+			<input type="hidden" id="storeNo" />
+			<input type="hidden" id="cat_id" />
+			<input type="hidden" id="page" value="2"/>
+  <div class="fl">
+  	  <div class="fl_t">
+  	  	<div id="one"><!--一级分类列表--></div>
+  	  	<a href="#" id="more"><span class="mui-icon mui-icon-arrowdown"></span></a>
+  	  </div>
+  	  	<ul class="fl_menu" id="fl_menu" style="display: none;"><!--一级分类列表--></ul>
+  	  
+  </div>
+  <div style="clear: both;"></div>
+	<div class="mui-col-xs-3">
+		<div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+			<!--二级分类列表-->
+		</div>
+	</div>
+	<div class="mui-col-xs-9" style="border-left: 1px solid #c8c7cc;padding-bottom: 50px;">
+		<div id="pullRefresh" class="mui-control-content mui-active sds">
+			<ul id="segmentedControlContents">
+				<!--商品列表-->
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div style="clear: both;"></div>
+<input type="hidden" id="id" />
+<input type="hidden" id="mark" />
+<input type="hidden" id="two_id" />
+<input type="hidden" id="kucun"/>
+<input type="hidden" id="postage"/>
+<input type="hidden" id="res" value="0"/>
+<input type="hidden" id="page" value="2"/>
+<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab jump" href="index.html">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab active">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+		<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+	<a class="foot_tab jump" href="personal.html">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+<script type="text/javascript">
+mui('body').on('tap', '.jump', function(e) {
+	var id = this.getAttribute("href");
+	var href = this.href;
+	mui.openWindow({
+		url: href, 
+		id:id,
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	});
+	//plus.webview.currentWebview().close();
+});
+    mui.ready(function() {
+//      mui('.mui-scroll-wrapper').scroll({
+//          bounce: true,
+//          indicators: false,
+//          deceleration:mui.os.ios?0.003:0.0009
+//      });
+        mui('.mui-scroll').on('tap','.mui-control-item:not(.mui-active)',function(){
+            mui('.mui-slider').slider().gotoItem(this.getAttribute('data-index'));
+        });
+        
+       document.getElementById('more').addEventListener('tap',function(){
+       	   
+       	     if(document.getElementById('fl_menu').style.display=='none'){
+       	       document.getElementById('fl_menu').style.display='block';
+       	       
+       	}
+       	     else{
+       	     	
+       	     	document.getElementById('fl_menu').style.display='none';
+       	     }
+       	 
+       	 
+       })
+       
+       
+       /*mui('#fl_menu').on('tap','a',function(){
+       	  this.classList.add('mui-active');
+       	   document.getElementById('fl_menu').style.display='none'; 
+       	
+       })*/
+    });
+(function($){
+	//var  one=document.getElementById('one');
+	//one.querySelectorAll('a').addEventListener('click',function(){});
+	$("#one").on('click','a',function(){
+		$("#fl_menu").find("a").each(function (i){
+			$(this).removeClass("mui-active");
+		})
+		$("#fl_menu").css("display","none");
+		$(this).addClass("mui-active").siblings("a").removeClass("mui-active");
+		var c_id = $(this).attr("data-id");
+		//$("#cid1").val($(this).attr("data-id"));
+		//alert(c_id);
+		document.getElementById("page").value=2;
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Shan/goodThreeCateList",
+	      	data:{
+				cat_id:c_id
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				var left = document.getElementById("segmentedControls");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					if(i == 0){
+						bb(data[i].cat_id)
+						str=str+'<a class="mui-control-item mui-active" data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+					}else{
+						str=str+'<a class="mui-control-item"data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+					}
+				}
+				left.innerHTML = str;	
+				
+			}
+		});
+		
+		
+	})
+	$("#fl_menu").on('click','a',function(){
+		
+		$("#one").find("a").each(function (i){
+			$(this).removeClass("mui-active");
+		})
+		$("#fl_menu").css("display","none");
+		$("#fl_menu").find("a").each(function (i){
+			$(this).removeClass("mui-active");
+		})
+		$(this).addClass("mui-active");
+		//$(this).siblings("a").removeClass("mui-active");
+		var c_id = $(this).attr("data-id");
+		//$("#cid1").val($(this).attr("data-id"));
+		//alert(c_id);
+		document.getElementById("page").value=2;
+	
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Shan/goodThreeCateList",
+	      	data:{
+				cat_id:c_id
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback", 
+			success:function(data){
+				
+				var left = document.getElementById("segmentedControls");
+				var str='';
+				for(var i=0;i<data.length;i++){
+					if(i == 0){
+						bb(data[i].cat_id)
+						str=str+'<a class="mui-control-item mui-active" data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+					}else{
+						str=str+'<a class="mui-control-item"data-id="'+data[i].cat_id+'">'+data[i].cat_name+'</a>';	
+					}
+				}
+				
+				left.innerHTML = str;	
+				
+			}
+		});
+		
+		
+	})
+	
+	$('#segmentedControls').on('click','a',function(){
+		var storeNo = plus.storage.getItem("storeNo");
+		$(this).addClass("active").siblings("a").removeClass("active");
+		var c_id = $(this).attr("data-id");
+		//alert(c_id)
+		var shopid = $("#shopid").val();
+		document.getElementById("cat_id").value=c_id;
+		document.getElementById("page").value=2;
+		var right = document.getElementById("segmentedControlContents");
+		right.innerHTML='';
+		setTimeout(function() {
+			jQuery.ajax({
+		      	url:"http://www.cundianle.cn/cdl.php/home/Shan/cateGood",
+		      	data:{
+					cat_id:c_id,
+					storeNo:storeNo
+				},
+				type:"get",
+				dataType:"jsonp",
+				jsonp:"jsoncallback",
+				//beforeSend: function(data) {
+					//plus.nativeUI.showWaiting(); 
+				//},
+				success:function(data){
+					//plus.nativeUI.closeWaiting();
+					//alert(data.length)
+					
+					var oDate = new Date(); //实例一个时间对象
+					var hours = oDate.getHours(); //获取系统时，
+					var min = oDate.getMinutes(); //获取系统分  加上20分钟
+					if(hours<10){
+						hours='0'+hours;
+					}
+					if(min<10){
+						min='0'+min;
+					}
+					var start = document.getElementById("start");
+					var end = document.getElementById("end");
+					if(data == ""){
+					right.innerHTML='<img class="wu" src="images/wu.png"/>';
+						
+					}else{					
+						var str='';
+						for(var i=0;i<data.length;i++){					
+							str=str+'<li><img data-id="'+data[i].id+'" src="http://www.cundianle.cn'+data[i].goods_img+'"/><div class="sd_info"><p class="name" data-id="'+data[i].id+'">'+data[i].name+'</p><span class="jg" data-id="'+data[i].id+'">￥'+data[i].retailprice+'/'+data[i].unitname+'</span><span class="gg"></span>';						
+																													
+								if(start.value > hours+":"+min || end.value < hours+":"+min){
+									str=str+'<span style="color:#ff0000;font-size:13px;">未营业</span>';
+									str=str+'</div></li>';
+								}else{
+									if(data[i].goodOnlineStock == 0){
+										str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">已售罄</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';	
+										}else if(data[i].goodOnlineStock == -2){
+											str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存不足</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+										}else{
+											str=str+'</div><span style="color:#ff0000;font-size:13px;float:left;margin-left:1rem">库存:'+data[i].goodOnlineStock+''+data[i].unitname+'</span><span class="mai addcar" data-id="'+data[i].id+'">点击购买</span></li>';
+										}
+									
+								}
+						
+						}
+					
+						right.innerHTML = str;
+						
+					}
+					
+				}
+			})
+		}, 10);
+	});
+})(jQuery)
+</script>
+ 
+<script>	
+mui.init();	
+mui("#segmentedControlContents").on('tap','img',function(){
+	//alert(this.getAttribute('data-id'))
+	mui.openWindow({
+		url:'goods_detail.html',
+		id:'goods_detail',
+		extras:{
+			good_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	})
+})
+mui("#segmentedControlContents").on('tap','.name',function(){
+	mui.openWindow({
+		url:'goods_detail.html',
+		id:'goods_detail',
+		extras:{
+			good_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	})
+})
+
+mui("#segmentedControlContents").on('tap','.jg',function(){
+	mui.openWindow({
+		url:'goods_detail.html',
+		id:'goods_detail',
+		extras:{
+			good_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	})
+})
+
+mui("#segmentedControlContents").on('tap','.addcar',function(){
+	mui.openWindow({
+		url:'goods_detail.html',
+		id:'goods_detail',
+		extras:{
+			good_id:this.getAttribute('data-id')
+		},
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+		waiting:{
+			autoShow:false,
+			options:{
+				width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+				height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			}
+		},
+		styles: {
+			zindex: 1
+		}
+	})
+})
+
+//document.getElementById('pullRefresh').addEventListener('scroll', function(e) {
+//var contentsElem = document.getElementById("pullRefresh");
+//var contentListElem = contentsElem.querySelectorAll('li');
+//}); 
+
+</script> 
+	
+</body>
+
+</html>

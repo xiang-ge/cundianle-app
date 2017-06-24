@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/immersed.js" ></script>
+<link href="css/mui.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		var self = plus.webview.currentWebview();
+  		var order_id = self.order_id;
+  		//alert(order_id)
+  		jQuery.ajax({
+			url:"http://www.cundianle.cn/cdl.php/home/User/orderDetail",
+			data:{
+				order_id:order_id,
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+  				if(data != null){
+					document.getElementById("pay").innerHTML = "￥"+data.total;
+					document.getElementById("order_id").value = data.order_id;
+					document.getElementById("price").value = data.total;
+					document.getElementById("title").innerHTML = "订单名称："+data.goods_name;
+					document.getElementById("total").innerHTML = "订单总价： ￥"+data.total;
+					document.getElementById("cid").value = data.cid;
+				}
+			}
+		})
+  	})
+</script>
+<style type="text/css">
+	body{
+		
+	}
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;}
+	.mui-title{text-align: left;}
+	
+	.order{background-color: #fff;padding: 5px 3%;margin-bottom: 20px;}
+	.order p{padding: 15px 0;font-size: 16px;color: #333;}
+	
+	.tit{height: 40px;background-color: #fff;padding: 0 5%;line-height: 40px;font-size: 16px;color: #333;border-bottom: 1px solid #d1d1d1;}
+	.tit span{color: #E83E41;}
+	ul{box-shadow: 0 2px 3px #999;}
+	.mainList li{}
+	.mainList li .iconfont{display: block;float: left;padding: 5px 15px 2px;margin: 3%;line-height:none;font-size: 30px;border: 1px solid #cfcfcf;background-color: #f0f0f0;border-radius: 5px;}
+	.mainList li .icon-zhifubao{color: #00a0ea;}
+	.mainList li .icon-yinxingqia{color: #f9b645;}
+	.mainList li .icon-weixin{color: #6fb842;}
+	.mainList li .icon-qian{color: #E83E41;}
+	.mainList li span{line-height: 30px;}
+	.mainList li p{line-height: 25px;}
+	.mainList.mui-table-view-radio .mui-table-view-cell .mui-navigate-right:after{color: #cfcfcf;content: '\e411';}
+	.mainList.mui-table-view-radio .mui-table-view-cell.mui-selected .mui-navigate-right:after{color: #e93c40;content: '\e442';}
+	
+	.mask{width: 100%;height: 100%;position: absolute;top: 0;background:rgba(0,0,0,0.4);display: none;}
+	.mask ul{position: absolute;bottom: 0;padding-top: 10px;}
+	.mask ul li{float: left;width: 50%;}
+	.mask ul li a img{display: block;width: 85%;margin-left: 20%;border:1px solid #fff;}
+	.mask ul .mui-selected a img{border: 1px solid #e93c40;}
+	
+	.mask .mui-table-view-radio .mui-table-view-cell{padding:10px 50px 10px 10px;}
+	.mask .mui-table-view-radio .mui-table-view-cell .mui-navigate-right::after{left: 5px;}
+	.mask .mui-table-view-radio .mui-table-view-cell .mui-navigate-right:after{color: #cfcfcf;content: '\e62d';font-family: "iconfont";}
+	.mask .mui-table-view-radio .mui-table-view-cell.mui-selected .mui-navigate-right:after{color: #e93c40;}
+	.mui-table-view-cell::after{content: none;}
+	
+	#info{color: #999;margin-left: 10px;}
+	
+	.sure{display: none;width:100%;height: 100%;position: absolute;top:0;left:0;background:rgba(0,0,0,0.7);}
+	.alert{width: 90%;padding: 0 3% 15px;position: fixed;left: 5%;top:20%;background:#fff;border-radius: 5px;}
+	.alert .notice{line-height: 60px;color: #999;padding: 0 5%;font-size: 18px;text-align: center;border-bottom: 1px solid #ddd;}
+	.alert .price{text-align: center;line-height: 50px;color: #333;font-size: 18px;}
+	.alert input{height: 50px;border: 1px solid #ddd;text-align: center;margin-bottom: 0;}
+	.alert .forget{float: right;font-size: 14px;line-height: 40px;text-decoration: underline;}
+	.alert .butt{clear: both;}
+	.alert .butt a{display: block;width: 48%;height: 40px;text-align: center;line-height: 40px;border-radius: 5px;}
+	.alert .butt .close{float: left;border: 1px solid #ddd;color: #333;}
+	.alert .butt .queren{float: right;border: 1px solid #E83E41;background-color: #E83E41;color: #fff;}
+	.alert #notice{color: #E83E41;line-height: 40px;}			
+	
+	.butt_red{color:#fff;background: #5eb530;width: 90%;height: 50px;text-align:center;margin: 20px auto 0;line-height: 50px;font-size: 18px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left jump"></a>
+    <h1 class="mui-title" style="text-align: center;">支付订单</h1>
+</header>
+<div class="mui-content" id="dcontent">
+	<div id="cartlist">
+		<div class="order">
+			<p id="title"></p>
+			<p id="total"></p>
+		</div>
+	</div>
+	<input type="hidden" id="price" value="" />
+	<input type="hidden" id="order_id" value="" />
+	<input type="hidden" id="cid" value="" />
+	<p class="tit">共需支付 <span id="pay"></span></p>	
+</div>
+</body>
+
+<script type="text/javascript">
+mui.init();
+mui('body').on('tap', '.jump', function(e) {
+	mui.openWindow({
+		url:'order_list_pay.html',
+		id:'order_list_pay',
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+	    },
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+});
+</script>
+<script type="text/javascript">
+var pays={};
+function plusReady(){
+	// 获取支付通道
+	plus.payment.getChannels(function(channels){
+		var content=document.getElementById('dcontent');
+		for(var i in channels){
+			var channel=channels[i];
+			pays[channel.id]=channel;
+			if(channel.description != "微信"){
+				var de=document.createElement('div');
+				de.setAttribute('class','butt_red');
+				de.setAttribute('onclick','pay(this.id)');
+				de.id=channel.id;			
+				de.innerText=channel.description+"支付";
+			}
+			content.appendChild(de);
+			checkServices(channel);
+		}
+	},function(e){
+		outLine("获取支付通道失败："+e.message);
+	});
+}
+document.addEventListener('plusready',plusReady,false);
+// 检测是否安装支付服务
+function checkServices(pc){
+	if(!pc.serviceReady){
+		var txt=null;
+		switch(pc.id){
+			case "alipay":
+			txt="检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？";
+			break;
+			default:
+			txt="系统未安装“"+pc.description+"”服务，无法完成支付，是否立即安装？";
+			break;
+		}
+		plus.nativeUI.confirm(txt,function(e){
+			if(e.index==0){
+				pc.installService();
+			}
+		},pc.description);
+	}
+}
+
+var w=null;
+var PAYSERVER='http://www.cundianle.cn/alipays.php?payid=';
+// 支付
+function pay(id){
+	var order_id = document.getElementById("order_id").value;
+//	var pushtype = "tran";
+//	var cid = document.getElementById("cid").value;
+//	var token = "";
+//	var content = "村点乐用户购买通知";
+//	var payload = '{title:"下单通知",content:"已有用户购买商品,请及时送货",payload:{id:"1234567890"}}';
+	//alert(order_id)
+	//alert(title)
+	if(w){return;}//检查是否请求订单中
+	if(id==='appleiap'){
+		//outSet("应用内支付");
+		clicked('payment_iap.html');
+		return;
+	}
+	//outSet("----- 请求支付 -----");
+	var url=PAYSERVER;
+	if(id=='alipay'||id=='wxpay'){
+		url+=id;
+	}else{
+		plus.nativeUI.alert("不支持此支付通道！",null,"捐赠");
+		return;
+	}
+	var appid=plus.runtime.appid;
+	if(navigator.userAgent.indexOf('StreamApp')>=0){
+		appid='Stream';
+	}
+	url+='&appid='+appid+'&total=';
+	
+	w=plus.nativeUI.showWaiting();
+	// 请求支付订单
+	var amount = document.getElementById('price').value;
+	var xhr=new XMLHttpRequest();
+	xhr.onreadystatechange=function(){
+		
+		switch(xhr.readyState){
+			case 4:
+			w.close();w=null;
+			
+			if(xhr.status==200){
+				var order=xhr.responseText;
+				plus.payment.request(pays[id],order,function(result){
+					jQuery.ajax({
+					      	url:"http://www.cundianle.cn/cdl.php/home/User/confirmBuyOrder",
+					      	data:{
+					      		order_id:order_id
+					      	},
+							type:"get",
+							dataType:"jsonp",
+							jsonp:"jsoncallback",
+							success:function(data){
+								//alert(data)
+								mui.openWindow({
+									url:'order_list_receipt.html',
+									id:'order_list_receipt',
+									createNew: true,
+									show:{
+										aniShow:"pop-in",
+										duration: '200'
+									},
+							        waiting:{
+							        	autoShow:false,
+							        	options:{
+									        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+									        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+									    }
+							        },
+							        styles: {
+										zindex: 1
+									}
+								})
+				  			}
+						})
+					plus.nativeUI.alert("支付成功",function(){
+						//alert(order_id)
+
+//						jQuery.ajax({
+//					      	url:"http://www.cundianle.cn/push/push.php",
+//					      	data:{
+//					      		pushtype:pushtype,
+//					      		cid:cid,
+//					      		token:token,
+//					      		content:content,
+//					      		payload:payload
+//					      	},
+//							type:"get",
+//							dataType:"jsonp",
+//							jsonp:"jsoncallback",
+//							success:function(data){
+//								
+//				  			}
+//						})
+					});
+				},function(e){					
+					//plus.nativeUI.alert("["+e.code+"]："+e.message);	
+					mui.openWindow({
+						url:'order_list_pay.html',
+						id:'order_list_pay',
+						createNew: true,
+						show:{
+							aniShow:"pop-in",
+							duration: '200'
+						},
+				        waiting:{
+				        	autoShow:false,
+				        	options:{
+						        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+						        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+						    }
+				        },
+				        styles: {
+							zindex: 1
+						}
+					})
+				});
+			}else{
+				plus.nativeUI.alert("获取订单信息失败！",null,"捐赠");
+			}
+			break;
+			default:
+			break;
+		}
+	}
+	xhr.open('GET',url+amount);
+	xhr.send();
+}
+</script>
+</html>

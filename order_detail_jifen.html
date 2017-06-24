@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var self = plus.webview.currentWebview();
+	var order_id = self.order_id;
+	//alert(order_id)
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Integral/integralOrderInfo",
+      	data:{
+      		order_id:order_id
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			
+			document.getElementById("order_id").value = data.order_id;//订单id
+			document.getElementById("img").src = data.goods_img;//商品图片
+			document.getElementById("number").innerHTML = data.order_number;//订单号			
+			document.getElementById("time").innerHTML = data.add_time;//下单时间
+			document.getElementById("arrive_time").innerHTML = '预计次日到达时间:<span>次日10:00</span>';//到达时间
+			document.getElementById("consignee").innerHTML = data.user_list_nickname;//收件人姓名
+			document.getElementById("phone").innerHTML = data.user_list_phone;//收件人手机号
+			document.getElementById("address").innerHTML = data.provincename+data.cityname+data.townname+data.user_list_village;//收件人地址
+			document.getElementById("name").innerHTML = data.goods_name;//商品名称
+			document.getElementById("shop_price").innerHTML = "积分："+data.integral;//现售价
+			document.getElementById("market_price").innerHTML = "￥"+data.price;
+			document.getElementById("count").innerHTML = "x"+data.goods_count;//购买数量
+			if(data != -1){				
+				document.getElementById("pay").innerHTML = "积分兑换";
+				if(data.order_status == 1){
+					document.getElementById("status").innerHTML = '待发货';
+				}else if(data.order_status == 2){
+					document.getElementById("btn").innerHTML = '<a href="javascript:;" onclick="confirmOrder('+data.order_id+')">确认收货</a>';
+					document.getElementById("status").innerHTML = '已发货,待收货';
+				}else if(data.order_status == 3){
+					document.getElementById("btn").innerHTML = '<a href="javascript:;" onclick="removeOrder('+data.order_id+')">删除订单</a>';
+					document.getElementById("status").innerHTML = '已收货';
+				}				
+			}			
+		}
+	})		
+	
+})
+</script>
+<style>
+	.order_bg{}
+	.order_sta{padding:15px;background: #50B24B;overflow: hidden;}
+	.order_sta img{width:30%;float:right;margin-right:20px;}
+	.order_sta span{display: inline-block;padding-top:8%;color:#fff;padding-left:10px;;}
+    .order_sta span b{font-weight:normal;margin-left:10px;}
+    .order_info{margin-top:15px;background: #fff;}
+    .order_info h2{padding-left:20px;font-size:16px;height:38px;line-height: 38px;border-bottom:1px solid #f2f2f2;color:#333;}
+    .order_info p{color:#666;padding-left:20px;line-height: 30px;height:30px;;}
+    .order_info p span{padding-left:10px;}
+    .product_info {padding:20px;background: #fff;overflow: hidden;margin-top:15px;}
+    .product_info img{float:left;border:1px solid #dfdfdf;border-radius: 3px;width:90px;height:90px;padding:10px;;}
+   
+    .product_info .tit{float: left;width: 40%;height: 50%;font-size: 16px;color: #444;overflow: hidden;line-height: 25px;margin-top: 5px; margin-left: 10px;}
+	.product_info .right{float: right;overflow: hidden;}
+	.product_info .right p{height: 20px;}
+	.product_info .right .price{text-align: right;font-size: 16px;color: #444;font-weight: bold;}
+	.product_info .right .prices{text-decoration:line-through;text-align: right;font-size: 16px;color: #444;}
+	.product_info .right .num{font-size: 16px;text-align: right;}
+    .product_info p span{margin-right:5px;}
+    .dis_info{padding:20px;background: #fff;margin-top:15px;margin-bottom:40px;}
+    .btn{position: fixed;bottom:0px;left:0px;width:100%;background: #f8f8f8;padding:4%;border-top:1px solid #dfdfdf;}
+    .btn a{display: block;float:right;padding:5px;border:1px solid #50B24B;border-radius: 3px;color:#50B24B;margin-left:10px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav cdhead">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left mygren"></a>
+    <h1 class="mui-title mytit">订单详细</h1>
+</header>
+<div class="mui-content order_bg">
+	<div class="order_sta">
+		<span>订单状态:<b id="status"></b></span>
+		<img src="images/order_bg.png"/>
+	</div>
+	<div class="order_info">
+		<h2>订单信息</h2>
+		<p>订单编号:<span id="number"></span></p>
+		<p>下单时间:<span id="time"></span></p>
+		<p id="arrive_time"  style="color:#2AC845;"></p>
+	</div>
+	<div class="order_info">
+		<h2>收货信息</h2>
+		<p>收货人:<span id="consignee"></span><span id="phone"></span></p>
+		<p style="height:60px;">收货地址:<span id="address"></span></p>
+	</div>
+	<div class="product_info">
+		<img id="img"/>
+		<div class="tit" id="name"></div>
+		<div class="right">
+	    	<p class="price" id="shop_price"></p>		        	
+	    	<p class="prices" id="market_price"></p>
+	    	<p class="num" id="count"></p>
+   		</div>
+	</div>
+	<div class="dis_info">
+		<p>营业时间:<span>09:00-20:00</span></p>
+		<p>支付方式:<span id="pay"></span></p>
+	</div>
+	
+</div>
+<div class="btn" id="btn"></div>
+<input type="hidden" id="order_id" />
+</body>
+</html>
+<script>
+/** * 删除订单信息 * ***/
+function removeOrder(id){
+//	alert(id)
+	if(window.confirm('确定删除该订单信息？')){
+		jQuery.ajax({
+	      	url:"http://www.cundianle.cn/cdl.php/home/Integral/confirmOrder",
+	      	data:{
+				order_id:id,
+				act:2
+			},
+			type:"get",
+			dataType:"jsonp",
+			jsonp:"jsoncallback",
+			success:function(data){
+				if(data == 1){
+					plus.ui.toast("删除成功");
+					window.location.href="order_list_jifen.html";
+				}else{
+					plus.ui.toast("删除失败，请稍后再试");
+					window.location.href=window.location.href;
+				}
+	
+			}
+		})
+	}
+}
+/*** 收货订单操作****/
+function confirmOrder(id){
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/Integral/confirmOrder",
+      	data:{
+			order_id:id,
+			act:1
+		},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+//			alert(data)
+			if(data == 1){
+					plus.ui.toast("确认成功");
+					window.location.href=window.location.href;
+				}else{
+					plus.ui.toast("确认失败，请稍后再试");
+					window.location.href=window.location.href;
+				}
+		}
+	})
+}
+</script>

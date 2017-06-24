@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<style type="text/css">
+
+/*.mui-content{background:#11c250;}*/
+body {
+	background: url(images/jingqingqidai.jpg);background-size: 100%;}
+
+
+.mui-bar-nav{box-shadow: none;}
+.mui-content{background: none;}
+.cd_top .icon-tubiao{position: absolute;right:7%;top:10%;color:#fff;font-size:26px;}
+.jishi{margin-top:92%;color: #fff;text-align: center;font-size: 50px;}
+</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red" style="background: none;">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+ 
+</header>
+<div class="mui-content">
+	<!--<div class="jishi">
+		<span class="time" id="time"><span class="day"></span>天</span>
+	</div>				-->
+</div>
+
+</body>
+<script type="text/javascript" charset="utf-8">
+	mui.init({
+		swipeBack: true, //启用右滑关闭功能
+
+	});
+	
+//	//秒杀倒计时；
+//	tiMe();
+//
+//		function tiMe() {
+//
+//			var end_time = new Date("2017/6/14");
+//			var new_time = new Date();
+//			var lefttime = parseInt((end_time.getTime() - new_time.getTime()) / 1000);
+//			//alert(lefttime);
+//
+//			//换算成天
+//			var d = parseInt(lefttime / (3600 * 24));
+//			//换算 小时
+//
+//			var h = parseInt(lefttime / (60 * 60) % 24);
+//			/*%24的作用是把换算成天数,剩下的是小时*/
+//			//换算分钟 %60的作用是去掉小时数，剩下的
+//			var m = parseInt(lefttime / 60 % 60);
+//			//换算秒数
+//			var s = parseInt(lefttime % 60);
+//
+//			$("#time").find(".day").text(d < 10 ? "0" + d : d);
+//
+//			if(lefttime <= 0) {
+//
+//				$("#time").text("敬请期待");
+//
+//			}
+//
+//			setTimeout(tiMe, 1000);
+//
+//		}
+
+
+</script>
+</html>

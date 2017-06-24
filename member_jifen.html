@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<style type="text/css">
+body
+
+html,body{background: url(images/huiyuanka.png);background-size: 100%;}
+.mui-content{margin-top:3%;background:#11c250;}
+.mui-bar-nav{box-shadow: none;}
+.mui-bar-nav ~ .mui-content{padding: 130px 3% 10px;background: none;}
+.mui-bar-tab .mui-tab-item.mui-active{color:#50B24B;}
+.mui-bar-tab .foot_tab{width: 20%;}
+.input_box{border: 2px solid #bababa;border-radius: 8px;}
+.input_box .label{height: 55px;}
+.input_box .user{border-bottom: 2px solid #bababa;}
+.input_box .label span{display:block;float: left;width: 25%;line-height: 50px;padding-left: 5%;padding-top:5px;}
+.input_box .label input{width: 75%;height: 48px;border: none;line-height: 43px;}
+
+.login{width: 100%;height: 50px;margin-top: 5px;background-color: #5db530;border: none;color: #fff;font-size: 18px;}
+
+.forget{margin-top: 15px;float: right;color: #60646f;}
+.reg{margin-top: 15px;float: left;color: #fff;}
+.butt_white{float: left;width: 30%;height: 45px;line-height: 45px;margin: 20px 10% 0;}
+.post{margin-top: 35%;}
+.data{height: 50px;margin-top: 20px;padding-right: 1%;width:75%;margin:20px auto 0px;}
+	.data span{display: block;float: left;width: 30%;text-align: right;line-height: 48px;color: #fff; font-size:1rem;background: #18B831;}
+	.data input,.mui-btn-block{float: left;width: 70%;height: 47px;border: none;background: none;}
+	.mui-btn-block{padding: 0 15px;line-height: 47px;text-align: left;}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff;
+    font-size:1rem;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;
+    font-size:1rem;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #fff;
+    font-size:1rem;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #fff;
+    font-size:1rem;
+}
+	.butt_red{width:75%;height:50px;margin:0 auto;display: block;padding:10px 0px;font-size:16px;color:#fff;background: #16a937;border:none;}
+	.reg_logo{width:50%;display: block;margin:5% auto;}
+.data2{width:80%;margin:10px auto 0px;}
+
+
+</style>
+<script type="text/javascript">
+mui.plusReady(function(){
+	 var phones = plus.storage.getItem("phone");
+	document.getElementById('phone').value = phones;	
+})
+
+
+</script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav red">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">积分查询</h1>
+</header>
+<div class="mui-content">
+
+<div class="post">	
+	<div class="data">
+		<input type="hidden" id="phone"/>
+		<!--<span style="text-align: center;">会员卡号</span>
+		<input type="number" id="tel" placeholder="请输入您的会员卡号"  />-->
+	</div>
+	<div class="data" style="border:1px solid #18B831;">
+		<span style="text-align: center;">密码确认</span>
+		<input type="password" id="password1" placeholder="请输入会员卡密码" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6"/> 
+	</div>
+	<button type="button" class="login butt_red"  id="login" onclick="check()" style="margin-top: 6%;">点击查询积分</button>
+	
+</div>
+</div>
+
+<!--底部-->
+<nav class="mui-bar mui-bar-tab">
+	<a class="foot_tab jump" href="index.html">
+		<span class="mui-icon iconfont icon-shouye"></span>
+		<span class="mui-tab-label">首页</span>
+	</a>
+	<a class="foot_tab jump" href="shansong.html">
+		<span class="mui-icon iconfont icon-shangou"></span>
+		<span class="mui-tab-label">闪超</span>
+	</a>
+	<a class="foot_tab jump" href="cunqianggou.html">
+		<span class="mui-icon iconfont icon-miaopai"></span>
+		<span class="mui-tab-label">村抢购</span>
+	</a>
+	<a class="foot_tab jump" href="cart.html">
+		<span class="mui-icon iconfont icon-xiazai49"></span>
+		<span class="mui-tab-label">购物车</span>
+	</a>
+	<a class="foot_tab active" href="#">
+		<span class="mui-icon iconfont icon-wode"></span>
+		<span class="mui-tab-label">我的</span>
+	</a>
+</nav>
+
+<script type="text/javascript">
+	
+function check(){
+	
+	var user_phone = plus.storage.getItem("phone");
+	var passWord = document.getElementById('password1').value;
+				jQuery.ajax({
+			      	url:"http://www.cundianle.cn/cdl.php/home/Vip/getIntegral",
+			      	data:{
+			      		phone:user_phone,
+			      		pwd:passWord,
+			      	},
+					type:"get",
+					dataType:"jsonp",
+					jsonp:"jsoncallback",
+					success:function(e){
+						alert(e);	
+					}
+				})
+
+}
+
+</script>
+</html>

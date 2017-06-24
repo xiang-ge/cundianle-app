@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/mui.min.js"></script>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		
+  		document.getElementById("shopid").value = plus.storage.getItem("shopid");
+  	})
+</script>
+<style>
+    .mui-bar-nav.white{padding-right: 4%;}
+	.mui-bar-nav.white .mui-action-back{color: #888;}
+	.mui-bar-nav form{position: relative;}
+	.mui-bar-nav input[type='text']{width: 80%;height: 40px;margin: 1.7% 0 0 2%;border: 1px solid #888;margin-right:2%;}
+	.mui-bar-nav .mui-icon.mui-icon-search{padding:10px 0px;padding-left:2%;}
+	.mui-bar-nav .mui-icon{padding-top:16px;}
+	.mui-bar-nav input[type='button']{width: 10%;height: 100%;border: 0;background-color: transparent;position: absolute;right: 0;top: 0;z-index: 999;padding:0px;}
+    .cdjs_p{overflow: hidden;padding:20px 8px;}
+   .cdjs_p li{width:49.5%;float:left;margin-right:1%;background: #fff;margin-bottom:1%;padding:1.5%;border-radius: 3px;;}   
+   .cdjs_p li img{width:94%;margin:2% 3%;display: block;;}
+   .cdjs_p li.bg{margin-right:0%;}
+   .mui-content{border-top:1px solid #dfdfdf;}
+   .cd_yf_tit{margin-top:5px;}
+   .cd_yf_tit p{color:#333;margin:3px 0px;}
+   .cd_yf_tit p .youxuan{padding:0px;border:1px solid #50B24B;color:#50B24B;font-size:12px;margin-left:3px;margin-right:3px;}
+  .cd_yf_tit p .yf_pri{color:#f83546;font-size:18px;}
+  .cd_yf_tit p .buy_c{float:right;}
+  .nogood{text-align: center;margin-top: 25%;display: none;}
+  .nogood .icon-p-shop{font-size: 100px;margin-top: 30px;}
+  .nogood .text{font-size: 20px;margin-top: 20px;}
+  .no_order{display: block;margin:38% auto;width:50%;}
+</style>
+</head>
+<body>
+  <header class="mui-bar mui-bar-nav white" style="height:52px;">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<form action="" method="post">
+		<input class="input" type="text" id="seaname" placeholder="请输入您要搜索的内容" />
+		
+    	<input class="butt" type="button" onclick="sea()" value=""/>
+		<span class="mui-icon mui-icon-search"></span>
+	</form>
+</header>
+	<div class="mui-content">
+		<div class="nogood" id="nogood">
+			<img class="no_order" src="images/wu.png">
+		</div>
+	   <ul class="cdjs_p" id="searchlist">
+	   	 <!--<li><a href="goods_detail.html"><img src="images/cd_yf.png"/><div class="cd_yf_tit"><p><span class="youxuan">优选</span>中年妇女妈妈装冬季新款</p><p><span class="yf_pri">￥235</span><span class="buy_c">569人付款</span></p></div></a></li>
+	   	 <li class="bg"><a href="goods_detail.html"><img src="images/cd_yf.png"/><div class="cd_yf_tit"><p><span class="youxuan">优选</span>中年妇女妈妈装冬季新款</p><p><span class="yf_pri">￥235</span><span class="buy_c">569人付款</span></p></div></a></li>
+	   	 <li><a href="goods_detail.html"><img src="images/cd_yf.png"/><div class="cd_yf_tit"><p><span class="youxuan">优选</span>中年妇女妈妈装冬季新款</p><p><span class="yf_pri">￥235</span><span class="buy_c">569人付款</span></p></div></a></li>
+	   	 <li class="bg"><a href="goods_detail.html"><img src="images/cd_yf.png"/><div class="cd_yf_tit"><p><span class="youxuan">优选</span>中年妇女妈妈装冬季新款</p><p><span class="yf_pri">￥235</span><span class="buy_c">569人付款</span></p></div></a></li>-->
+	   </ul>
+	</div>
+	
+	<input type="hidden" id="shopid" />
+</body>
+<script type="text/javascript">
+var seaname = document.getElementById("seaname");
+var shopid = document.getElementById("shopid");
+function sea(){
+	//alert(seaname.value)
+	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/searchGoods",
+      	data:{
+      		shopid:shopid.value,
+      		searname:seaname.value
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			var nogood = document.getElementById("nogood");
+			var searchlist = document.getElementById("searchlist");
+			if(data == ""){
+  				nogood.style.display = "block";
+				searchlist.innerHTML = "";
+			}else{
+				nogood.style.display = "none";
+				var search = "";
+				for(var i=0;i<data.length;i++){
+					if(i%2 == 0){
+						search=search+'<li class="bg" data-id="'+data[i].id+'"><img src="http://www.cundianle.cn/'+data[i].picture+'"/><div class="cd_yf_tit"><p>'+data[i].shopname+'</p><p><span class="yf_pri">￥'+data[i].nowprice+'</span><span class="buy_c">'+data[i].sale_count+'人付款</span></p></div></li>';
+						
+					}else{
+						search=search+'<li data-id="'+data[i].id+'"><img src="http://www.cundianle.cn/'+data[i].picture+'"/><div class="cd_yf_tit"><p>'+data[i].shopname+'</p><p><span class="yf_pri">￥'+data[i].nowprice+'</span><span class="buy_c">'+data[i].sale_count+'人付款</span></p></div></li>';
+					}
+				}
+				searchlist.innerHTML = search;	
+				mui('#searchlist img').each(function(){
+					var width = this.offsetWidth;
+					//this.style.height = width+10+'px';
+					this.style.height=234*width/255+'px';
+					//this.style.height = width+'px';
+				})
+			}
+		}
+	})
+}
+</script>
+ <script>
+    mui.init();
+    mui("#searchlist").on('tap','li',function(){
+		//alert(this.getAttribute('data-id'))
+		mui.openWindow({
+			url:'miao.html',
+			id:'miao.html',
+			extras:{
+				good_id:this.getAttribute('data-id')
+			},
+			createNew: true,
+			show:{
+				aniShow:"pop-in",
+				duration: '200'
+			},
+			waiting:{
+				autoShow:false,
+				options:{
+					width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+					height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+				}
+			},
+			styles: {
+				zindex: 1
+			}
+		})
+	})
+	//闪送超市 列表
+	mui(".cdjs_p").on("tap", "a", function() {
+          var id = this.getAttribute("href");
+	      var href = this.href;
+	      
+	      mui.openWindow({
+	      	url:href,
+	      	id:id,
+	      	show:{
+			aniShow:"pop-in",
+			duration: '200'
+		    },
+	        waiting:{
+	        	autoShow:false,
+	        	options:{
+			        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+			        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+			    }
+	        },
+	        styles: {
+				zindex: 1
+			}
+	      	
+	      	
+	      	
+	      	
+	      })
+	      
+	      
+	})
+ </script>
+</html>

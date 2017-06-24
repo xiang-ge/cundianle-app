@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title></title>
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="css/mui.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="css/public.css"/>
+<script src="js/mui.min.js"></script>
+<link href="css/mui.imageviewer.css" rel="stylesheet" />
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.plusReady(function(){
+	var userid = plus.storage.getItem("userid");
+	document.getElementById("userid").value = userid;
+  	jQuery.ajax({
+      	url:"http://www.cundianle.cn/cdl.php/home/User/personal",
+      	data:{
+      		userid:userid
+      	},
+		type:"get",
+		dataType:"jsonp",
+		jsonp:"jsoncallback",
+		success:function(data){
+			//alert(data.shop_name)
+			//头像
+			document.getElementById("heads").src = "http://www.cundianle.cn/"+data.user_list_headpic;
+			
+			//昵称
+			document.getElementById("nickname").innerHTML = data.user_list_nickname;
+			if(data.detailed == -1){
+				document.getElementById("address").innerHTML = data.user_list_village;
+			}else{
+				document.getElementById("address").innerHTML = data.user_list_village+data.detailed;
+			}
+			
+			//手机号
+			document.getElementById("phone").innerHTML = data.user_list_phone;
+			
+		}
+	})
+})
+</script>
+<style type="text/css">
+	.mui-bar-nav{box-shadow: none;}
+	.mui-bar-nav ~ .mui-content{padding: 60px 0 0;background-color: #fff;}
+	
+	.list{padding: 0 5%;}
+	.list li{height: 50px;border-bottom: 1px solid #eee;}
+	.list li a{display: block;line-height: 50px;color: #333;font-size: 16px;}
+	.list li a span{float: right;color: #C7C7C7;line-height: 50px;}
+	.list li a .data{display:block;width:40%;height: 50px;text-align:right;font-size: 16px;margin-right: 2%;overflow: hidden;}
+	.list .photo{height: 100px;border: none;}
+	.list .photo a{line-height: 100px;}
+	.list .photo a span{line-height: 100px;}
+	.list .photo a img{float: right;display: block;width: 70px;height: 70px;margin: 15px 2% 0 0;border-radius: 35px;}
+	.butt_red{width: 100%;height: 50px;line-height: 50px;border-radius: 0;position: fixed;bottom: 0;display: block;background-color: #50B24B;text-align: center;color: #fff;}
+</style>
+</head>
+<body contextmenu="return false;">
+<header class="mui-bar mui-bar-nav red">
+    <a class="mui-icon mui-icon-left-nav mui-pull-left" id="personal"></a>
+    <h1 class="mui-title">设置</h1>
+</header>
+
+<div class="mui-content content1">
+    <ul class="list">
+    	<li class="photo"><a>头像<span class="mui-icon mui-icon-arrowright"></span><img src="" id="heads"/></a></li>
+    	<li><a href="javascript:;">手机号<span class="data" id="phone"></span></a></li>
+    	<li><a class="jump" href="user_set_name.html">姓名<span class="mui-icon mui-icon-arrowright"></span><span class="data" id="nickname"></span></a></li>
+    	<li><a href="javascript:;">收货地址<span class="data" id="address" style="width: 78%;"></span></a></li>
+    	<li><a class="jump" href="user_set_password_log_1.html">修改密码<span class="mui-icon mui-icon-arrowright"></span></a></li>
+    </ul>
+    <a class="butt_red" id="quit">安全退出</a>
+   <input type="hidden" id="userid" /> 
+</div>
+</body>
+<script src="js/mui.imageViewer.js"></script>
+<script src="js/arttmpl.js"></script>
+<script type="text/javascript">
+mui.init();
+document.getElementById('personal').addEventListener('tap', function() {
+	mui.openWindow({
+		url:'personal.html',
+		id:'personal',
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	})
+})
+</script>
+<script type="text/javascript" charset="utf-8">
+//换头像
+(function($, doc) {
+	
+	var imglength = new Array();
+	var MIN_SOUND_TIME = 800;
+	$.init({
+		gestureConfig: {
+			tap: true, //默认为true
+			doubletap: true, //默认为false
+			longtap: true, //默认为false
+			swipe: true, //默认为true
+			drag: true, //默认为true
+			hold: true, //默认为false，不监听
+			release: true //默认为false，不监听
+		}
+	});
+	template.config('escape', false);
+	$.plusReady(function() {
+		plus.webview.currentWebview().setStyle({
+			softinputMode: "adjustResize"
+		});
+		var ui = {
+			butt1: doc.querySelector('.content1 .photo a'),
+			photo: doc.querySelector('.content1 .photo a img'),
+			body: doc.querySelector('body')
+		};
+		ui.butt1.addEventListener('tap', function(event) {
+			var btnArray = [{
+				title: "拍照"
+			}, {
+				title: "从相册选择"
+			}];
+			plus.nativeUI.actionSheet({
+				title: "选择照片",
+				cancel: "取消",
+				buttons: btnArray
+			}, function(e) {
+				var index = e.index;
+				switch (index) {
+					case 0:
+						break;
+					case 1:
+						var cmr = plus.camera.getCamera();
+						cmr.captureImage(function(path) {
+							ui.butt1.className="";
+							ui.photo.src= "file://" + plus.io.convertLocalFileSystemURL(path);
+							appendFile(path);
+						}, function(err) {});
+						break;
+					case 2:
+						plus.gallery.pick(function(path) {
+							ui.butt1.className="";
+							ui.photo.src= path;
+							appendFile(path);
+						}, function(err) {}, null);
+						break;
+				}
+			});
+		}, false);		
+	});
+	// 添加文件
+	var f1=null;
+	function appendFile(path){	
+	  var img = new Image();
+        img.src = path;        // 传过来的图片路径在这里用。
+        img.onload = function () {
+            var that = this;
+            //生成比例 
+            var w = that.width,
+                h = that.height,
+                scale = w / h; 
+                w = 200 || w;              //480  你想压缩到多大，改这里
+                h = w / scale;
+
+            //生成canvas
+            var canvas = document.createElement('canvas');
+
+            var ctx = canvas.getContext('2d');
+
+            //$(canvas).attr({width : w, height : h});
+            canvas.setAttribute("width",w);
+            canvas.setAttribute("height",h);
+
+            ctx.drawImage(that, 0, 0, w, h);
+
+            var base64 = canvas.toDataURL('image/jpeg', 1 || 0.8 );   //1最清晰，越低越模糊。有一点不清楚这里明明设置的是jpeg。弹出 base64 开头的一段 data：image/png;却是png。哎开心就好，开心就好
+
+            f1 = base64;   // 把base64数据丢过去，上传要用。
+			var wt=plus.nativeUI.showWaiting();
+			//alert(f1)
+			var userid = document.getElementById("userid");
+			mui.ajax('http://www.cundianle.cn/cdl.php/home/User/saveHead',{
+				data:{
+					imgurl:f1,
+					userid:userid.value
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					plus.nativeUI.closeWaiting();
+					alert(1)
+					//服务器返回响应，根据响应结果，分析是否发送成功；
+					//返回格式JSON：{'result':1}
+					/*plus.nativeUI.closeWaiting();
+					*/
+					if(data.result == 1){
+						plus.ui.toast("上传成功");						
+					}else{ 
+						plus.ui.toast("上传失败"); 
+					}
+				},
+				error:function(xhr,type,errorThrown){
+					plus.nativeUI.closeWaiting();
+					plus.ui.toast("上传成功");						
+					
+					//plus.ui.toast("上传成功");		
+					//alert(2)
+                	//异常处理；
+	               // console.log(type);
+	            }
+			})
+            //var pic = document.getElementById("x");
+            
+            //pic.src = base64;                 //这里丢到img 的 src 里面就能看到效果了
+	            
+	           
+	    }
+	
+	}
+
+}(mui, document));
+
+
+document.getElementById("quit").addEventListener('tap',function () {
+	//将用户名id在本地的存储中销毁
+	plus.storage.removeItem("userid");
+	plus.storage.removeItem("shopid");
+	plus.storage.removeItem("phone");
+	plus.storage.removeItem("storeno");
+	mui.openWindow({
+		url: "login.html", 
+		id: "login",
+		createNew: true,
+		show:{
+			aniShow:"pop-in",
+			duration: '200'
+		},
+        waiting:{
+        	autoShow:false,
+        	options:{
+		        width:'50',//等待框背景区域宽度，默认根据内容自动计算合适宽度
+		        height:'50',//等待框背景区域高度，默认根据内容自动计算合适高度
+		    }
+        },
+        styles: {
+			zindex: 1
+		}
+	});
+	//plus.webview.currentWebview().close();
+});
+</script>
+</html>
